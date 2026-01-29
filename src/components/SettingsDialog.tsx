@@ -1,4 +1,4 @@
-import { Settings, Download, FileText, FileSpreadsheet } from 'lucide-react';
+import { Settings, FileText, FileSpreadsheet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -8,18 +8,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { AppSettings, Language, WeightUnit, HeightUnit, Baby } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
-import { languageNames } from '@/lib/translations';
 import { exportToCSV, exportToPDF } from '@/lib/exportData';
 import { toast } from 'sonner';
+import { SettingsControls } from './SettingsControls';
 
 interface SettingsDialogProps {
   settings: AppSettings;
@@ -68,47 +61,12 @@ export function SettingsDialog({
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
-          <div className="space-y-2">
-            <Label>{t('language')}</Label>
-            <Select value={settings.language} onValueChange={(v) => onLanguageChange(v as Language)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {(Object.keys(languageNames) as Language[]).map((lang) => (
-                  <SelectItem key={lang} value={lang}>
-                    {languageNames[lang]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('weightUnit')}</Label>
-            <Select value={settings.weightUnit} onValueChange={(v) => onWeightUnitChange(v as WeightUnit)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                <SelectItem value="lb">Pounds (lb)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>{t('heightUnit')}</Label>
-            <Select value={settings.heightUnit} onValueChange={(v) => onHeightUnitChange(v as HeightUnit)}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="cm">Centimeters (cm)</SelectItem>
-                <SelectItem value="in">Inches (in)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          <SettingsControls
+            settings={settings}
+            onLanguageChange={onLanguageChange}
+            onWeightUnitChange={onWeightUnitChange}
+            onHeightUnitChange={onHeightUnitChange}
+          />
 
           {activeBaby && activeBaby.entries.length > 0 && (
             <div className="space-y-2">

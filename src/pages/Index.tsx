@@ -5,6 +5,7 @@ import { GrowthChart } from '@/components/GrowthChart';
 import { BabySelector } from '@/components/BabySelector';
 import { AddBabyDialog } from '@/components/AddBabyDialog';
 import { SettingsDialog } from '@/components/SettingsDialog';
+import { SettingsControls } from '@/components/SettingsControls';
 import { useBabyData } from '@/hooks/useBabyData';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -75,11 +76,23 @@ const Index = () => {
       {/* Main Content */}
       <main className="container max-w-4xl mx-auto px-4 py-8 space-y-8">
         {!activeBaby ? (
-          <div className="glass-card rounded-2xl p-8 text-center">
+          <div className="glass-card rounded-2xl p-8 text-center flex flex-col items-center">
             <div className="text-6xl mb-4 animate-float">👶</div>
             <h3 className="font-bold text-lg mb-2">{t('noBabies')}</h3>
-            <p className="text-muted-foreground mb-4">{t('noBabiesDesc')}</p>
-            <AddBabyDialog onAdd={addBaby} language={settings.language} />
+            <p className="text-muted-foreground mb-6">{t('noBabiesDesc')}</p>
+            <div className="mb-8">
+              <AddBabyDialog onAdd={addBaby} language={settings.language} />
+            </div>
+            
+            <div className="w-full max-w-xs border-t pt-6">
+              <h4 className="text-sm font-medium mb-4 text-muted-foreground">{t('settings')}</h4>
+              <SettingsControls
+                settings={settings}
+                onLanguageChange={setLanguage}
+                onWeightUnitChange={setWeightUnit}
+                onHeightUnitChange={setHeightUnit}
+              />
+            </div>
           </div>
         ) : (
           <>
