@@ -6,37 +6,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { GrowthEntry, Gender } from '@/types/baby';
+import { Baby, AppSettings } from '@/types/baby';
 import { exportToCSV, exportToPDF } from '@/lib/exportData';
+import { useTranslation } from '@/hooks/useTranslation';
 import { toast } from 'sonner';
 
 interface ExportButtonsProps {
-  entries: GrowthEntry[];
-  gender: Gender;
+  baby: Baby | null;
+  settings: AppSettings;
 }
 
-export function ExportButtons({ entries, gender }: ExportButtonsProps) {
+export function ExportButtons({ baby, settings }: ExportButtonsProps) {
+  const { t } = useTranslation(settings.language);
+
+  if (!baby || baby.entries.length === 0) {
+    return null;
+  }
+
   const handleExportCSV = () => {
-    if (entries.length === 0) {
-      toast.error('No data to export', {
-        description: 'Add some entries first before exporting.',
-      });
-      return;
-    }
-    exportToCSV(entries, gender);
+    exportToCSV(baby, settings);
     toast.success('CSV exported!', {
       description: 'Your growth data has been downloaded.',
     });
   };
 
   const handleExportPDF = () => {
-    if (entries.length === 0) {
-      toast.error('No data to export', {
-        description: 'Add some entries first before exporting.',
-      });
-      return;
-    }
-    exportToPDF(entries, gender);
+    exportToPDF(baby, settings);
     toast.success('PDF exported!', {
       description: 'Your growth report has been downloaded.',
     });
@@ -47,17 +42,17 @@ export function ExportButtons({ entries, gender }: ExportButtonsProps) {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm" className="gap-2">
           <Download className="h-4 w-4" />
-          Export
+          {t('export')}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={handleExportCSV} className="gap-2 cursor-pointer">
           <FileSpreadsheet className="h-4 w-4" />
-          Export as CSV
+          {t('exportCSV')}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleExportPDF} className="gap-2 cursor-pointer">
           <FileText className="h-4 w-4" />
-          Export as PDF
+          {t('exportPDF')}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

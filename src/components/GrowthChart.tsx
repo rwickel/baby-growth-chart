@@ -8,29 +8,31 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-  ReferenceLine,
 } from 'recharts';
 import { differenceInMonths, parseISO } from 'date-fns';
-import { Gender, GrowthEntry } from '@/types/baby';
+import { GrowthEntry, AppSettings } from '@/types/baby';
 import growthReferences from '@/data/growthReferences.json';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useTranslation } from '@/hooks/useTranslation';
+import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
 
 interface GrowthChartProps {
   entries: GrowthEntry[];
-  gender: Gender;
+  gender: 'male' | 'female';
   birthDate?: string;
+  settings: AppSettings;
 }
 
 type Metric = 'weight' | 'height';
 
-export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
+export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChartProps) {
+  const { t } = useTranslation(settings.language);
   const references = growthReferences[gender];
 
   const getAgeInMonths = (date: string): number => {
     if (birthDate) {
       return differenceInMonths(parseISO(date), parseISO(birthDate));
     }
-    // If no birth date, estimate based on first entry
     if (entries.length > 0) {
       const firstDate = parseISO(entries[0].date);
       return differenceInMonths(parseISO(date), firstDate);
@@ -39,9 +41,9 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
   };
 
   const chartData = useMemo(() => {
-    const data: Record<number, { month: number; weight?: number; height?: number }>[] = [];
+    const data: Record<string, number | undefined>[] = [];
     
-    // Add reference data points
+    // Add reference data points (always in kg/cm)
     references.weight.months.forEach((month, index) => {
       data.push({
         month,
@@ -55,32 +57,39 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
         heightP50: references.height.p50[index],
         heightP85: references.height.p85[index],
         heightP97: references.height.p97[index],
-      } as any);
+      });
     });
 
     // Add baby's data points
     entries.forEach((entry) => {
       const month = getAgeInMonths(entry.date);
-      const existingPoint = data.find((d: any) => d.month === month);
+      const existingPoint = data.find((d) => d.month === month);
       if (existingPoint) {
-        (existingPoint as any).babyWeight = entry.weight;
-        (existingPoint as any).babyHeight = entry.height;
+        existingPoint.babyWeight = entry.weight;
+        existingPoint.babyHeight = entry.height;
       } else {
         data.push({
           month,
           babyWeight: entry.weight,
           babyHeight: entry.height,
-        } as any);
+        });
       }
     });
 
-    return data.sort((a: any, b: any) => a.month - b.month);
+    return data.sort((a, b) => (a.month || 0) - (b.month || 0));
   }, [entries, references, birthDate]);
 
   const renderChart = (metric: Metric) => {
     const dataKey = metric === 'weight' ? 'babyWeight' : 'babyHeight';
-    const unit = metric === 'weight' ? 'kg' : 'cm';
+    const unit = metric === 'weight' ? getWeightLabel(settings.weightUnit) : getHeightLabel(settings.heightUnit);
     const color = gender === 'male' ? 'hsl(200, 80%, 65%)' : 'hsl(340, 70%, 70%)';
+
+    const formatValue = (value: number) => {
+      if (metric === 'weight') {
+        return displayWeight(value, settings.weightUnit);
+      }
+      return displayHeight(value, settings.heightUnit);
+    };
 
     return (
       <ResponsiveContainer width="100%" height={400}>
@@ -88,14 +97,15 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
           <XAxis
             dataKey="month"
-            label={{ value: 'Age (months)', position: 'bottom', offset: -5 }}
+            label={{ value: t('ageMonths'), position: 'bottom', offset: -5 }}
             tick={{ fontSize: 12 }}
             stroke="hsl(var(--muted-foreground))"
           />
           <YAxis
-            label={{ value: `${metric === 'weight' ? 'Weight' : 'Height'} (${unit})`, angle: -90, position: 'insideLeft' }}
+            label={{ value: `${t(metric)} (${unit})`, angle: -90, position: 'insideLeft' }}
             tick={{ fontSize: 12 }}
             stroke="hsl(var(--muted-foreground))"
+            tickFormatter={(value) => formatValue(value)}
           />
           <Tooltip
             contentStyle={{
@@ -111,11 +121,11 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
                 [`${metric}P50`]: '50th percentile',
                 [`${metric}P85`]: '85th percentile',
                 [`${metric}P97`]: '97th percentile',
-                [dataKey]: 'Your baby',
+                [dataKey]: t('yourBaby'),
               };
-              return [`${value} ${unit}`, labels[name] || name];
+              return [`${formatValue(value)} ${unit}`, labels[name] || name];
             }}
-            labelFormatter={(value) => `Age: ${value} months`}
+            labelFormatter={(value) => `${t('age')}: ${value} ${t('months')}`}
           />
           <Legend
             wrapperStyle={{ paddingTop: '20px' }}
@@ -126,57 +136,18 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
                 [`${metric}P50`]: '50%',
                 [`${metric}P85`]: '85%',
                 [`${metric}P97`]: '97%',
-                [dataKey]: '👶 Your baby',
+                [dataKey]: `👶 ${t('yourBaby')}`,
               };
               return labels[value] || value;
             }}
           />
 
           {/* Reference lines */}
-          <Line
-            type="monotone"
-            dataKey={`${metric}P3`}
-            stroke="hsl(var(--chart-p3))"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            dot={false}
-            name={`${metric}P3`}
-          />
-          <Line
-            type="monotone"
-            dataKey={`${metric}P15`}
-            stroke="hsl(var(--chart-p15))"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            dot={false}
-            name={`${metric}P15`}
-          />
-          <Line
-            type="monotone"
-            dataKey={`${metric}P50`}
-            stroke="hsl(var(--chart-p50))"
-            strokeWidth={2}
-            dot={false}
-            name={`${metric}P50`}
-          />
-          <Line
-            type="monotone"
-            dataKey={`${metric}P85`}
-            stroke="hsl(var(--chart-p85))"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            dot={false}
-            name={`${metric}P85`}
-          />
-          <Line
-            type="monotone"
-            dataKey={`${metric}P97`}
-            stroke="hsl(var(--chart-p97))"
-            strokeWidth={1.5}
-            strokeDasharray="5 5"
-            dot={false}
-            name={`${metric}P97`}
-          />
+          <Line type="monotone" dataKey={`${metric}P3`} stroke="hsl(var(--chart-p3))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P3`} />
+          <Line type="monotone" dataKey={`${metric}P15`} stroke="hsl(var(--chart-p15))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P15`} />
+          <Line type="monotone" dataKey={`${metric}P50`} stroke="hsl(var(--chart-p50))" strokeWidth={2} dot={false} name={`${metric}P50`} />
+          <Line type="monotone" dataKey={`${metric}P85`} stroke="hsl(var(--chart-p85))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P85`} />
+          <Line type="monotone" dataKey={`${metric}P97`} stroke="hsl(var(--chart-p97))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P97`} />
 
           {/* Baby's data */}
           <Line
@@ -198,10 +169,8 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
     return (
       <div className="glass-card rounded-2xl p-8 text-center">
         <div className="text-6xl mb-4">📊</div>
-        <h3 className="font-bold text-lg mb-2">No data to chart yet</h3>
-        <p className="text-muted-foreground">
-          Add your first entry to see growth charts with percentile curves!
-        </p>
+        <h3 className="font-bold text-lg mb-2">{t('noChartData')}</h3>
+        <p className="text-muted-foreground">{t('noChartDataDesc')}</p>
       </div>
     );
   }
@@ -209,13 +178,13 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
   return (
     <div className="glass-card rounded-2xl p-6 space-y-4">
       <h3 className="font-bold text-lg flex items-center gap-2">
-        📈 Growth Charts
+        📈 {t('growthCharts')}
       </h3>
 
       <Tabs defaultValue="weight" className="w-full">
         <TabsList className="grid w-full max-w-[300px] grid-cols-2">
-          <TabsTrigger value="weight">Weight</TabsTrigger>
-          <TabsTrigger value="height">Height</TabsTrigger>
+          <TabsTrigger value="weight">{t('weight')}</TabsTrigger>
+          <TabsTrigger value="height">{t('height')}</TabsTrigger>
         </TabsList>
         <TabsContent value="weight" className="mt-6">
           {renderChart('weight')}
@@ -226,7 +195,7 @@ export function GrowthChart({ entries, gender, birthDate }: GrowthChartProps) {
       </Tabs>
 
       <div className="text-xs text-muted-foreground text-center pt-4">
-        Reference lines based on WHO Child Growth Standards
+        {t('whoStandards')}
       </div>
     </div>
   );
