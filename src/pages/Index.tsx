@@ -2,7 +2,6 @@ import { Baby } from 'lucide-react';
 import { EntryForm } from '@/components/EntryForm';
 import { EntriesList } from '@/components/EntriesList';
 import { GrowthChart } from '@/components/GrowthChart';
-import { ExportButtons } from '@/components/ExportButtons';
 import { BabySelector } from '@/components/BabySelector';
 import { AddBabyDialog } from '@/components/AddBabyDialog';
 import { SettingsDialog } from '@/components/SettingsDialog';
@@ -27,10 +26,16 @@ const Index = () => {
 
   const { t } = useTranslation(settings.language);
 
+  const bgColor = activeBaby?.gender === 'male' 
+    ? 'bg-[hsl(var(--baby-boy-light))]' 
+    : activeBaby?.gender === 'female' 
+      ? 'bg-[hsl(var(--baby-girl-light))]' 
+      : 'bg-background';
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen transition-colors duration-500 ${bgColor}`}>
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border">
+      <header className={`sticky top-0 z-10 backdrop-blur-md border-b border-border ${bgColor}/80`}>
         <div className="container max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -42,9 +47,9 @@ const Index = () => {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <ExportButtons baby={activeBaby} settings={settings} />
             <SettingsDialog
               settings={settings}
+              activeBaby={activeBaby}
               onLanguageChange={setLanguage}
               onWeightUnitChange={setWeightUnit}
               onHeightUnitChange={setHeightUnit}
