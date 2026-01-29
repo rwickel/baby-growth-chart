@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        nunito: ['Nunito', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -47,6 +50,15 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        "baby-boy": "hsl(var(--baby-boy))",
+        "baby-boy-light": "hsl(var(--baby-boy-light))",
+        "baby-girl": "hsl(var(--baby-girl))",
+        "baby-girl-light": "hsl(var(--baby-girl-light))",
+        "chart-p3": "hsl(var(--chart-p3))",
+        "chart-p15": "hsl(var(--chart-p15))",
+        "chart-p50": "hsl(var(--chart-p50))",
+        "chart-p85": "hsl(var(--chart-p85))",
+        "chart-p97": "hsl(var(--chart-p97))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -65,25 +77,27 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "pulse-soft": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.7" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "pulse-soft": "pulse-soft 2s ease-in-out infinite",
       },
     },
   },
