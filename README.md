@@ -1,6 +1,8 @@
-# Baby Growth Chart
+# Baby Growth Chart (Android / Web App)
 
 A modern, responsive web and mobile application for tracking and visualizing baby growth data (weight, height, head circumference). Built with React, TypeScript, and shadcn/ui, and powered by Capacitor for mobile.
+<img width="803" height="962" alt="image" src="https://github.com/user-attachments/assets/93d57bf4-bd3f-4e10-a3e6-4df3fdaa77c6" />
+
 
 ## Features
 
