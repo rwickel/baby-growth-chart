@@ -33,9 +33,9 @@ const Index = () => {
       : 'bg-background';
 
   return (
-    <div className={`min-h-screen transition-colors duration-500 ${bgColor}`}>
+    <div className={`min-h-screen transition-colors duration-500 ${bgColor} pb-[env(safe-area-inset-bottom)]`}>
       {/* Header */}
-      <header className={`sticky top-0 z-10 backdrop-blur-md border-b border-border ${bgColor}/80`}>
+      <header className={`sticky top-0 z-10 backdrop-blur-md border-b border-border ${bgColor}/80 pt-[env(safe-area-inset-top)]`}>
         <div className="container max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
