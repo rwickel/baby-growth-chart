@@ -2,6 +2,7 @@ import { GenderToggle } from '@/components/GenderToggle';
 import { EntryForm } from '@/components/EntryForm';
 import { EntriesList } from '@/components/EntriesList';
 import { GrowthChart } from '@/components/GrowthChart';
+import { ExportButtons } from '@/components/ExportButtons';
 import { useBabyData } from '@/hooks/useBabyData';
 import { Baby } from 'lucide-react';
 
@@ -22,7 +23,10 @@ const Index = () => {
               <p className="text-xs text-muted-foreground">Track height & weight</p>
             </div>
           </div>
-          <GenderToggle value={gender} onChange={setGender} />
+          <div className="flex items-center gap-3">
+            <ExportButtons entries={entries} gender={gender} />
+            <GenderToggle value={gender} onChange={setGender} />
+          </div>
         </div>
       </header>
 
