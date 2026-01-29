@@ -1,88 +1,106 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { format, parseISO } from 'date-fns';
-import { GrowthEntry, Gender } from '@/types/baby';
+import { format, parseISO, differenceInMonths, differenceInWeeks } from 'date-fns';
+import { GrowthEntry, Baby, AppSettings } from '@/types/baby';
+import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
 
-export function exportToCSV(entries: GrowthEntry[], gender: Gender): void {
-  const headers = ['Date', 'Weight (kg)', 'Height (cm)'];
-  const rows = entries.map(entry => [
+export function exportToCSV(baby: Baby, settings: AppSettings): void {
+  const weightLabel = getWeightLabel(settings.weightUnit);
+  const heightLabel = getHeightLabel(settings.heightUnit);
+  
+  const headers = ['Date', `Weight (${weightLabel})`, `Height (${heightLabel})`];
+  const rows = baby.entries.map(entry => [
     format(parseISO(entry.date), 'yyyy-MM-dd'),
-    entry.weight.toString(),
-    entry.height.toString(),
+    displayWeight(entry.weight, settings.weightUnit),
+    displayHeight(entry.height, settings.heightUnit),
   ]);
 
+  const genderLabel = baby.gender === 'male' ? 'Boy' : 'Girl';
   const csvContent = [
-    `Baby Growth Data - ${gender === 'male' ? 'Boy' : 'Girl'}`,
+    `Baby Growth Data - ${baby.name} (${genderLabel})`,
+    baby.birthDate ? `Birth Date: ${format(parseISO(baby.birthDate), 'yyyy-MM-dd')}` : '',
     `Exported: ${format(new Date(), 'yyyy-MM-dd HH:mm')}`,
     '',
     headers.join(','),
     ...rows.map(row => row.join(',')),
-  ].join('\n');
+  ].filter(Boolean).join('\n');
 
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   const url = URL.createObjectURL(blob);
   
   link.setAttribute('href', url);
-  link.setAttribute('download', `baby-growth-${gender}-${format(new Date(), 'yyyy-MM-dd')}.csv`);
+  link.setAttribute('download', `baby-growth-${baby.name}-${format(new Date(), 'yyyy-MM-dd')}.csv`);
   link.style.visibility = 'hidden';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-export function exportToPDF(entries: GrowthEntry[], gender: Gender): void {
+export function exportToPDF(baby: Baby, settings: AppSettings): void {
   const doc = new jsPDF();
-  const genderLabel = gender === 'male' ? 'Boy' : 'Girl';
+  const genderLabel = baby.gender === 'male' ? 'Boy' : 'Girl';
+  const weightLabel = getWeightLabel(settings.weightUnit);
+  const heightLabel = getHeightLabel(settings.heightUnit);
   
   // Title
   doc.setFontSize(20);
-  doc.setTextColor(gender === 'male' ? '#60a5fa' : '#f472b6');
-  doc.text(`Baby Growth Report - ${genderLabel}`, 14, 20);
+  doc.setTextColor(baby.gender === 'male' ? '#60a5fa' : '#f472b6');
+  doc.text(`${baby.name} - Growth Report`, 14, 20);
   
   // Subtitle
   doc.setFontSize(10);
   doc.setTextColor('#6b7280');
-  doc.text(`Generated: ${format(new Date(), 'MMMM d, yyyy \'at\' h:mm a')}`, 14, 28);
+  doc.text(`${genderLabel} | Generated: ${format(new Date(), 'MMMM d, yyyy \'at\' h:mm a')}`, 14, 28);
+  
+  // Birth date and age
+  if (baby.birthDate) {
+    const birthDateFormatted = format(parseISO(baby.birthDate), 'MMMM d, yyyy');
+    const ageMonths = differenceInMonths(new Date(), parseISO(baby.birthDate));
+    const ageWeeks = differenceInWeeks(new Date(), parseISO(baby.birthDate));
+    const ageDisplay = ageMonths >= 1 ? `${ageMonths} months` : `${ageWeeks} weeks`;
+    
+    doc.text(`Birth Date: ${birthDateFormatted} (${ageDisplay} old)`, 14, 34);
+  }
   
   // Summary section
-  if (entries.length > 0) {
-    const latestEntry = entries[entries.length - 1];
-    const firstEntry = entries[0];
+  if (baby.entries.length > 0) {
+    const latestEntry = baby.entries[baby.entries.length - 1];
+    const firstEntry = baby.entries[0];
     
     doc.setFontSize(12);
     doc.setTextColor('#374151');
-    doc.text('Summary', 14, 40);
+    doc.text('Summary', 14, 46);
     
     doc.setFontSize(10);
     doc.setTextColor('#6b7280');
-    doc.text(`Total entries: ${entries.length}`, 14, 48);
-    doc.text(`First recorded: ${format(parseISO(firstEntry.date), 'MMM d, yyyy')}`, 14, 54);
-    doc.text(`Latest recorded: ${format(parseISO(latestEntry.date), 'MMM d, yyyy')}`, 14, 60);
-    doc.text(`Current weight: ${latestEntry.weight} kg`, 14, 66);
-    doc.text(`Current height: ${latestEntry.height} cm`, 14, 72);
+    doc.text(`Total entries: ${baby.entries.length}`, 14, 54);
+    doc.text(`First recorded: ${format(parseISO(firstEntry.date), 'MMM d, yyyy')}`, 14, 60);
+    doc.text(`Latest recorded: ${format(parseISO(latestEntry.date), 'MMM d, yyyy')}`, 14, 66);
+    doc.text(`Current weight: ${displayWeight(latestEntry.weight, settings.weightUnit)} ${weightLabel}`, 14, 72);
+    doc.text(`Current height: ${displayHeight(latestEntry.height, settings.heightUnit)} ${heightLabel}`, 14, 78);
     
-    // Weight change
+    // Changes
     const weightChange = latestEntry.weight - firstEntry.weight;
     const heightChange = latestEntry.height - firstEntry.height;
-    doc.text(`Weight gain: ${weightChange >= 0 ? '+' : ''}${weightChange.toFixed(2)} kg`, 14, 78);
-    doc.text(`Height gain: ${heightChange >= 0 ? '+' : ''}${heightChange.toFixed(1)} cm`, 14, 84);
+    doc.text(`Weight gain: ${weightChange >= 0 ? '+' : ''}${displayWeight(weightChange, settings.weightUnit)} ${weightLabel}`, 14, 84);
+    doc.text(`Height gain: ${heightChange >= 0 ? '+' : ''}${displayHeight(heightChange, settings.heightUnit)} ${heightLabel}`, 14, 90);
   }
   
   // Table
-  const tableData = entries.map(entry => [
+  const tableData = baby.entries.map(entry => [
     format(parseISO(entry.date), 'MMM d, yyyy'),
-    `${entry.weight} kg`,
-    `${entry.height} cm`,
+    `${displayWeight(entry.weight, settings.weightUnit)} ${weightLabel}`,
+    `${displayHeight(entry.height, settings.heightUnit)} ${heightLabel}`,
   ]);
   
   autoTable(doc, {
-    startY: entries.length > 0 ? 94 : 40,
+    startY: baby.entries.length > 0 ? 100 : 46,
     head: [['Date', 'Weight', 'Height']],
     body: tableData,
     theme: 'striped',
     headStyles: {
-      fillColor: gender === 'male' ? [96, 165, 250] : [244, 114, 182],
+      fillColor: baby.gender === 'male' ? [96, 165, 250] : [244, 114, 182],
       textColor: [255, 255, 255],
     },
     alternateRowStyles: {
@@ -108,5 +126,5 @@ export function exportToPDF(entries: GrowthEntry[], gender: Gender): void {
     );
   }
   
-  doc.save(`baby-growth-${gender}-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+  doc.save(`baby-growth-${baby.name}-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
 }

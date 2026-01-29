@@ -1,13 +1,31 @@
-import { GenderToggle } from '@/components/GenderToggle';
+import { Baby } from 'lucide-react';
 import { EntryForm } from '@/components/EntryForm';
 import { EntriesList } from '@/components/EntriesList';
 import { GrowthChart } from '@/components/GrowthChart';
 import { ExportButtons } from '@/components/ExportButtons';
+import { BabySelector } from '@/components/BabySelector';
+import { AddBabyDialog } from '@/components/AddBabyDialog';
+import { SettingsDialog } from '@/components/SettingsDialog';
 import { useBabyData } from '@/hooks/useBabyData';
-import { Baby } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Index = () => {
-  const { gender, entries, setGender, addEntry, updateEntry, deleteEntry } = useBabyData();
+  const {
+    babies,
+    activeBaby,
+    settings,
+    setLanguage,
+    setWeightUnit,
+    setHeightUnit,
+    addBaby,
+    deleteBaby,
+    setActiveBaby,
+    addEntry,
+    updateEntry,
+    deleteEntry,
+  } = useBabyData();
+
+  const { t } = useTranslation(settings.language);
 
   return (
     <div className="min-h-screen bg-background">
@@ -19,33 +37,73 @@ const Index = () => {
               <Baby className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="font-bold text-xl">Baby Growth Tracker</h1>
-              <p className="text-xs text-muted-foreground">Track height & weight</p>
+              <h1 className="font-bold text-xl">{t('appTitle')}</h1>
+              <p className="text-xs text-muted-foreground">{t('appSubtitle')}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <ExportButtons entries={entries} gender={gender} />
-            <GenderToggle value={gender} onChange={setGender} />
+          <div className="flex items-center gap-2">
+            <ExportButtons baby={activeBaby} settings={settings} />
+            <SettingsDialog
+              settings={settings}
+              onLanguageChange={setLanguage}
+              onWeightUnitChange={setWeightUnit}
+              onHeightUnitChange={setHeightUnit}
+            />
           </div>
         </div>
       </header>
 
+      {/* Baby Selection Bar */}
+      <div className="border-b border-border bg-secondary/30">
+        <div className="container max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+          <BabySelector
+            babies={babies}
+            activeBabyId={activeBaby?.id || null}
+            onSelect={setActiveBaby}
+            onDelete={deleteBaby}
+            language={settings.language}
+          />
+          <AddBabyDialog onAdd={addBaby} language={settings.language} />
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="container max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Entry Form */}
-        <EntryForm onSubmit={addEntry} />
+        {!activeBaby ? (
+          <div className="glass-card rounded-2xl p-8 text-center">
+            <div className="text-6xl mb-4 animate-float">👶</div>
+            <h3 className="font-bold text-lg mb-2">{t('noBabies')}</h3>
+            <p className="text-muted-foreground mb-4">{t('noBabiesDesc')}</p>
+            <AddBabyDialog onAdd={addBaby} language={settings.language} />
+          </div>
+        ) : (
+          <>
+            {/* Entry Form */}
+            <EntryForm onSubmit={addEntry} settings={settings} />
 
-        {/* Growth Chart */}
-        <GrowthChart entries={entries} gender={gender} />
+            {/* Growth Chart */}
+            <GrowthChart
+              entries={activeBaby.entries}
+              gender={activeBaby.gender}
+              birthDate={activeBaby.birthDate}
+              settings={settings}
+            />
 
-        {/* Entries List */}
-        <EntriesList entries={entries} onUpdate={updateEntry} onDelete={deleteEntry} />
+            {/* Entries List */}
+            <EntriesList
+              entries={activeBaby.entries}
+              onUpdate={updateEntry}
+              onDelete={deleteEntry}
+              settings={settings}
+            />
+          </>
+        )}
       </main>
 
       {/* Footer */}
       <footer className="border-t border-border py-6 mt-12">
         <div className="container max-w-4xl mx-auto px-4 text-center text-sm text-muted-foreground">
-          <p>Made with ❤️ for parents everywhere</p>
+          <p>{t('madeWithLove')}</p>
         </div>
       </footer>
     </div>

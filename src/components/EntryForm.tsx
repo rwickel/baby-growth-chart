@@ -7,16 +7,20 @@ import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { GrowthEntry } from '@/types/baby';
+import { GrowthEntry, AppSettings } from '@/types/baby';
+import { useTranslation } from '@/hooks/useTranslation';
+import { parseWeight, parseHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
 
 interface EntryFormProps {
   onSubmit: (entry: Omit<GrowthEntry, 'id'>) => void;
   initialValues?: GrowthEntry;
   onCancel?: () => void;
   isEditing?: boolean;
+  settings: AppSettings;
 }
 
-export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: EntryFormProps) {
+export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settings }: EntryFormProps) {
+  const { t } = useTranslation(settings.language);
   const [date, setDate] = useState<Date | undefined>(
     initialValues ? new Date(initialValues.date) : new Date()
   );
@@ -27,10 +31,14 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
     e.preventDefault();
     if (!date || !weight || !height) return;
 
+    // Convert to storage units (kg, cm)
+    const weightInKg = parseWeight(parseFloat(weight), settings.weightUnit);
+    const heightInCm = parseHeight(parseFloat(height), settings.heightUnit);
+
     onSubmit({
       date: format(date, 'yyyy-MM-dd'),
-      weight: parseFloat(weight),
-      height: parseFloat(height),
+      weight: weightInKg,
+      height: heightInCm,
     });
 
     if (!isEditing) {
@@ -40,15 +48,18 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
     }
   };
 
+  const weightLabel = getWeightLabel(settings.weightUnit);
+  const heightLabel = getHeightLabel(settings.heightUnit);
+
   return (
     <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 space-y-5">
       <h3 className="font-bold text-lg flex items-center gap-2">
-        {isEditing ? '✏️ Edit Entry' : '📝 Add New Entry'}
+        {isEditing ? `✏️ ${t('editEntry')}` : `📝 ${t('addEntry')}`}
       </h3>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="date" className="text-sm font-medium">Date</Label>
+          <Label htmlFor="date" className="text-sm font-medium">{t('date')}</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -59,7 +70,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, 'PPP') : <span>Pick a date</span>}
+                {date ? format(date, 'PPP') : <span>{t('pickDate')}</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -75,14 +86,14 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="weight" className="text-sm font-medium">Weight (kg)</Label>
+          <Label htmlFor="weight" className="text-sm font-medium">{t('weight')} ({weightLabel})</Label>
           <Input
             id="weight"
             type="number"
             step="0.01"
             min="0"
-            max="30"
-            placeholder="e.g., 5.5"
+            max={settings.weightUnit === 'lb' ? '66' : '30'}
+            placeholder={settings.weightUnit === 'lb' ? 'e.g., 12.1' : 'e.g., 5.5'}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             className="text-base"
@@ -91,14 +102,14 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="height" className="text-sm font-medium">Height (cm)</Label>
+          <Label htmlFor="height" className="text-sm font-medium">{t('height')} ({heightLabel})</Label>
           <Input
             id="height"
             type="number"
             step="0.1"
             min="0"
-            max="120"
-            placeholder="e.g., 60"
+            max={settings.heightUnit === 'in' ? '48' : '120'}
+            placeholder={settings.heightUnit === 'in' ? 'e.g., 23.6' : 'e.g., 60'}
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             className="text-base"
@@ -109,11 +120,11 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing }: Entr
 
       <div className="flex gap-3 pt-2">
         <Button type="submit" className="gap-2">
-          {isEditing ? 'Save Changes' : <><Plus className="h-4 w-4" /> Add Entry</>}
+          {isEditing ? t('saveChanges') : <><Plus className="h-4 w-4" /> {t('addEntry')}</>}
         </Button>
         {isEditing && onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {t('cancel')}
           </Button>
         )}
       </div>

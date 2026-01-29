@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Edit2, Trash2, Weight, Ruler } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { GrowthEntry } from '@/types/baby';
+import { GrowthEntry, AppSettings } from '@/types/baby';
 import { EntryForm } from './EntryForm';
+import { useTranslation } from '@/hooks/useTranslation';
+import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,18 +22,23 @@ interface EntriesListProps {
   entries: GrowthEntry[];
   onUpdate: (id: string, updates: Partial<Omit<GrowthEntry, 'id'>>) => void;
   onDelete: (id: string) => void;
+  settings: AppSettings;
 }
 
-export function EntriesList({ entries, onUpdate, onDelete }: EntriesListProps) {
+export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesListProps) {
+  const { t } = useTranslation(settings.language);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  const weightLabel = getWeightLabel(settings.weightUnit);
+  const heightLabel = getHeightLabel(settings.heightUnit);
 
   if (entries.length === 0) {
     return (
       <div className="glass-card rounded-2xl p-8 text-center">
         <div className="text-6xl mb-4 animate-float">👶</div>
-        <h3 className="font-bold text-lg mb-2">No entries yet</h3>
+        <h3 className="font-bold text-lg mb-2">{t('noEntries')}</h3>
         <p className="text-muted-foreground">
-          Start tracking your baby's growth by adding the first entry above!
+          {t('noEntriesDesc')}
         </p>
       </div>
     );
@@ -40,9 +47,9 @@ export function EntriesList({ entries, onUpdate, onDelete }: EntriesListProps) {
   return (
     <div className="glass-card rounded-2xl p-6 space-y-4">
       <h3 className="font-bold text-lg flex items-center gap-2">
-        📋 Growth History
+        📋 {t('growthHistory')}
         <span className="text-sm font-normal text-muted-foreground">
-          ({entries.length} {entries.length === 1 ? 'entry' : 'entries'})
+          ({entries.length} {entries.length === 1 ? t('entry') : t('entries')})
         </span>
       </h3>
 
@@ -53,6 +60,7 @@ export function EntriesList({ entries, onUpdate, onDelete }: EntriesListProps) {
               key={entry.id}
               initialValues={entry}
               isEditing
+              settings={settings}
               onSubmit={(updates) => {
                 onUpdate(entry.id, updates);
                 setEditingId(null);
@@ -64,17 +72,21 @@ export function EntriesList({ entries, onUpdate, onDelete }: EntriesListProps) {
               key={entry.id}
               className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl hover:bg-secondary/70 transition-colors"
             >
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-6 flex-wrap">
                 <div className="text-sm font-medium text-muted-foreground min-w-[100px]">
                   {format(parseISO(entry.date), 'MMM d, yyyy')}
                 </div>
                 <div className="flex items-center gap-2 text-foreground">
                   <Weight className="h-4 w-4 text-primary" />
-                  <span className="font-semibold">{entry.weight} kg</span>
+                  <span className="font-semibold">
+                    {displayWeight(entry.weight, settings.weightUnit)} {weightLabel}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground">
                   <Ruler className="h-4 w-4 text-accent" />
-                  <span className="font-semibold">{entry.height} cm</span>
+                  <span className="font-semibold">
+                    {displayHeight(entry.height, settings.heightUnit)} {heightLabel}
+                  </span>
                 </div>
               </div>
 
@@ -96,19 +108,19 @@ export function EntriesList({ entries, onUpdate, onDelete }: EntriesListProps) {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Entry?</AlertDialogTitle>
+                      <AlertDialogTitle>{t('deleteEntry')}</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will permanently delete the entry from {format(parseISO(entry.date), 'MMM d, yyyy')}.
-                        This action cannot be undone.
+                        {t('deleteEntryDesc')} {format(parseISO(entry.date), 'MMM d, yyyy')}.
+                        {' '}{t('cannotUndo')}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => onDelete(entry.id)}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
-                        Delete
+                        {t('delete')}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
