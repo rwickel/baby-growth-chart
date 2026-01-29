@@ -1,23 +1,26 @@
 # Baby Growth Chart
 
-A modern, responsive web application for tracking and visualizing baby growth data (weight, height, head circumference). Built with React, TypeScript, and shadcn/ui.
+A modern, responsive web and mobile application for tracking and visualizing baby growth data (weight, height, head circumference). Built with React, TypeScript, and shadcn/ui, and powered by Capacitor for mobile.
 
 ## Features
 
 - 👶 **Multi-Child Support**: Manage growth records for multiple babies.
+- 🎨 **Dynamic Themes**: Gender-based themes (Blue for boys, Pink for girls).
+- ⚙️ **Quick Setup**: Configure language and units directly from the start screen.
 - 📈 **Interactive Charts**: Visualize growth trends over time using Recharts.
 - 📝 **Detailed Entries**: Log weight, length/height, and head circumference with dates.
 - 🔄 **Unit Conversion**: Support for different unit systems (metric/imperial).
-- 📤 **Data Export**: Export records to PDF for sharing with healthcare providers.
-- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices.
+- 📤 **Data Export**: Export records to CSV and PDF for sharing with healthcare providers.
+- 📱 **Mobile Ready**: Native Android support via Capacitor with immersive full-screen design.
 - 🌙 **Dark Mode**: Built-in support for light and dark themes.
 
 ## Tech Stack
 
 - **Framework**: [React](https://reactjs.org/) with [Vite](https://vitejs.dev/)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Mobile**: [Capacitor](https://capacitorjs.com/) (Android)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) (based on Radix UI)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
 - **Charts**: [Recharts](https://recharts.org/)
 - **State Management**: [TanStack Query](https://tanstack.com/query)
 - **Forms**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
@@ -28,9 +31,9 @@ A modern, responsive web application for tracking and visualizing baby growth da
 ### Prerequisites
 
 - Node.js (v18 or higher recommended)
-- npm, yarn, or bun
+- Android Studio (for mobile development)
 
-### Installation
+### Web Development
 
 1. Clone the repository:
    ```bash
@@ -47,18 +50,33 @@ A modern, responsive web application for tracking and visualizing baby growth da
    ```bash
    npm run dev
    ```
-   The application will be available at `http://localhost:8080` (or the port shown in your terminal).
+   The application will be available at `http://localhost:5173`.
 
-4. 
-```bash
-   npm install
-   npm install @capacitor/android
+### Mobile Development (Android)
+
+1. Build the web application:
+   ```bash
    npm run build
-   npx cap add android
-   npx cap sync android
-   npx cap open android   
- ```
-   
+   ```
+
+2. Sync with Android project:
+   ```bash
+   npx cap sync
+   ```
+
+3. Open in Android Studio:
+   ```bash
+   npx cap open android
+   ```
+
+4. Run the app on an emulator or physical device.
+
+### Generating Assets
+
+To regenerate app icons and splash screens (requires `@capacitor/assets`):
+```bash
+npx capacitor-assets generate --android
+```
 
 ## Available Scripts
 
@@ -72,21 +90,19 @@ A modern, responsive web application for tracking and visualizing baby growth da
 
 ```
 src/
-├── components/     # Reusable UI components and feature-specific widgets
+├── components/     # Reusable UI components
 │   ├── ui/         # primitive shadcn/ui components
-│   └── ...         # Feature components (e.g., GrowthChart, EntryForm)
-├── data/           # Static data (e.g., growth references)
-├── hooks/          # Custom React hooks
-├── lib/            # Utility functions and configurations
-├── pages/          # Application pages/routes
-├── types/          # TypeScript type definitions
-└── test/           # Test setup and utilities
+│   └── ...         # Feature components (e.g., GrowthChart, SettingsControls)
+├── data/           # Static data
+├── hooks/          # Custom React hooks (useBabyData, useTranslation)
+├── lib/            # Utility functions (conversions, export)
+├── pages/          # Route-level pages
+├── types/          # TypeScript definitions
+└── test/           # Unit tests
+android/            # Native Android project files
+assets/             # Source assets for icons/splash
 ```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-MIT
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
