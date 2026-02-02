@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -28,11 +29,12 @@ export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
   const [name, setName] = useState('');
   const [gender, setGender] = useState<Gender>('male');
   const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !birthDate) return;
-    
+
     onAdd(name.trim(), gender, format(birthDate, 'yyyy-MM-dd'));
     setName('');
     setGender('male');
@@ -53,6 +55,9 @@ export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
           <DialogTitle className="flex items-center gap-2">
             👶 {t('addBaby')}
           </DialogTitle>
+          <DialogDescription>
+            {t('noBabiesDesc')}
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -90,7 +95,7 @@ export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
 
           <div className="space-y-2">
             <Label>{t('birthDate')}</Label>
-            <Popover>
+            <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -107,11 +112,23 @@ export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
                 <Calendar
                   mode="single"
                   selected={birthDate}
-                  onSelect={setBirthDate}
+                  onSelect={(d) => {
+                    setBirthDate(d);
+                    setCalendarOpen(false);
+                  }}
                   disabled={(date) => date > new Date()}
                   initialFocus
                   className="pointer-events-auto"
                 />
+                <div className="p-3 border-t border-border flex justify-end">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setCalendarOpen(false)}
+                  >
+                    {t('cancel')}
+                  </Button>
+                </div>
               </PopoverContent>
             </Popover>
           </div>

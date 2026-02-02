@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -59,6 +60,9 @@ export function SettingsDialog({
           <DialogTitle className="flex items-center gap-2">
             ⚙️ {t('settings')}
           </DialogTitle>
+          <DialogDescription>
+            {t('appSubtitle')}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <SettingsControls

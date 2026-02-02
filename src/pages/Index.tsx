@@ -27,10 +27,10 @@ const Index = () => {
 
   const { t } = useTranslation(settings.language);
 
-  const bgColor = activeBaby?.gender === 'male' 
-    ? 'bg-[hsl(var(--baby-boy-light))]' 
-    : activeBaby?.gender === 'female' 
-      ? 'bg-[hsl(var(--baby-girl-light))]' 
+  const bgColor = activeBaby?.gender === 'male'
+    ? 'bg-[hsl(var(--baby-boy-light))]'
+    : activeBaby?.gender === 'female'
+      ? 'bg-[hsl(var(--baby-girl-light))]'
       : 'bg-background';
 
   return (
@@ -83,7 +83,7 @@ const Index = () => {
             <div className="mb-8">
               <AddBabyDialog onAdd={addBaby} language={settings.language} />
             </div>
-            
+
             <div className="w-full max-w-xs border-t pt-6">
               <h4 className="text-sm font-medium mb-4 text-muted-foreground">{t('settings')}</h4>
               <SettingsControls
@@ -96,16 +96,17 @@ const Index = () => {
           </div>
         ) : (
           <>
-            {/* Entry Form */}
-            <EntryForm onSubmit={addEntry} settings={settings} />
-
             {/* Growth Chart */}
             <GrowthChart
               entries={activeBaby.entries}
               gender={activeBaby.gender}
               birthDate={activeBaby.birthDate}
               settings={settings}
+              babyName={activeBaby.name}
             />
+
+            {/* Entry Form */}
+            <EntryForm onSubmit={addEntry} settings={settings} />
 
             {/* Entries List */}
             <EntriesList

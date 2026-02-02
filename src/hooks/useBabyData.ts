@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { AppData, Baby, GrowthEntry, AppSettings, Gender, Language, WeightUnit, HeightUnit } from '@/types/baby';
+import { generateUUID } from '@/lib/utils';
 
 const STORAGE_KEY = 'baby-growth-tracker-v2';
 
@@ -24,7 +25,7 @@ function migrateFromV1(): AppData | null {
       if (parsed.gender && Array.isArray(parsed.entries)) {
         // Old format detected, migrate
         const newBaby: Baby = {
-          id: crypto.randomUUID(),
+          id: generateUUID(),
           name: 'Baby',
           gender: parsed.gender,
           birthDate: '',
@@ -91,7 +92,7 @@ export function useBabyData() {
   // Baby management
   const addBaby = useCallback((name: string, gender: Gender, birthDate: string) => {
     const newBaby: Baby = {
-      id: crypto.randomUUID(),
+      id: generateUUID(),
       name,
       gender,
       birthDate,
@@ -120,7 +121,7 @@ export function useBabyData() {
       return {
         ...prev,
         babies: newBabies,
-        activeBabyId: prev.activeBabyId === id 
+        activeBabyId: prev.activeBabyId === id
           ? (newBabies.length > 0 ? newBabies[0].id : null)
           : prev.activeBabyId,
       };
@@ -134,22 +135,22 @@ export function useBabyData() {
   // Entry management (for active baby)
   const addEntry = useCallback((entry: Omit<GrowthEntry, 'id'>) => {
     if (!data.activeBabyId) return;
-    
+
     const newEntry: GrowthEntry = {
       ...entry,
-      id: crypto.randomUUID(),
+      id: generateUUID(),
     };
-    
+
     setData(prev => ({
       ...prev,
       babies: prev.babies.map(baby =>
         baby.id === prev.activeBabyId
           ? {
-              ...baby,
-              entries: [...baby.entries, newEntry].sort(
-                (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-              ),
-            }
+            ...baby,
+            entries: [...baby.entries, newEntry].sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            ),
+          }
           : baby
       ),
     }));
@@ -157,17 +158,17 @@ export function useBabyData() {
 
   const updateEntry = useCallback((id: string, updates: Partial<Omit<GrowthEntry, 'id'>>) => {
     if (!data.activeBabyId) return;
-    
+
     setData(prev => ({
       ...prev,
       babies: prev.babies.map(baby =>
         baby.id === prev.activeBabyId
           ? {
-              ...baby,
-              entries: baby.entries
-                .map(entry => (entry.id === id ? { ...entry, ...updates } : entry))
-                .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
-            }
+            ...baby,
+            entries: baby.entries
+              .map(entry => (entry.id === id ? { ...entry, ...updates } : entry))
+              .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+          }
           : baby
       ),
     }));
@@ -175,15 +176,15 @@ export function useBabyData() {
 
   const deleteEntry = useCallback((id: string) => {
     if (!data.activeBabyId) return;
-    
+
     setData(prev => ({
       ...prev,
       babies: prev.babies.map(baby =>
         baby.id === prev.activeBabyId
           ? {
-              ...baby,
-              entries: baby.entries.filter(entry => entry.id !== id),
-            }
+            ...baby,
+            entries: baby.entries.filter(entry => entry.id !== id),
+          }
           : baby
       ),
     }));
@@ -194,21 +195,24 @@ export function useBabyData() {
     babies: data.babies,
     activeBaby,
     settings: data.settings,
-    
+
     // Settings actions
     setLanguage,
     setWeightUnit,
     setHeightUnit,
-    
+
     // Baby actions
     addBaby,
     updateBaby,
     deleteBaby,
     setActiveBaby,
-    
+
     // Entry actions
     addEntry,
     updateEntry,
     deleteEntry,
+
+    // Utilities (exposed for testing)
+    generateUUID,
   };
 }

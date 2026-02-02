@@ -70,39 +70,47 @@ export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesLi
           ) : (
             <div
               key={entry.id}
-              className="flex items-center justify-between p-4 bg-secondary/50 rounded-xl hover:bg-secondary/70 transition-colors"
+              className="group flex items-center justify-between p-3 bg-secondary/40 rounded-xl hover:bg-secondary/60 transition-colors gap-2"
             >
-              <div className="flex items-center gap-6 flex-wrap">
-                <div className="text-sm font-medium text-muted-foreground min-w-[100px]">
-                  {format(parseISO(entry.date), 'MMM d, yyyy')}
+              <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-2 flex-1 min-w-0">
+                <div className="text-[11px] font-bold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
+                  {format(parseISO(entry.date), 'MMM d, yy')}
                 </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Weight className="h-4 w-4 text-primary" />
-                  <span className="font-semibold">
-                    {displayWeight(entry.weight, settings.weightUnit)} {weightLabel}
-                  </span>
+
+                <div className="flex items-center gap-1.5 text-foreground min-w-0">
+                  <Weight className="h-3 w-3 text-primary/70 shrink-0" />
+                  <div className="flex items-baseline gap-0.5 overflow-hidden">
+                    <span className="text-sm font-bold tabular-nums">
+                      {entry.weight > 0 ? displayWeight(entry.weight, settings.weightUnit) : "—"}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground font-medium lowercase">{weightLabel}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-foreground">
-                  <Ruler className="h-4 w-4 text-accent" />
-                  <span className="font-semibold">
-                    {displayHeight(entry.height, settings.heightUnit)} {heightLabel}
-                  </span>
+
+                <div className="flex items-center gap-1.5 text-foreground min-w-0">
+                  <Ruler className="h-3 w-3 text-accent/70 shrink-0" />
+                  <div className="flex items-baseline gap-0.5 overflow-hidden">
+                    <span className="text-sm font-bold tabular-nums">
+                      {entry.height > 0 ? displayHeight(entry.height, settings.heightUnit) : "—"}
+                    </span>
+                    <span className="text-[9px] text-muted-foreground font-medium lowercase">{heightLabel}</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-0.5 shrink-0">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setEditingId(entry.id)}
-                  className="h-8 w-8"
+                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
                 >
                   <Edit2 className="h-4 w-4" />
                 </Button>
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                    <Button variant="ghost" size="icon" className="h-9 w-9 text-destructive/60 hover:text-destructive">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>

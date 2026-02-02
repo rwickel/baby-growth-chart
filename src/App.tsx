@@ -14,9 +14,13 @@ const App = () => {
   useEffect(() => {
     const hideStatusBar = async () => {
       try {
-        await StatusBar.hide();
+        // Only try to hide status bar on native platforms to avoid web console errors
+        const { Capacitor } = await import("@capacitor/core");
+        if (Capacitor.isNativePlatform()) {
+          await StatusBar.hide();
+        }
       } catch (error) {
-        console.error("Error hiding status bar:", error);
+        // Silently fail on web or if plugin is not available
       }
     };
     hideStatusBar();
@@ -27,7 +31,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_relativeSplatPath: true }}>
           <Routes>
             <Route path="/" element={<Index />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

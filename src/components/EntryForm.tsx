@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { GrowthEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
 import { parseWeight, parseHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
+import { toast } from 'sonner';
 
 interface EntryFormProps {
   onSubmit: (entry: Omit<GrowthEntry, 'id'>) => void;
@@ -26,14 +27,19 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
   );
   const [weight, setWeight] = useState(initialValues?.weight.toString() || '');
   const [height, setHeight] = useState(initialValues?.height.toString() || '');
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date || !weight || !height) return;
+    if (!date || (!weight && !height)) {
+      // Show toast if both weight and height are missing
+      toast.error(t('atLeastOneMetric'));
+      return;
+    }
 
     // Convert to storage units (kg, cm)
-    const weightInKg = parseWeight(parseFloat(weight), settings.weightUnit);
-    const heightInCm = parseHeight(parseFloat(height), settings.heightUnit);
+    const weightInKg = weight ? parseWeight(parseFloat(weight), settings.weightUnit) : 0;
+    const heightInCm = height ? parseHeight(parseFloat(height), settings.heightUnit) : 0;
 
     onSubmit({
       date: format(date, 'yyyy-MM-dd'),
@@ -60,7 +66,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="date" className="text-sm font-medium">{t('date')}</Label>
-          <Popover>
+          <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
@@ -77,10 +83,22 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
               <Calendar
                 mode="single"
                 selected={date}
-                onSelect={setDate}
+                onSelect={(d) => {
+                  setDate(d);
+                  setCalendarOpen(false);
+                }}
                 initialFocus
                 className="pointer-events-auto"
               />
+              <div className="p-3 border-t border-border flex justify-end">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCalendarOpen(false)}
+                >
+                  {t('cancel')}
+                </Button>
+              </div>
             </PopoverContent>
           </Popover>
         </div>
@@ -97,7 +115,6 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             className="text-base"
-            required
           />
         </div>
 
@@ -113,7 +130,6 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             className="text-base"
-            required
           />
         </div>
       </div>

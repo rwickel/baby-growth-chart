@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import {
   LineChart,
   Line,
@@ -15,19 +15,39 @@ import growthReferences from '@/data/growthReferences.json';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from '@/hooks/useTranslation';
 import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
+import { Button } from '@/components/ui/button';
+import { Share2, Download, FileSpreadsheet } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import { toast } from 'sonner';
+import { exportToCSV } from '@/lib/exportData';
+import { Baby } from '@/types/baby';
 
 interface GrowthChartProps {
   entries: GrowthEntry[];
   gender: 'male' | 'female';
   birthDate?: string;
   settings: AppSettings;
+  babyName?: string;
 }
 
 type Metric = 'weight' | 'height';
 
-export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChartProps) {
+export function GrowthChart({ entries, gender, birthDate, settings, babyName }: GrowthChartProps) {
   const { t } = useTranslation(settings.language);
+  const chartRef = useRef<HTMLDivElement>(null);
   const references = growthReferences[gender];
+
+  // Create a local baby object for CSV export if needed
+  const activeBabyObject: Baby | null = useMemo(() => {
+    if (!babyName) return null;
+    return {
+      id: 'local',
+      name: babyName,
+      gender,
+      birthDate: birthDate || '',
+      entries,
+    };
+  }, [babyName, gender, birthDate, entries]);
 
   const getAgeInMonths = (date: string): number => {
     if (birthDate) {
@@ -42,7 +62,7 @@ export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChar
 
   const chartData = useMemo(() => {
     const data: Record<string, number | undefined>[] = [];
-    
+
     // Add reference data points (always in kg/cm)
     references.weight.months.forEach((month, index) => {
       data.push({
@@ -65,19 +85,91 @@ export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChar
       const month = getAgeInMonths(entry.date);
       const existingPoint = data.find((d) => d.month === month);
       if (existingPoint) {
-        existingPoint.babyWeight = entry.weight;
-        existingPoint.babyHeight = entry.height;
+        existingPoint.babyWeight = entry.weight > 0 ? entry.weight : undefined;
+        existingPoint.babyHeight = entry.height > 0 ? entry.height : undefined;
       } else {
         data.push({
           month,
-          babyWeight: entry.weight,
-          babyHeight: entry.height,
+          babyWeight: entry.weight > 0 ? entry.weight : undefined,
+          babyHeight: entry.height > 0 ? entry.height : undefined,
         });
       }
     });
 
     return data.sort((a, b) => (a.month || 0) - (b.month || 0));
   }, [entries, references, birthDate]);
+
+  const handleDownload = async () => {
+    if (!chartRef.current) return;
+    try {
+      const dataUrl = await toPng(chartRef.current, { backgroundColor: 'white' });
+      const link = document.createElement('a');
+      link.download = `growth-chart-${babyName || 'baby'}.png`;
+      link.href = dataUrl;
+      link.click();
+      toast.success(t('chartDownloaded'), {
+        description: t('downloadHint'),
+      });
+    } catch (err) {
+      toast.error('Failed to download chart');
+    }
+  };
+
+  const handleShare = async () => {
+    if (!chartRef.current) return;
+    try {
+      const dataUrl = await toPng(chartRef.current, { backgroundColor: 'white' });
+
+      const { Capacitor } = await import("@capacitor/core");
+      const isNative = Capacitor.isNativePlatform();
+
+      if (isNative) {
+        // For Android/iOS, the best way to share an image is to save it to a file first
+        const { Filesystem, Directory } = await import("@capacitor/filesystem");
+        const { Share } = await import("@capacitor/share");
+
+        const fileName = `growth-chart-${babyName || 'baby'}-${Date.now()}.png`;
+        const base64Data = dataUrl.split(',')[1];
+
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Cache,
+        });
+
+        await Share.share({
+          title: `${babyName || t('yourBaby')} - ${t('growthCharts')}`,
+          text: t('whoStandards'),
+          files: [savedFile.uri],
+          dialogTitle: t('share'),
+        });
+        toast.success(t('chartShared'));
+        return;
+      }
+
+      // Web fallback
+      const response = await fetch(dataUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `growth-chart-${babyName || 'baby'}.png`, { type: 'image/png' });
+
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `${babyName || t('yourBaby')} - ${t('growthCharts')}`,
+          text: t('whoStandards'),
+        });
+        toast.success(t('chartShared'));
+      } else {
+        // Ultimate fallback: just download the image
+        handleDownload();
+      }
+    } catch (err) {
+      console.error('Share error:', err);
+      toast.error('Failed to share chart');
+      // If we failed after generating image, try to at least download it
+      handleDownload();
+    }
+  };
 
   const renderChart = (metric: Metric) => {
     const dataKey = metric === 'weight' ? 'babyWeight' : 'babyHeight';
@@ -116,12 +208,12 @@ export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChar
             }}
             formatter={(value: number, name: string) => {
               const labels: Record<string, string> = {
-                [`${metric}P3`]: '3rd percentile',
-                [`${metric}P15`]: '15th percentile',
-                [`${metric}P50`]: '50th percentile',
-                [`${metric}P85`]: '85th percentile',
-                [`${metric}P97`]: '97th percentile',
-                [dataKey]: t('yourBaby'),
+                [`${metric}P3`]: 'P3',
+                [`${metric}P15`]: 'P15',
+                [`${metric}P50`]: 'P50',
+                [`${metric}P85`]: 'P85',
+                [`${metric}P97`]: 'P97',
+                [dataKey]: babyName || t('yourBaby'),
               };
               return [`${formatValue(value)} ${unit}`, labels[name] || name];
             }}
@@ -131,12 +223,12 @@ export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChar
             wrapperStyle={{ paddingTop: '20px' }}
             formatter={(value) => {
               const labels: Record<string, string> = {
-                [`${metric}P3`]: '3%',
-                [`${metric}P15`]: '15%',
-                [`${metric}P50`]: '50%',
-                [`${metric}P85`]: '85%',
-                [`${metric}P97`]: '97%',
-                [dataKey]: `👶 ${t('yourBaby')}`,
+                [`${metric}P3`]: 'P3',
+                [`${metric}P15`]: 'P15',
+                [`${metric}P50`]: 'P50',
+                [`${metric}P85`]: 'P85',
+                [`${metric}P97`]: 'P97',
+                [dataKey]: `👶 ${babyName || t('yourBaby')}`,
               };
               return labels[value] || value;
             }}
@@ -176,27 +268,48 @@ export function GrowthChart({ entries, gender, birthDate, settings }: GrowthChar
   }
 
   return (
-    <div className="glass-card rounded-2xl p-6 space-y-4">
-      <h3 className="font-bold text-lg flex items-center gap-2">
-        📈 {t('growthCharts')}
-      </h3>
+    <div className="glass-card rounded-2xl p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* <h3 className="font-bold text-lg flex items-center gap-2">
+           📈 {t('growthCharts')}
+        </h3> */}
+        <div className="flex gap-2">
+          <Button variant="outline" size="icon" onClick={handleShare} title={t('share')}>
+            <Share2 className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={handleDownload} title={t('download')}>
+            <Download className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => {
+            if (activeBabyObject) {
+              exportToCSV(activeBabyObject, settings);
+              toast.success(t('dataExported'));
+            }
+          }} title={t('exportCSV')}>
+            <FileSpreadsheet className="h-4 w-4" />
+          </Button>
+        </div>
 
-      <Tabs defaultValue="weight" className="w-full">
-        <TabsList className="grid w-full max-w-[300px] grid-cols-2">
-          <TabsTrigger value="weight">{t('weight')}</TabsTrigger>
-          <TabsTrigger value="height">{t('height')}</TabsTrigger>
-        </TabsList>
-        <TabsContent value="weight" className="mt-6">
-          {renderChart('weight')}
-        </TabsContent>
-        <TabsContent value="height" className="mt-6">
-          {renderChart('height')}
-        </TabsContent>
-      </Tabs>
-
-      <div className="text-xs text-muted-foreground text-center pt-4">
-        {t('whoStandards')}
       </div>
-    </div>
+
+      <div ref={chartRef} className="bg-card rounded-xl p-2">
+        <Tabs defaultValue="weight" className="w-full">
+          <TabsList className="grid w-full max-w-[300px] grid-cols-2">
+            <TabsTrigger value="weight">{t('weight')}</TabsTrigger>
+            <TabsTrigger value="height">{t('height')}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="weight" className="mt-6">
+            {renderChart('weight')}
+          </TabsContent>
+          <TabsContent value="height" className="mt-6">
+            {renderChart('height')}
+          </TabsContent>
+        </Tabs>
+
+        <div className="text-xs text-muted-foreground text-center pt-4">
+          {t('whoStandards')}
+        </div>
+      </div>
+    </div >
   );
 }

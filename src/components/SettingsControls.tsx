@@ -50,8 +50,8 @@ export function SettingsControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="kg">Kilograms (kg)</SelectItem>
-            <SelectItem value="lb">Pounds (lb)</SelectItem>
+            <SelectItem value="kg">{t('kilograms')} (kg)</SelectItem>
+            <SelectItem value="lb">{t('pounds')} (lb)</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -63,8 +63,8 @@ export function SettingsControls({
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="cm">Centimeters (cm)</SelectItem>
-            <SelectItem value="in">Inches (in)</SelectItem>
+            <SelectItem value="cm">{t('centimeters')} (cm)</SelectItem>
+            <SelectItem value="in">{t('inches')} (in)</SelectItem>
           </SelectContent>
         </Select>
       </div>

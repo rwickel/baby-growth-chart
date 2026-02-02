@@ -58,18 +58,15 @@ A modern, responsive web and mobile application for tracking and visualizing bab
 
 1. Build the web application:
    ```bash
-   npm run build
+      npm install
+      npm install @capacitor/android
+      npm run build
+      npx cap add android
+      npx cap sync android
+      npx cap open android
    ```
 
-2. Sync with Android project:
-   ```bash
-   npx cap sync
-   ```
 
-3. Open in Android Studio:
-   ```bash
-   npx cap open android
-   ```
 
 4. Run the app on an emulator or physical device.
 
