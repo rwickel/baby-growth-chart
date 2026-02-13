@@ -94,6 +94,9 @@ export const translations: Record<Language, Record<string, string>> = {
     developmentTitle: 'Developmental Milestones',
     expectedAt: 'Expected at',
     monthsOld: 'months old',
+    updateBabyDesc: 'Update your baby\'s information',
+    backToAge: 'Back to age',
+    birthRecord: 'Birth record',
   },
   es: {
     appTitle: 'Seguidor de Crecimiento',
@@ -185,6 +188,9 @@ export const translations: Record<Language, Record<string, string>> = {
     developmentTitle: 'Hitos del Desarrollo',
     expectedAt: 'Esperado a los',
     monthsOld: 'meses',
+    updateBabyDesc: 'Actualiza la información de tu bebé',
+    backToAge: 'Volver a la edad de',
+    birthRecord: 'Registro de nacimiento',
   },
   fr: {
     appTitle: 'Suivi de Croissance',
@@ -276,6 +282,9 @@ export const translations: Record<Language, Record<string, string>> = {
     developmentTitle: 'Étapes du Développement',
     expectedAt: 'Attendu à',
     monthsOld: 'mois',
+    updateBabyDesc: 'Modifier les informations de votre bébé',
+    backToAge: 'Retour à l\'âge de',
+    birthRecord: 'Dossier de naissance',
   },
   de: {
     appTitle: 'Wachstumstracker',
@@ -367,6 +376,9 @@ export const translations: Record<Language, Record<string, string>> = {
     developmentTitle: 'Meilensteine der Entwicklung',
     expectedAt: 'Erwartet mit',
     monthsOld: 'Monaten',
+    updateBabyDesc: 'Informationen Ihres Babys aktualisieren',
+    backToAge: 'Zurück zum Alter von',
+    birthRecord: 'Geburtseintrag',
   },
 };
 

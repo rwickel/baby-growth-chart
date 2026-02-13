@@ -9,6 +9,7 @@ export interface GrowthEntry {
   date: string;
   weight: number; // stored in kg
   height: number; // stored in cm
+  note?: string;
 }
 
 export interface MilkEntry {

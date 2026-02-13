@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { format } from 'date-fns';
-import { CalendarIcon, UserPlus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { format, parseISO } from 'date-fns';
+import { CalendarIcon, UserPlus, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,44 +15,78 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { Gender, Language } from '@/types/baby';
+import { Gender, Language, Baby } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
+import { parseWeight, parseHeight } from '@/lib/unitConversions';
 
-interface AddBabyDialogProps {
-  onAdd: (name: string, gender: Gender, birthDate: string) => void;
+interface BabyDialogProps {
+  onSubmit: (name: string, gender: Gender, birthDate: string, weight?: number, height?: number) => void;
   language: Language;
   trigger?: React.ReactNode;
+  initialData?: Baby;
+  title?: string;
+  weightUnit?: 'kg' | 'lb';
+  heightUnit?: 'cm' | 'in';
 }
 
 import boyImg from '../img/boy.png';
 import girlImg from '../img/girl.png';
 
-export function AddBabyDialog({ onAdd, language, trigger }: AddBabyDialogProps) {
+export function BabyDialog({ onSubmit, language, trigger, initialData, title, weightUnit = 'kg', heightUnit = 'cm' }: BabyDialogProps) {
   const { t } = useTranslation(language);
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState('');
-  const [gender, setGender] = useState<Gender>('male');
-  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+  const [name, setName] = useState(initialData?.name || '');
+  const [gender, setGender] = useState<Gender>(initialData?.gender || 'male');
+  const [birthDate, setBirthDate] = useState<Date | undefined>(
+    initialData?.birthDate ? parseISO(initialData.birthDate) : undefined
+  );
+  const [weight, setWeight] = useState('');
+  const [height, setHeight] = useState('');
   const [calendarOpen, setCalendarOpen] = useState(false);
+
+  useEffect(() => {
+    if (open && initialData) {
+      setName(initialData.name);
+      setGender(initialData.gender);
+      setBirthDate(parseISO(initialData.birthDate));
+      setWeight('');
+      setHeight('');
+    } else if (open && !initialData) {
+      setName('');
+      setGender('male');
+      setBirthDate(undefined);
+      setWeight('');
+      setHeight('');
+    }
+  }, [open, initialData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !birthDate) return;
 
-    onAdd(name.trim(), gender, format(birthDate, 'yyyy-MM-dd'));
-    setName('');
-    setGender('male');
-    setBirthDate(undefined);
+    const w = weight ? parseWeight(parseFloat(weight), weightUnit) : undefined;
+    const h = height ? parseHeight(parseFloat(height), heightUnit) : undefined;
+
+    onSubmit(name.trim(), gender, format(birthDate, 'yyyy-MM-dd'), w, h);
+    if (!initialData) {
+      setName('');
+      setGender('male');
+      setBirthDate(undefined);
+      setWeight('');
+      setHeight('');
+    }
     setOpen(false);
   };
+
+  const isEdit = !!initialData;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {trigger || (
           <Button variant="outline" size="sm" className="gap-2 h-10 px-4 rounded-xl border-white/40 bg-white/20 backdrop-blur-sm hover:bg-white/40 font-bold transition-all">
-            <UserPlus className="h-4 w-4" />
-            {t('addBaby')}
+            {isEdit ? <Edit2 className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+            {title || (isEdit ? t('editEntry') : t('addBaby'))}
           </Button>
         )}
       </DialogTrigger>
@@ -61,12 +95,12 @@ export function AddBabyDialog({ onAdd, language, trigger }: AddBabyDialogProps) 
           <DialogHeader>
             <DialogTitle className="flex items-center gap-3 text-2xl font-black text-slate-800">
               <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center overflow-hidden">
-                <img src={boyImg} className="w-8 h-8 object-contain" alt="" />
+                <img src={gender === 'male' ? boyImg : girlImg} className="w-8 h-8 object-contain" alt="" />
               </div>
-              {t('addBaby')}
+              {title || (isEdit ? t('editEntry') : t('addBaby'))}
             </DialogTitle>
             <DialogDescription className="font-medium text-slate-500 pt-1">
-              {t('noBabiesDesc')}
+              {isEdit ? t('updateBabyDesc') : t('noBabiesDesc')}
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -130,6 +164,7 @@ export function AddBabyDialog({ onAdd, language, trigger }: AddBabyDialogProps) 
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
+                  type="button"
                   className={cn(
                     'h-14 w-full justify-start text-left font-bold rounded-2xl bg-slate-50 border-slate-100 hover:bg-white transition-all px-6',
                     !birthDate && 'text-muted-foreground'
@@ -155,8 +190,37 @@ export function AddBabyDialog({ onAdd, language, trigger }: AddBabyDialogProps) 
             </Popover>
           </div>
 
+          {!isEdit && (
+            <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+              <div className="space-y-3">
+                <Label htmlFor="initial-weight" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('weight')} ({weightUnit})</Label>
+                <Input
+                  id="initial-weight"
+                  type="number"
+                  step="0.01"
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  placeholder="0.00"
+                  className="h-14 font-bold rounded-2xl bg-slate-50 border-slate-100 focus:bg-white transition-all px-6"
+                />
+              </div>
+              <div className="space-y-3">
+                <Label htmlFor="initial-height" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('height')} ({heightUnit})</Label>
+                <Input
+                  id="initial-height"
+                  type="number"
+                  step="0.1"
+                  value={height}
+                  onChange={(e) => setHeight(e.target.value)}
+                  placeholder="0.0"
+                  className="h-14 font-bold rounded-2xl bg-slate-50 border-slate-100 focus:bg-white transition-all px-6"
+                />
+              </div>
+            </div>
+          )}
+
           <Button type="submit" className="h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/20 w-full mt-4">
-            {t('addBaby')}
+            {isEdit ? t('saveChanges') : t('addBaby')}
           </Button>
         </form>
       </DialogContent>

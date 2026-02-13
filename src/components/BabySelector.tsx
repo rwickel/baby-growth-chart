@@ -14,21 +14,25 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { AddBabyDialog } from '@/components/AddBabyDialog';
 
 interface BabySelectorProps {
   babies: Baby[];
   activeBabyId: string | null;
   onSelect: (id: string) => void;
   onDelete: (id: string) => void;
-  onAdd: (name: string, gender: Gender, birthDate: string) => void;
+  onAdd: (name: string, gender: Gender, birthDate: string, weight?: number, height?: number) => void;
+  onUpdate: (id: string, updates: Partial<Baby>) => void;
+  weightUnit?: 'kg' | 'lb';
+  heightUnit?: 'cm' | 'in';
   language: Language;
 }
 
 import boyImg from '../img/boy.png';
 import girlImg from '../img/girl.png';
+import { BabyDialog } from './BabyDialog';
+import { Edit2 } from 'lucide-react';
 
-export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, language }: BabySelectorProps) {
+export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, onUpdate, weightUnit = 'kg', heightUnit = 'cm', language }: BabySelectorProps) {
   const { t } = useTranslation(language);
 
   return (
@@ -66,6 +70,22 @@ export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, 
                     </div>
                   )}
                 </button>
+
+                {/* Edit Button */}
+                <div className="absolute -top-2 -left-2 z-10">
+                  <BabyDialog
+                    onSubmit={(name, gender, birthDate) => onUpdate(baby.id, { name, gender, birthDate })}
+                    language={language}
+                    initialData={baby}
+                    weightUnit={weightUnit}
+                    heightUnit={heightUnit}
+                    trigger={
+                      <button className="w-8 h-8 bg-white rounded-full border border-slate-100 flex items-center justify-center shadow-md hover:bg-slate-50 hover:border-slate-200 transition-all group/edit">
+                        <Edit2 className="w-3.5 h-3.5 text-slate-300 group-hover/edit:text-slate-600 transition-colors" />
+                      </button>
+                    }
+                  />
+                </div>
 
                 {/* Delete Button */}
                 <div className="absolute -top-2 -right-2 z-10">
@@ -106,7 +126,7 @@ export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, 
                   {baby.name}
                 </span>
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
-                  {isBoy ? 'Boy' : 'Girl'}
+                  {isBoy ? t('boy') : t('girl')}
                 </span>
               </div>
             </div>
@@ -116,9 +136,11 @@ export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, 
         {/* Add Baby Button */}
         <div className="flex flex-col items-center gap-2 group relative">
           <div className="relative">
-            <AddBabyDialog
-              onAdd={onAdd}
+            <BabyDialog
+              onSubmit={onAdd}
               language={language}
+              weightUnit={weightUnit}
+              heightUnit={heightUnit}
               trigger={
                 <button className="w-20 h-20 rounded-full border-4 border-dashed border-slate-200 bg-slate-50/50 flex items-center justify-center transition-all hover:bg-slate-50 hover:border-slate-300 hover:scale-105 group/add">
                   <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover/add:rotate-90 transition-all duration-500">

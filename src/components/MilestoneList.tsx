@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import {
     Trophy,
     Activity,
     Brain,
     Heart,
     MessageCircle,
+    ChevronLeft,
     ChevronRight,
     Star
 } from 'lucide-react';
@@ -20,30 +21,91 @@ interface MilestoneListProps {
 
 export function MilestoneList({ baby, settings }: MilestoneListProps) {
     const { t } = useTranslation(settings.language);
-    const ageInMonths = useMemo(() => calculateAgeInMonths(baby.birthDate), [baby.birthDate]);
+    const babyAgeInMonths = useMemo(() => calculateAgeInMonths(baby.birthDate), [baby.birthDate]);
+    const [selectedMonth, setSelectedMonth] = useState(babyAgeInMonths);
     const isBoy = baby.gender === 'male';
 
+    // Update selected month when baby changes or ages, but only if it matches current age
+    useEffect(() => {
+        setSelectedMonth(babyAgeInMonths);
+    }, [babyAgeInMonths, baby.id]);
+
+    const monthlyData = useMemo(() =>
+        [...milestonesData.monthly_development].sort((a, b) => a.month - b.month)
+        , []);
+
     const currentMilestones = useMemo(() => {
-        // Find the closest month that is <= baby's age
-        const monthlyData = [...milestonesData.monthly_development].sort((a, b) => b.month - a.month);
-        return monthlyData.find(m => m.month <= ageInMonths) || monthlyData[monthlyData.length - 1];
-    }, [ageInMonths]);
+        // Find the closest month that is <= selectedMonth
+        const data = [...monthlyData].reverse();
+        return data.find(m => m.month <= selectedMonth) || monthlyData[0];
+    }, [selectedMonth, monthlyData]);
+
+    const currentIndex = monthlyData.findIndex(m => m.month === currentMilestones.month);
+
+    const handlePrev = () => {
+        if (currentIndex > 0) {
+            setSelectedMonth(monthlyData[currentIndex - 1].month);
+        }
+    };
+
+    const handleNext = () => {
+        if (currentIndex < monthlyData.length - 1) {
+            setSelectedMonth(monthlyData[currentIndex + 1].month);
+        }
+    };
 
     if (!currentMilestones) return null;
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            {/* Age Header */}
-            <div className="flex flex-col items-center text-center space-y-2">
-                <div className={cn(
-                    "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border",
-                    isBoy ? "bg-blue-50/50 text-baby-boy border-blue-100" : "bg-pink-50/50 text-baby-girl border-pink-100"
-                )}>
-                    {t('expectedAt')} {currentMilestones.month} {t('monthsOld')}
+            {/* Navigation Header */}
+            <div className="flex flex-col items-center text-center space-y-4">
+                <div className="flex items-center gap-6">
+                    <button
+                        onClick={handlePrev}
+                        disabled={currentIndex === 0}
+                        className={cn(
+                            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 active:scale-90",
+                            currentIndex === 0 ? "opacity-30" : "hover:border-slate-300 hover:shadow-md"
+                        )}
+                    >
+                        <ChevronLeft className="w-6 h-6 text-slate-600" />
+                    </button>
+
+                    <div className="flex flex-col items-center min-w-[140px]">
+                        <div className={cn(
+                            "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border mb-2",
+                            isBoy ? "bg-blue-50/50 text-baby-boy border-blue-100" : "bg-pink-50/50 text-baby-girl border-pink-100"
+                        )}>
+                            {t('expectedAt')} {currentMilestones.month} {t('monthsOld')}
+                        </div>
+                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">
+                            {currentMilestones.title}
+                        </h2>
+                    </div>
+
+                    <button
+                        onClick={handleNext}
+                        disabled={currentIndex === monthlyData.length - 1}
+                        className={cn(
+                            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 active:scale-90",
+                            currentIndex === monthlyData.length - 1 ? "opacity-30" : "hover:border-slate-300 hover:shadow-md"
+                        )}
+                    >
+                        <ChevronRight className="w-6 h-6 text-slate-600" />
+                    </button>
                 </div>
-                <h2 className="text-3xl font-black text-slate-800 tracking-tight">
-                    {currentMilestones.title}
-                </h2>
+
+                {selectedMonth !== babyAgeInMonths && (
+                    <button
+                        onClick={() => setSelectedMonth(babyAgeInMonths)}
+                        className="text-[10px] font-black uppercase tracking-widest text-primary/60 hover:text-primary transition-colors flex items-center gap-2"
+                    >
+                        <div className="w-1 h-1 rounded-full bg-current" />
+                        {t('backToAge')} {baby.name}
+                        <div className="w-1 h-1 rounded-full bg-current" />
+                    </button>
+                )}
             </div>
 
             {/* Hero Milestones */}

@@ -101,13 +101,25 @@ export function useBabyData() {
   }, [updateSettings]);
 
   // Baby management
-  const addBaby = useCallback((name: string, gender: Gender, birthDate: string) => {
+  const addBaby = useCallback((name: string, gender: Gender, birthDate: string, weight?: number, height?: number) => {
+    const entries: GrowthEntry[] = [];
+
+    if (weight !== undefined || height !== undefined) {
+      entries.push({
+        id: generateUUID(),
+        date: birthDate,
+        weight: weight || 0,
+        height: height || 0,
+        note: 'Birth record',
+      });
+    }
+
     const newBaby: Baby = {
       id: generateUUID(),
       name,
       gender,
       birthDate,
-      entries: [],
+      entries,
       milkEntries: [],
     };
     setData(prev => ({

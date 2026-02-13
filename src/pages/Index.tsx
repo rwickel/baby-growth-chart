@@ -26,6 +26,7 @@ const Index = () => {
     setWeightUnit,
     setHeightUnit,
     addBaby,
+    updateBaby,
     deleteBaby,
     setActiveBaby,
     addEntry,
@@ -78,6 +79,9 @@ const Index = () => {
             onSelect={setActiveBaby}
             onDelete={deleteBaby}
             onAdd={addBaby}
+            onUpdate={updateBaby}
+            weightUnit={settings.weightUnit}
+            heightUnit={settings.heightUnit}
             language={settings.language}
           />
         </section>
