@@ -32,6 +32,139 @@ interface GrowthChartProps {
 
 type Metric = 'weight' | 'height';
 
+interface MetricChartProps {
+  metric: Metric;
+  entries: GrowthEntry[];
+  gender: 'male' | 'female';
+  settings: AppSettings;
+  babyName?: string;
+  chartData: any[];
+  birthDate?: string;
+}
+
+function MetricChart({ metric, entries, gender, settings, babyName, chartData, birthDate }: MetricChartProps) {
+  const { t } = useTranslation(settings.language);
+
+  const dataKey = metric === 'weight' ? 'babyWeight' : 'babyHeight';
+  const unit = metric === 'weight' ? getWeightLabel(settings.weightUnit) : getHeightLabel(settings.heightUnit);
+  const color = gender === 'male' ? 'hsl(200, 80%, 65%)' : 'hsl(340, 70%, 70%)';
+
+  const formatValue = (value: number) => {
+    if (metric === 'weight') {
+      return displayWeight(value, settings.weightUnit);
+    }
+    return displayHeight(value, settings.heightUnit);
+  };
+
+  const getAgeInMonths = (date: string): number => {
+    const d1 = parseISO(date);
+    const d2 = birthDate ? parseISO(birthDate) : (entries.length > 0 ? parseISO(entries[0].date) : d1);
+    const days = differenceInDays(d1, d2);
+    return Number((days / 30.4375).toFixed(2));
+  };
+
+  const maxAge = useMemo(() => {
+    if (entries.length === 0) return 60;
+    const latestEntryAge = getAgeInMonths(entries[entries.length - 1].date);
+    if (latestEntryAge <= 6) return 6;
+    if (latestEntryAge <= 12) return 12;
+    if (latestEntryAge <= 24) return 24;
+    if (latestEntryAge <= 36) return 36;
+    if (latestEntryAge <= 48) return 48;
+    return 60;
+  }, [entries]);
+
+  const xAxisTicks = useMemo(() => {
+    if (maxAge <= 6) return [0, 1, 2, 3, 4, 5, 6];
+    if (maxAge <= 12) return [0, 2, 4, 6, 8, 10, 12];
+    if (maxAge <= 24) return [0, 4, 8, 12, 16, 20, 24];
+    return [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
+  }, [maxAge]);
+
+  const filteredData = useMemo(() => {
+    return chartData.filter(d => (d.month || 0) <= maxAge);
+  }, [chartData, maxAge]);
+
+  return (
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart data={filteredData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
+        <XAxis
+          dataKey="month"
+          type="number"
+          domain={[0, maxAge]}
+          ticks={xAxisTicks}
+          label={{ value: t('ageMonths'), position: 'bottom', offset: -5, fontSize: 10 }}
+          tick={{ fontSize: 10 }}
+          stroke="hsl(var(--muted-foreground))"
+        />
+        <YAxis
+          domain={['auto', 'auto']}
+          padding={{ top: 0, bottom: 0 }}
+          label={{ value: `${t(metric)} (${unit})`, angle: -90, position: 'insideLeft', fontSize: 10 }}
+          tick={{ fontSize: 10 }}
+          stroke="hsl(var(--muted-foreground))"
+          tickFormatter={(value) => formatValue(value)}
+        />
+        <Tooltip
+          contentStyle={{
+            backgroundColor: 'hsl(var(--card))',
+            border: '1px solid hsl(var(--border))',
+            borderRadius: '12px',
+            padding: '4px',
+            fontSize: '10px',
+          }}
+          formatter={(value: number, name: string) => {
+            const labels: Record<string, string> = {
+              [`${metric}P3`]: 'P3',
+              [`${metric}P15`]: 'P15',
+              [`${metric}P50`]: 'P50',
+              [`${metric}P85`]: 'P85',
+              [`${metric}P97`]: 'P97',
+              [dataKey]: babyName || t('yourBaby'),
+            };
+            return [`${formatValue(value)} ${unit}`, labels[name] || name];
+          }}
+          labelFormatter={(value) => `${t('age')}: ${value} ${t('months')}`}
+        />
+        <Legend
+          wrapperStyle={{ paddingTop: '10px', fontSize: '10px' }}
+          formatter={(value) => {
+            const labels: Record<string, string> = {
+              [`${metric}P3`]: 'P3',
+              [`${metric}P15`]: 'P15',
+              [`${metric}P50`]: 'P50',
+              [`${metric}P85`]: 'P85',
+              [`${metric}P97`]: 'P97',
+              [dataKey]: babyName || t('yourBaby'),
+            };
+            return labels[value] || value;
+          }}
+        />
+
+        {/* Reference lines */}
+        <Line type="monotone" dataKey={`${metric}P3`} stroke="hsl(var(--chart-p3))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P3`} connectNulls />
+        <Line type="monotone" dataKey={`${metric}P15`} stroke="hsl(var(--chart-p15))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P15`} connectNulls />
+        <Line type="monotone" dataKey={`${metric}P50`} stroke="hsl(var(--chart-p50))" strokeWidth={2} dot={false} name={`${metric}P50`} connectNulls />
+        <Line type="monotone" dataKey={`${metric}P85`} stroke="hsl(var(--chart-p85))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P85`} connectNulls />
+        <Line type="monotone" dataKey={`${metric}P97`} stroke="hsl(var(--chart-p97))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P97`} connectNulls />
+
+        {/* Baby's data */}
+        <Line
+          type="monotone"
+          dataKey={dataKey}
+          stroke={color}
+          strokeWidth={2}
+          dot={{ fill: color, strokeWidth: 1, r: 6 }}
+          activeDot={{ r: 6, stroke: color, strokeWidth: 1 }}
+          name={dataKey}
+          connectNulls
+        />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}
+
 export function GrowthChart({ entries, gender, birthDate, settings, babyName }: GrowthChartProps) {
   const { t } = useTranslation(settings.language);
   const chartRef = useRef<HTMLDivElement>(null);
@@ -50,14 +183,6 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
     };
   }, [babyName, gender, birthDate, entries]);
 
-  const getAgeInMonths = (date: string): number => {
-    const d1 = parseISO(date);
-    const d2 = birthDate ? parseISO(birthDate) : (entries.length > 0 ? parseISO(entries[0].date) : d1);
-    const days = differenceInDays(d1, d2);
-    // Use the standard average month length (365.25 / 12)
-    return Number((days / 30.4375).toFixed(2));
-  };
-
   const chartData = useMemo(() => {
     const dataMap = new Map<number, Record<string, number | undefined>>();
 
@@ -66,6 +191,13 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
         dataMap.set(month, { month });
       }
       return dataMap.get(month)!;
+    };
+
+    const getAgeInMonths = (date: string): number => {
+      const d1 = parseISO(date);
+      const d2 = birthDate ? parseISO(birthDate) : (entries.length > 0 ? parseISO(entries[0].date) : d1);
+      const days = differenceInDays(d1, d2);
+      return Number((days / 30.4375).toFixed(2));
     };
 
     // Add weight reference data
@@ -124,7 +256,6 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
       const isNative = Capacitor.isNativePlatform();
 
       if (isNative) {
-        // For Android/iOS, the best way to share an image is to save it to a file first
         const { Filesystem, Directory } = await import("@capacitor/filesystem");
         const { Share } = await import("@capacitor/share");
 
@@ -147,7 +278,6 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
         return;
       }
 
-      // Web fallback
       const response = await fetch(dataUrl);
       const blob = await response.blob();
       const file = new File([blob], `growth-chart-${babyName || 'baby'}.png`, { type: 'image/png' });
@@ -160,128 +290,13 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
         });
         toast.success(t('chartShared'));
       } else {
-        // Ultimate fallback: just download the image
         handleDownload();
       }
     } catch (err) {
       console.error('Share error:', err);
       toast.error('Failed to share chart');
-      // If we failed after generating image, try to at least download it
       handleDownload();
     }
-  };
-
-  const renderChart = (metric: Metric) => {
-    const dataKey = metric === 'weight' ? 'babyWeight' : 'babyHeight';
-    const unit = metric === 'weight' ? getWeightLabel(settings.weightUnit) : getHeightLabel(settings.heightUnit);
-    const color = gender === 'male' ? 'hsl(200, 80%, 65%)' : 'hsl(340, 70%, 70%)';
-
-    const formatValue = (value: number) => {
-      if (metric === 'weight') {
-        return displayWeight(value, settings.weightUnit);
-      }
-      return displayHeight(value, settings.heightUnit);
-    };
-
-    const maxAge = useMemo(() => {
-      if (entries.length === 0) return 60;
-      const latestEntryAge = getAgeInMonths(entries[entries.length - 1].date);
-      if (latestEntryAge <= 6) return 6;
-      if (latestEntryAge <= 12) return 12;
-      if (latestEntryAge <= 24) return 24;
-      if (latestEntryAge <= 36) return 36;
-      if (latestEntryAge <= 48) return 48;
-      return 60;
-    }, [entries]);
-
-    const xAxisTicks = useMemo(() => {
-      if (maxAge <= 6) return [0, 1, 2, 3, 4, 5, 6];
-      if (maxAge <= 12) return [0, 2, 4, 6, 8, 10, 12];
-      if (maxAge <= 24) return [0, 4, 8, 12, 16, 20, 24];
-      return [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
-    }, [maxAge]);
-
-    const filteredData = useMemo(() => {
-      return chartData.filter(d => (d.month || 0) <= maxAge);
-    }, [chartData, maxAge]);
-
-    return (
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={filteredData} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
-          <XAxis
-            dataKey="month"
-            type="number"
-            domain={[0, maxAge]}
-            ticks={xAxisTicks}
-            label={{ value: t('ageMonths'), position: 'bottom', offset: -5 }}
-            tick={{ fontSize: 10 }}
-            stroke="hsl(var(--muted-foreground))"
-          />
-          <YAxis
-            domain={['auto', 'auto']}
-            padding={{ top: 20, bottom: 20 }}
-            label={{ value: `${t(metric)} (${unit})`, angle: -90, position: 'insideLeft' }}
-            tick={{ fontSize: 12 }}
-            stroke="hsl(var(--muted-foreground))"
-            tickFormatter={(value) => formatValue(value)}
-          />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: 'hsl(var(--card))',
-              border: '1px solid hsl(var(--border))',
-              borderRadius: '12px',
-              padding: '12px',
-            }}
-            formatter={(value: number, name: string) => {
-              const labels: Record<string, string> = {
-                [`${metric}P3`]: 'P3',
-                [`${metric}P15`]: 'P15',
-                [`${metric}P50`]: 'P50',
-                [`${metric}P85`]: 'P85',
-                [`${metric}P97`]: 'P97',
-                [dataKey]: babyName || t('yourBaby'),
-              };
-              return [`${formatValue(value)} ${unit}`, labels[name] || name];
-            }}
-            labelFormatter={(value) => `${t('age')}: ${value} ${t('months')}`}
-          />
-          <Legend
-            wrapperStyle={{ paddingTop: '20px' }}
-            formatter={(value) => {
-              const labels: Record<string, string> = {
-                [`${metric}P3`]: 'P3',
-                [`${metric}P15`]: 'P15',
-                [`${metric}P50`]: 'P50',
-                [`${metric}P85`]: 'P85',
-                [`${metric}P97`]: 'P97',
-                [dataKey]: babyName || t('yourBaby'),
-              };
-              return labels[value] || value;
-            }}
-          />
-
-          {/* Reference lines */}
-          <Line type="monotone" dataKey={`${metric}P3`} stroke="hsl(var(--chart-p3))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P3`} connectNulls />
-          <Line type="monotone" dataKey={`${metric}P15`} stroke="hsl(var(--chart-p15))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P15`} connectNulls />
-          <Line type="monotone" dataKey={`${metric}P50`} stroke="hsl(var(--chart-p50))" strokeWidth={2} dot={false} name={`${metric}P50`} connectNulls />
-          <Line type="monotone" dataKey={`${metric}P85`} stroke="hsl(var(--chart-p85))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P85`} connectNulls />
-          <Line type="monotone" dataKey={`${metric}P97`} stroke="hsl(var(--chart-p97))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P97`} connectNulls />
-
-          {/* Baby's data */}
-          <Line
-            type="monotone"
-            dataKey={dataKey}
-            stroke={color}
-            strokeWidth={3}
-            dot={{ fill: color, strokeWidth: 2, r: 6 }}
-            activeDot={{ r: 8, stroke: color, strokeWidth: 2 }}
-            name={dataKey}
-            connectNulls
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    );
   };
 
   if (entries.length === 0) {
@@ -299,9 +314,7 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
   return (
     <div className="glass-card rounded-[2.5rem] p-8 space-y-8 border-none shadow-lg">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-        {/* <h3 className="font-bold text-lg flex items-center gap-2">
-           📈 {t('growthCharts')}
-        </h3> */}
+
         <div className="flex gap-2">
           <Button variant="outline" size="icon" onClick={handleShare} title={t('share')}>
             <Share2 className="h-4 w-4" />
@@ -328,10 +341,26 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
             <TabsTrigger value="height">{t('height')}</TabsTrigger>
           </TabsList>
           <TabsContent value="weight" className="mt-6">
-            {renderChart('weight')}
+            <MetricChart
+              metric="weight"
+              entries={entries}
+              gender={gender}
+              settings={settings}
+              babyName={babyName}
+              chartData={chartData}
+              birthDate={birthDate}
+            />
           </TabsContent>
           <TabsContent value="height" className="mt-6">
-            {renderChart('height')}
+            <MetricChart
+              metric="height"
+              entries={entries}
+              gender={gender}
+              settings={settings}
+              babyName={babyName}
+              chartData={chartData}
+              birthDate={birthDate}
+            />
           </TabsContent>
         </Tabs>
 

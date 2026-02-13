@@ -1,0 +1,309 @@
+{
+    "age_range": "0-12 months",
+    "monthly_development": [
+        {
+            "month": 0,
+            "title": "Newborn",
+            "physical": [
+                "Moves arms and legs reflexively",
+                "Lifts head briefly during tummy time",
+                "Grasps finger when palm is touched"
+            ],
+            "cognitive": [
+                "Recognizes caregiver's voice",
+                "Focuses on objects 8-12 inches away",
+                "Startles at loud sounds"
+            ],
+            "social_emotional": [
+                "Makes eye contact",
+                "Calms when comforted",
+                "Cries to express needs"
+            ],
+            "language": [
+                "Cries differently for different needs",
+                "Makes small throat sounds"
+            ],
+            "milestones": [
+                "Begins tummy time",
+                "Responds to sound"
+            ]
+        },
+        {
+            "month": 1,
+            "title": "One Month",
+            "physical": [
+                "Holds head up briefly",
+                "Brings hands near face"
+            ],
+            "cognitive": [
+                "Follows moving object briefly",
+                "Recognizes familiar faces"
+            ],
+            "social_emotional": [
+                "Begins social smile",
+                "Looks at caregiver"
+            ],
+            "language": [
+                "Makes cooing sounds"
+            ],
+            "milestones": [
+                "Smiles at people"
+            ]
+        },
+        {
+            "month": 2,
+            "title": "Two Months",
+            "physical": [
+                "Holds head up steadily during tummy time",
+                "Begins smoother arm and leg movements"
+            ],
+            "cognitive": [
+                "Pays attention to faces",
+                "Begins tracking objects across midline"
+            ],
+            "social_emotional": [
+                "Smiles responsively",
+                "Tries to look at parent"
+            ],
+            "language": [
+                "Coos and gurgles",
+                "Turns head toward sounds"
+            ],
+            "milestones": [
+                "First social smile"
+            ]
+        },
+        {
+            "month": 3,
+            "title": "Three Months",
+            "physical": [
+                "Pushes up on elbows during tummy time",
+                "Opens and closes hands"
+            ],
+            "cognitive": [
+                "Recognizes familiar people at a distance",
+                "Shows interest in colorful toys"
+            ],
+            "social_emotional": [
+                "Enjoys playing with others",
+                "May cry when play stops"
+            ],
+            "language": [
+                "Begins babbling",
+                "Imitates some sounds"
+            ],
+            "milestones": [
+                "Supports upper body with arms"
+            ]
+        },
+        {
+            "month": 4,
+            "title": "Four Months",
+            "physical": [
+                "Rolls from tummy to back",
+                "Holds toy and shakes it"
+            ],
+            "cognitive": [
+                "Responds to affection",
+                "Reaches for toys with one hand"
+            ],
+            "social_emotional": [
+                "Smiles spontaneously",
+                "Copies some facial expressions"
+            ],
+            "language": [
+                "Babbles with expression",
+                "Copies sounds heard"
+            ],
+            "milestones": [
+                "Rolls over (tummy to back)"
+            ]
+        },
+        {
+            "month": 5,
+            "title": "Five Months",
+            "physical": [
+                "Rolls both directions",
+                "Begins sitting with support"
+            ],
+            "cognitive": [
+                "Explores objects by putting them in mouth",
+                "Shows curiosity about surroundings"
+            ],
+            "social_emotional": [
+                "Recognizes familiar faces",
+                "Likes to play with caregiver"
+            ],
+            "language": [
+                "Responds to own name",
+                "Makes consonant sounds"
+            ],
+            "milestones": [
+                "Rolls both ways"
+            ]
+        },
+        {
+            "month": 6,
+            "title": "Six Months",
+            "physical": [
+                "Sits briefly without support",
+                "Passes objects from one hand to another"
+            ],
+            "cognitive": [
+                "Looks around at nearby objects",
+                "Brings things to mouth"
+            ],
+            "social_emotional": [
+                "Recognizes familiar people",
+                "Likes looking at self in mirror"
+            ],
+            "language": [
+                "Responds to sounds by making sounds",
+                "Strings vowels together (e.g., 'ah', 'eh')"
+            ],
+            "milestones": [
+                "Sits without support"
+            ]
+        },
+        {
+            "month": 7,
+            "title": "Seven Months",
+            "physical": [
+                "Begins to bounce when held standing",
+                "May begin to crawl"
+            ],
+            "cognitive": [
+                "Finds partially hidden objects",
+                "Explores objects with hands and mouth"
+            ],
+            "social_emotional": [
+                "Enjoys social play",
+                "May show stranger anxiety"
+            ],
+            "language": [
+                "Responds to own name consistently",
+                "Babbles consonant sounds like 'ba', 'da'"
+            ],
+            "milestones": [
+                "Shows early crawling attempts"
+            ]
+        },
+        {
+            "month": 8,
+            "title": "Eight Months",
+            "physical": [
+                "Sits well without support",
+                "May pull to stand"
+            ],
+            "cognitive": [
+                "Understands object permanence",
+                "Looks for dropped objects"
+            ],
+            "social_emotional": [
+                "May show separation anxiety",
+                "Has favorite toys"
+            ],
+            "language": [
+                "Understands 'no'",
+                "Uses repetitive babbling"
+            ],
+            "milestones": [
+                "Pulls to stand"
+            ]
+        },
+        {
+            "month": 9,
+            "title": "Nine Months",
+            "physical": [
+                "Crawls or scoots",
+                "Stands holding on"
+            ],
+            "cognitive": [
+                "Watches path of falling objects",
+                "Looks for hidden objects"
+            ],
+            "social_emotional": [
+                "May be clingy with familiar adults",
+                "Has favorite objects"
+            ],
+            "language": [
+                "Understands simple words",
+                "Uses gestures like pointing"
+            ],
+            "milestones": [
+                "Crawls",
+                "Stands with support"
+            ]
+        },
+        {
+            "month": 10,
+            "title": "Ten Months",
+            "physical": [
+                "Cruises along furniture",
+                "Picks up small objects with thumb and forefinger"
+            ],
+            "cognitive": [
+                "Explores cause and effect",
+                "Imitates gestures"
+            ],
+            "social_emotional": [
+                "Shows preferences for certain people",
+                "Tests parental reactions"
+            ],
+            "language": [
+                "Says 'mama' or 'dada' (may not be specific)",
+                "Understands simple requests"
+            ],
+            "milestones": [
+                "Uses pincer grasp"
+            ]
+        },
+        {
+            "month": 11,
+            "title": "Eleven Months",
+            "physical": [
+                "Stands alone briefly",
+                "May take first steps"
+            ],
+            "cognitive": [
+                "Explores objects in different ways",
+                "Follows simple directions"
+            ],
+            "social_emotional": [
+                "Shows strong attachment to caregivers",
+                "Imitates others"
+            ],
+            "language": [
+                "Says one or two words",
+                "Uses gestures intentionally"
+            ],
+            "milestones": [
+                "First independent steps"
+            ]
+        },
+        {
+            "month": 12,
+            "title": "One Year",
+            "physical": [
+                "Walks independently or with support",
+                "Drinks from a cup"
+            ],
+            "cognitive": [
+                "Follows simple one-step commands",
+                "Explores objects by shaking, banging, throwing"
+            ],
+            "social_emotional": [
+                "Hands book to caregiver to read",
+                "Shows fear in some situations"
+            ],
+            "language": [
+                "Says 1-3 meaningful words",
+                "Understands simple instructions"
+            ],
+            "milestones": [
+                "First words",
+                "First independent steps"
+            ]
+        }
+    ]
+}

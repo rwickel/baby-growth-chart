@@ -32,16 +32,21 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 1.5rem;
+    --radius: 2rem;
 
-    /* Custom baby tracker colors - Soft Pastels */
-    --baby-boy: 199 80% 65%;
-    --baby-boy-light: 200 100% 95%;
-    --baby-girl: 340 70% 70%;
-    --baby-girl-light: 340 100% 96%;
+    /* Kawaii Design System - Soft Minimalist */
+    --baby-boy: 199 89% 48%;
+    /* Primary Sky Blue */
+    --baby-boy-soft: 200 100% 92%;
+    --baby-girl: 340 95% 78%;
+    /* Blossom Pink */
+    --baby-girl-soft: 340 100% 96%;
 
     --soft-blue: 200 100% 97%;
     --soft-pink: 340 100% 98%;
+
+    --kawaii-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+    --kawaii-shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
 
     --chart-p3: 200 50% 70%;
     --chart-p15: 170 50% 55%;
@@ -107,38 +112,32 @@
 
 @layer utilities {
   .bg-gradient-soft {
-    background: linear-gradient(180deg, hsl(var(--soft-blue)) 0%, hsl(var(--soft-pink)) 100%);
+    background: linear-gradient(180deg, #f0f7ff 0%, #fff5f8 100%);
   }
 
-  .bg-gradient-boy {
-    background: linear-gradient(135deg, hsl(var(--soft-blue)) 0%, #ffffff 100%);
+  .kawaii-card {
+    @apply bg-white rounded-[2.5rem] border-none;
+    box-shadow: var(--kawaii-shadow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
-  .bg-gradient-girl {
-    background: linear-gradient(135deg, hsl(var(--soft-pink)) 0%, #ffffff 100%);
-  }
-
-  .glass-card {
-    background-color: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
-  }
-
-  .glass-card-hover {
-    transition: all 0.3s ease;
-  }
-
-  .glass-card-hover:hover {
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  .kawaii-card:hover {
+    box-shadow: var(--kawaii-shadow-hover);
     transform: translateY(-4px);
   }
 
+  .glass-card {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.04);
+  }
+
   .gender-toggle-boy {
-    @apply bg-baby-boy text-white shadow-[0_4px_20px_hsl(var(--baby-boy)/0.4)];
+    @apply bg-baby-boy text-white shadow-[0_4px_20px_hsl(var(--baby-boy)/0.3)];
   }
 
   .gender-toggle-girl {
-    @apply bg-baby-girl text-white shadow-[0_4px_20px_hsl(var(--baby-girl)/0.4)];
+    @apply bg-baby-girl text-white shadow-[0_4px_20px_hsl(var(--baby-girl)/0.3)];
   }
 }

@@ -11,15 +11,24 @@ import { MilkEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
 import { toast } from 'sonner';
 
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+
 interface MilkEntryFormProps {
     onSubmit: (entry: Omit<MilkEntry, 'id'>) => void;
     initialValues?: MilkEntry;
     onCancel?: () => void;
     isEditing?: boolean;
     settings: AppSettings;
+    isOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
 }
 
-export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, settings }: MilkEntryFormProps) {
+export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, settings, isOpen, onOpenChange }: MilkEntryFormProps) {
     const { t } = useTranslation(settings.language);
 
     const initialDate = initialValues ? new Date(initialValues.date) : new Date();
@@ -51,31 +60,21 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
         if (!isEditing) {
             setAmount('');
             setNote('');
+            if (onOpenChange) onOpenChange(false);
         }
     };
 
-    return (
-        <form onSubmit={handleSubmit} className="glass-card rounded-[2.5rem] p-8 space-y-8 border-none shadow-lg">
-            <div className="flex items-center justify-between">
-                <h3 className="font-extrabold text-xl text-slate-800">
-                    {isEditing ? t('editMilk') : t('addMilk')}
-                </h3>
-                {!isEditing && (
-                    <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
-                        <Plus className="h-5 w-5 text-primary" />
-                    </div>
-                )}
-            </div>
-
+    const formContent = (
+        <form onSubmit={handleSubmit} className={cn("space-y-8", isEditing ? "" : "p-2")}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
-                    <Label htmlFor="date" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('date')}</Label>
+                    <Label htmlFor="date" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] ml-1">{t('date')}</Label>
                     <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
                                 className={cn(
-                                    'h-14 w-full justify-start text-left font-bold rounded-2xl bg-white/50 border-white/40 hover:bg-white',
+                                    'h-14 w-full justify-start text-left font-bold rounded-2xl bg-slate-50/50 border-white/40 hover:bg-white transition-all',
                                     !date && 'text-muted-foreground'
                                 )}
                             >
@@ -99,18 +98,21 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                 </div>
 
                 <div className="space-y-3">
-                    <Label htmlFor="time" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('time')}</Label>
-                    <Input
-                        id="time"
-                        type="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        className="h-14 text-lg font-black rounded-2xl bg-white/50 border-white/40 focus:bg-white transition-all px-6"
-                    />
+                    <Label htmlFor="time" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] ml-1">{t('time')}</Label>
+                    <div className="relative">
+                        <Clock className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                        <Input
+                            id="time"
+                            type="time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                            className="h-14 text-lg font-black rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all pl-14 pr-6"
+                        />
+                    </div>
                 </div>
 
                 <div className="space-y-3">
-                    <Label htmlFor="amount" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('amount')} (ml)</Label>
+                    <Label htmlFor="amount" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] ml-1">{t('amount')} (ml)</Label>
                     <Input
                         id="amount"
                         type="number"
@@ -120,25 +122,25 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                         placeholder="120"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
-                        className="h-14 text-lg font-black rounded-2xl bg-white/50 border-white/40 focus:bg-white transition-all px-6"
+                        className="h-14 text-lg font-black rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all px-6"
                     />
                 </div>
 
                 <div className="space-y-3">
-                    <Label htmlFor="note" className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">{t('note')}</Label>
+                    <Label htmlFor="note" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.1em] ml-1">{t('note')}</Label>
                     <Input
                         id="note"
                         type="text"
                         placeholder="e.g., Breast milk"
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        className="h-14 text-lg font-bold rounded-2xl bg-white/50 border-white/40 focus:bg-white transition-all px-6"
+                        className="h-14 text-lg font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all px-6"
                     />
                 </div>
             </div>
 
-            <div className="flex gap-4">
-                <Button type="submit" className="h-14 px-10 text-lg font-bold rounded-2xl shadow-lg shadow-primary/20 flex-1 sm:flex-none">
+            <div className="flex gap-4 pt-4">
+                <Button type="submit" className="h-14 px-10 text-lg font-black rounded-2xl shadow-lg shadow-primary/10 flex-1">
                     {isEditing ? t('saveChanges') : t('addMilk')}
                 </Button>
                 {isEditing && onCancel && (
@@ -148,5 +150,27 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                 )}
             </div>
         </form>
+    );
+
+    if (isEditing) {
+        return (
+            <div className="kawaii-card p-8">
+                <h3 className="font-black text-xl text-slate-800 mb-8">{t('editMilk')}</h3>
+                {formContent}
+            </div>
+        );
+    }
+
+    return (
+        <Dialog open={isOpen} onOpenChange={onOpenChange}>
+            <DialogContent className="rounded-[2.5rem] border-none shadow-2xl p-8 max-w-lg">
+                <DialogHeader className="mb-4">
+                    <DialogTitle className="text-2xl font-black text-slate-800 tracking-tight">
+                        {t('addMilk')}
+                    </DialogTitle>
+                </DialogHeader>
+                {formContent}
+            </DialogContent>
+        </Dialog>
     );
 }

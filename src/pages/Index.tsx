@@ -1,19 +1,20 @@
-import { Baby, Droplets, LineChart, Heart } from 'lucide-react';
+import { Droplets, LineChart, Heart, Menu, Bell, Plus, Trophy } from 'lucide-react';
 import { EntryForm } from '@/components/EntryForm';
 import { EntriesList } from '@/components/EntriesList';
 import { GrowthChart } from '@/components/GrowthChart';
 import { MilkEntryForm } from '@/components/MilkEntryForm';
 import { MilkList } from '@/components/MilkList';
 import { BabySelector } from '@/components/BabySelector';
-import { AddBabyDialog } from '@/components/AddBabyDialog';
 import { SettingsDialog } from '@/components/SettingsDialog';
 import { SettingsControls } from '@/components/SettingsControls';
 import { useBabyData } from '@/hooks/useBabyData';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BabySummary } from '@/components/BabySummary';
+import { BottomNav, TabType } from '@/components/BottomNav';
+import { FeedingChart } from '@/components/FeedingChart';
+import { cn } from '@/lib/utils';
 import boyImg from '../img/boy.png';
 import girlImg from '../img/girl.png';
+import { useState } from 'react';
 
 const Index = () => {
   const {
@@ -36,26 +37,27 @@ const Index = () => {
 
   const { t } = useTranslation(settings.language);
 
-  const bgColor = activeBaby?.gender === 'male'
-    ? 'bg-gradient-boy'
-    : activeBaby?.gender === 'female'
-      ? 'bg-gradient-girl'
-      : 'bg-gradient-soft';
+  const [feedingDialogOpen, setFeedingDialogOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>('growth');
+
+  const isBoy = activeBaby?.gender === 'male';
 
   return (
-    <div className={`min-h-screen transition-all duration-700 ${bgColor} pb-[env(safe-area-inset-bottom)]`}>
-      {/* Header */}
-      <header className={`sticky top-0 z-50 backdrop-blur-md border-b border-white/20 bg-white/40 pt-[env(safe-area-inset-top)]`}>
-        <div className="container max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center">
-              <Baby className="w-6 h-6 text-primary" />
-            </div> */}
-            <div>
-              <h1 className="font-extrabold text-2xl tracking-tight text-slate-800">{t('appTitle')}</h1>
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">{t('appSubtitle')}</p>
-            </div>
+    <main className="min-h-screen bg-gradient-soft pb-40 relative">
+      <div className="max-w-2xl mx-auto px-6 pt-10 space-y-10">
+        {/* Header Section */}
+        <header className="flex items-center justify-between gap-4 py-2">
+          {/* <button className="p-3 bg-white/60 backdrop-blur-md rounded-[1.5rem] shadow-sm hover:bg-white/80 transition-all active:scale-95 group">
+            <Menu className="h-6 w-6 text-slate-500 group-hover:text-slate-800 transition-colors" />
+          </button> */}
+
+          <div className="flex-1 text-center">
+            <h1 className="text-xl font-black text-slate-800 tracking-tight flex items-center justify-center gap-2">
+              <Heart className={cn("h-4 w-4 fill-current", isBoy ? "text-baby-boy" : "text-baby-girl")} />
+              {t('appTitle')}
+            </h1>
           </div>
+
           <div className="flex items-center gap-2">
             <SettingsDialog
               settings={settings}
@@ -65,123 +67,184 @@ const Index = () => {
               onHeightUnitChange={setHeightUnit}
             />
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Baby Selection Bar */}
-      <div className="border-b border-white/10 bg-white/20 backdrop-blur-sm">
-        <div className="container max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Baby Selector */}
+        <section className="animate-in fade-in slide-in-from-top-4 duration-1000">
           <BabySelector
             babies={babies}
             activeBabyId={activeBaby?.id || null}
             onSelect={setActiveBaby}
             onDelete={deleteBaby}
+            onAdd={addBaby}
             language={settings.language}
           />
-          <div className="shrink-0">
-            <AddBabyDialog onAdd={addBaby} language={settings.language} />
-          </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Main Content */}
-      <main className="container max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {!activeBaby ? (
-          <div className="glass-card rounded-[2.5rem] p-12 text-center flex flex-col items-center border-none shadow-xl">
-            <div className="flex gap-4 mb-6 animate-float">
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-white border-4 border-white shadow-inner">
-                <img src={boyImg} alt="Boy" className="w-full h-full object-contain bg-white" />
+        {activeBaby ? (
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-100">
+            {activeTab === 'growth' && (
+              <div className="space-y-12">
+
+                {/* Growth Section */}
+                <section className="space-y-6">
+                  <div className="flex items-center justify-between px-2">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("w-1.5 h-6 rounded-full", isBoy ? "bg-baby-boy shadow-[0_0_10px_rgba(var(--baby-boy)/0.3)]" : "bg-baby-girl shadow-[0_0_10px_rgba(var(--baby-girl)/0.3)]")} />
+                      <h3 className="font-black text-xl text-slate-800 tracking-tight">
+                        {activeBaby.name}'s {t('growth')}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <div className="kawaii-card p-2 md:p-6 overflow-hidden">
+                    <GrowthChart
+                      entries={activeBaby.entries}
+                      gender={activeBaby.gender}
+                      birthDate={activeBaby.birthDate}
+                      settings={settings}
+                      babyName={activeBaby.name}
+                    />
+                  </div>
+                </section>
+
+                {/* History Section */}
+                <section className="space-y-6 pt-4 border-t border-slate-100/50">
+                  {/* <div className="flex items-center justify-between px-2">
+                    <h2 className="text-xl font-black text-slate-800">
+                      {t('history')}
+                    </h2>
+                  </div> */}
+                  <div className="space-y-8">
+                    <EntryForm onSubmit={addEntry} settings={settings} />
+                    <EntriesList
+                      entries={activeBaby.entries}
+                      onUpdate={updateEntry}
+                      onDelete={deleteEntry}
+                      settings={settings}
+                      gender={activeBaby.gender}
+                    />
+                  </div>
+                </section>
               </div>
-              <div className="w-24 h-24 rounded-full overflow-hidden bg-white border-4 border-white shadow-inner">
-                <img src={girlImg} alt="Girl" className="w-full h-full object-contain bg-white" />
-              </div>
-            </div>
-            <h3 className="font-extrabold text-2xl mb-3 text-slate-800">{t('noBabies')}</h3>
-            <p className="text-slate-500 mb-8 max-w-sm">{t('noBabiesDesc')}</p>
-            <div className="mb-10">
-              <AddBabyDialog onAdd={addBaby} language={settings.language} />
-            </div>
+            )}
 
-            <div className="w-full max-w-xs border-t border-slate-100 pt-8">
-              <h4 className="text-xs font-bold mb-6 text-slate-400 uppercase tracking-widest">{t('settings')}</h4>
-              <SettingsControls
-                settings={settings}
-                onLanguageChange={setLanguage}
-                onWeightUnitChange={setWeightUnit}
-                onHeightUnitChange={setHeightUnit}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-10">
-            <BabySummary baby={activeBaby} settings={settings} />
-
-            <Tabs defaultValue="growth" className="w-full space-y-10">
-              <div className="flex justify-center">
-                <TabsList className="grid w-full max-w-md grid-cols-2 h-14 bg-white/50 backdrop-blur-md rounded-2xl p-1 gap-1 border border-white/40 shadow-sm">
-                  <TabsTrigger value="growth" className="gap-2 text-base rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md font-bold transition-all">
-                    <LineChart className="h-5 w-5" />
-                    <span>{t('growth')}</span>
-                  </TabsTrigger>
-                  <TabsTrigger value="milk" className="gap-2 text-base rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-md font-bold transition-all">
-                    <Droplets className="h-5 w-5" />
-                    <span>{t('milk')}</span>
-                  </TabsTrigger>
-                </TabsList>
-              </div>
-
-              <TabsContent value="growth" className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 outline-none">
-                {/* Growth Chart */}
-                <div className="glass-card rounded-[2.5rem] p-2 border-none">
-                  <GrowthChart
-                    entries={activeBaby.entries}
-                    gender={activeBaby.gender}
-                    birthDate={activeBaby.birthDate}
-                    settings={settings}
-                    babyName={activeBaby.name}
-                  />
+            {activeTab === 'feeding' && (
+              <div className="space-y-12">
+                <div className="relative group">
+                  <div className={cn(
+                    "absolute -inset-0.5 rounded-[2.5rem] blur opacity-20 group-hover:opacity-30 transition duration-1000",
+                    isBoy ? "bg-baby-boy" : "bg-baby-girl"
+                  )} />
+                  <div className="relative flex flex-col items-center gap-6 p-10 kawaii-card text-center bg-white/90 backdrop-blur-sm">
+                    <div className={cn(
+                      "w-24 h-24 rounded-[2rem] flex items-center justify-center transition-transform duration-700 group-hover:scale-110 group-hover:rotate-6",
+                      isBoy ? "bg-blue-50" : "bg-pink-50"
+                    )}>
+                      <Droplets className={cn("w-12 h-12", isBoy ? "text-baby-boy" : "text-baby-girl")} />
+                    </div>
+                    <div className="space-y-2">
+                      <h2 className="text-3xl font-black text-slate-800 tracking-tight">{t('feeding')}</h2>
+                      <p className="text-slate-500 font-medium">Capture your baby's nutrition journey</p>
+                    </div>
+                    <button
+                      onClick={() => setFeedingDialogOpen(true)}
+                      className={cn(
+                        "w-full h-16 text-white font-black text-lg rounded-[1.5rem] shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3",
+                        isBoy ? "bg-baby-boy/90 hover:bg-baby-boy shadow-baby-boy/20" : "bg-baby-girl/90 hover:bg-baby-girl shadow-baby-girl/20"
+                      )}
+                    >
+                      <Plus className="w-6 h-6 stroke-[3px]" />
+                      {t('addMilk')}
+                    </button>
+                  </div>
                 </div>
 
-                {/* Entry Form */}
-                <EntryForm onSubmit={addEntry} settings={settings} />
+                <section className="space-y-8">
+                  <FeedingChart
+                    entries={activeBaby.milkEntries}
+                    settings={settings}
+                    gender={activeBaby.gender}
+                  />
 
-                {/* Entries List */}
-                <EntriesList
-                  entries={activeBaby.entries}
-                  onUpdate={updateEntry}
-                  onDelete={deleteEntry}
-                  settings={settings}
-                  gender={activeBaby.gender}
-                />
-              </TabsContent>
+                  <div className="flex items-center justify-between px-2 pt-4">
+                    <div className="flex items-center gap-3">
+                      <div className={cn("w-1.5 h-6 rounded-full", isBoy ? "bg-baby-boy" : "bg-baby-girl")} />
+                      <h2 className="text-xl font-black text-slate-800 tracking-tight">
+                        Recent Feedings
+                      </h2>
+                    </div>
+                  </div>
+                  <MilkList
+                    entries={activeBaby.milkEntries}
+                    onUpdate={updateMilkEntry}
+                    onDelete={deleteMilkEntry}
+                    settings={settings}
+                  />
+                </section>
+              </div>
+            )}
 
-              <TabsContent value="milk" className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 outline-none">
-                {/* Milk Entry Form */}
-                <MilkEntryForm onSubmit={addMilkEntry} settings={settings} />
-
-                {/* Milk Entries List */}
-                <MilkList
-                  entries={activeBaby.milkEntries}
-                  onUpdate={updateMilkEntry}
-                  onDelete={deleteMilkEntry}
-                  settings={settings}
-                  gender={activeBaby.gender}
-                />
-              </TabsContent>
-            </Tabs>
+            {activeTab === 'milestones' && (
+              <div className="space-y-12">
+                <div className="kawaii-card p-16 text-center space-y-8 flex flex-col items-center bg-white/80 backdrop-blur-md border-2 border-dashed border-slate-100">
+                  <div className="w-32 h-32 bg-amber-50 rounded-[2.5rem] flex items-center justify-center animate-float">
+                    <Trophy className="h-16 w-16 text-amber-400" />
+                  </div>
+                  <div className="space-y-3">
+                    <h2 className="text-3xl font-black text-slate-800 tracking-tight">Milestones</h2>
+                    <p className="text-slate-500 font-bold text-lg max-w-xs mx-auto leading-relaxed">
+                      Something exciting is coming!
+                    </p>
+                    <p className="text-slate-400 font-medium max-w-[18rem] mx-auto text-sm">
+                      We're building a special place to celebrate every first smile, step, and word.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="kawaii-card p-12 text-center space-y-10 flex flex-col items-center bg-white/60 backdrop-blur-md border border-white/40">
+            <div className="relative w-32 h-32 animate-float">
+              <div className="absolute top-0 left-0 w-24 h-24 bg-baby-boy/10 rounded-3xl rotate-[-10deg] flex items-center justify-center overflow-hidden border-4 border-white shadow-xl">
+                <img src={boyImg} alt="" className="w-20 h-20 object-contain" />
+              </div>
+              <div className="absolute bottom-0 right-0 w-24 h-24 bg-baby-girl/10 rounded-3xl rotate-[10deg] flex items-center justify-center overflow-hidden border-4 border-white shadow-xl">
+                <img src={girlImg} alt="" className="w-20 h-20 object-contain" />
+              </div>
+            </div>
+            <div className="space-y-3 pt-4">
+              <h2 className="text-3xl font-black text-slate-800 tracking-tight">{t('getStarted')}</h2>
+              <p className="text-slate-500 font-bold text-lg max-w-xs mx-auto leading-relaxed">{t('addBabyFirst')}</p>
+            </div>
           </div>
         )}
-      </main>
 
-      {/* Footer */}
-      <footer className="py-12 mt-12 bg-white/10">
-        <div className="container max-w-4xl mx-auto px-4 text-center">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-2">
-            Made with <Heart className="h-3 w-3 text-rose-400 fill-rose-400" /> for parents everywhere
-          </p>
-        </div>
-      </footer>
-    </div>
+        <footer className="pt-20 pb-8 text-center">
+          <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/40 backdrop-blur-sm rounded-full border border-white/20 shadow-sm">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+              Made with <Heart className="h-2.5 w-2.5 text-rose-300 fill-rose-300 animate-pulse" /> for parents
+            </p>
+          </div>
+        </footer>
+      </div>
+
+      {activeBaby && (
+        <BottomNav
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
+          language={settings.language}
+        />
+      )}
+
+      <MilkEntryForm
+        isOpen={feedingDialogOpen}
+        onOpenChange={setFeedingDialogOpen}
+        onSubmit={addMilkEntry}
+        settings={settings}
+      />
+    </main>
   );
 };
 

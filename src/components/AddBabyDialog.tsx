@@ -21,12 +21,13 @@ import { useTranslation } from '@/hooks/useTranslation';
 interface AddBabyDialogProps {
   onAdd: (name: string, gender: Gender, birthDate: string) => void;
   language: Language;
+  trigger?: React.ReactNode;
 }
 
 import boyImg from '../img/boy.png';
 import girlImg from '../img/girl.png';
 
-export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
+export function AddBabyDialog({ onAdd, language, trigger }: AddBabyDialogProps) {
   const { t } = useTranslation(language);
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
@@ -48,10 +49,12 @@ export function AddBabyDialog({ onAdd, language }: AddBabyDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 h-10 px-4 rounded-xl border-white/40 bg-white/20 backdrop-blur-sm hover:bg-white/40 font-bold transition-all">
-          <UserPlus className="h-4 w-4" />
-          {t('addBaby')}
-        </Button>
+        {trigger || (
+          <Button variant="outline" size="sm" className="gap-2 h-10 px-4 rounded-xl border-white/40 bg-white/20 backdrop-blur-sm hover:bg-white/40 font-bold transition-all">
+            <UserPlus className="h-4 w-4" />
+            {t('addBaby')}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[420px] rounded-[2.5rem] p-0 overflow-hidden border-none shadow-2xl">
         <div className="bg-gradient-to-br from-primary/10 to-transparent p-8 pb-4">
