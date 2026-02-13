@@ -11,6 +11,7 @@ import { useBabyData } from '@/hooks/useBabyData';
 import { useTranslation } from '@/hooks/useTranslation';
 import { BottomNav, TabType } from '@/components/BottomNav';
 import { FeedingChart } from '@/components/FeedingChart';
+import { MilestoneList } from '@/components/MilestoneList';
 import { cn } from '@/lib/utils';
 import boyImg from '../img/boy.png';
 import girlImg from '../img/girl.png';
@@ -187,20 +188,10 @@ const Index = () => {
 
             {activeTab === 'milestones' && (
               <div className="space-y-12">
-                <div className="kawaii-card p-16 text-center space-y-8 flex flex-col items-center bg-white/80 backdrop-blur-md border-2 border-dashed border-slate-100">
-                  <div className="w-32 h-32 bg-amber-50 rounded-[2.5rem] flex items-center justify-center animate-float">
-                    <Trophy className="h-16 w-16 text-amber-400" />
-                  </div>
-                  <div className="space-y-3">
-                    <h2 className="text-3xl font-black text-slate-800 tracking-tight">Milestones</h2>
-                    <p className="text-slate-500 font-bold text-lg max-w-xs mx-auto leading-relaxed">
-                      Something exciting is coming!
-                    </p>
-                    <p className="text-slate-400 font-medium max-w-[18rem] mx-auto text-sm">
-                      We're building a special place to celebrate every first smile, step, and word.
-                    </p>
-                  </div>
-                </div>
+                <MilestoneList
+                  baby={activeBaby}
+                  settings={settings}
+                />
               </div>
             )}
           </div>

@@ -16,3 +16,20 @@ export function generateUUID() {
     return v.toString(16);
   });
 }
+
+export function calculateAgeInMonths(birthDate: string): number {
+  if (!birthDate) return 0;
+  const birth = new Date(birthDate);
+  const now = new Date();
+
+  let months = (now.getFullYear() - birth.getFullYear()) * 12;
+  months += now.getMonth() - birth.getMonth();
+
+  // If the current day of the month is less than the birth day, 
+  // it means the current month hasn't fully passed yet.
+  if (now.getDate() < birth.getDate()) {
+    months--;
+  }
+
+  return Math.max(0, months);
+}
