@@ -1,9 +1,7 @@
-import { LineChart, Droplets, Trophy } from 'lucide-react';
+import { Scale, Droplets, Footprints } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
 import { Language } from '@/types/baby';
-import feedingImg from '../img/feeding.png';
-import milestonesImg from '../img/milestones.png';
 
 export type TabType = 'growth' | 'feeding' | 'milestones';
 
@@ -16,10 +14,10 @@ interface BottomNavProps {
 export function BottomNav({ activeTab, onTabChange, language }: BottomNavProps) {
     const { t } = useTranslation(language);
 
-    const tabs: { id: TabType; icon?: any; image?: string; label: string }[] = [
-        { id: 'growth', icon: LineChart, label: t('growth') },
-        { id: 'feeding', image: feedingImg, label: t('feeding') },
-        { id: 'milestones', image: milestonesImg, label: t('milestones') },
+    const tabs: { id: TabType; icon: any; label: string; color: string }[] = [
+        { id: 'growth', icon: Scale, label: t('growth'), color: 'text-indigo-400' },
+        { id: 'feeding', icon: Droplets, label: t('feeding'), color: 'text-blue-400' },
+        { id: 'milestones', icon: Footprints, label: t('milestones'), color: 'text-rose-400' },
     ];
 
     return (
@@ -41,24 +39,13 @@ export function BottomNav({ activeTab, onTabChange, language }: BottomNavProps) 
                             )}
                         >
                             <div className={cn(
-                                "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-500",
-                                isActive ? "bg-white shadow-sm ring-1 ring-slate-900/5 rotate-0" : "rotate-0"
+                                "w-11 h-11 rounded-2xl flex items-center justify-center transition-all duration-500",
+                                isActive ? "bg-white shadow-md ring-1 ring-slate-900/5 -translate-y-1" : "bg-transparent"
                             )}>
-                                {tab.image ? (
-                                    <img
-                                        src={tab.image}
-                                        alt=""
-                                        className={cn(
-                                            "w-6 h-6 transition-all duration-500",
-                                            isActive ? "opacity-100 scale-110" : "opacity-40 grayscale"
-                                        )}
-                                    />
-                                ) : (
-                                    <Icon className={cn(
-                                        "w-5 h-5 transition-colors",
-                                        isActive ? "text-slate-900" : "text-inherit"
-                                    )} />
-                                )}
+                                <tab.icon className={cn(
+                                    "w-6 h-6 transition-all duration-500 stroke-[2.5px]",
+                                    isActive ? tab.color : "text-slate-300"
+                                )} />
                             </div>
                             <span className={cn(
                                 "text-[10px] font-black uppercase tracking-widest transition-all",

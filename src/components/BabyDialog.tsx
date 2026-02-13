@@ -219,7 +219,15 @@ export function BabyDialog({ onSubmit, language, trigger, initialData, title, we
             </div>
           )}
 
-          <Button type="submit" className="h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/20 w-full mt-4">
+          <Button
+            type="submit"
+            className={cn(
+              "h-14 text-lg font-black rounded-2xl shadow-lg w-full mt-4 transition-all active:scale-95 text-white",
+              gender === 'male'
+                ? "bg-baby-boy hover:bg-baby-boy/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-boy)/0.3)]"
+                : "bg-baby-girl hover:bg-baby-girl/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-girl)/0.3)]"
+            )}
+          >
             {isEdit ? t('saveChanges') : t('addBaby')}
           </Button>
         </form>

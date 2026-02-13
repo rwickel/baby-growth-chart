@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Plus } from 'lucide-react';
+import { CalendarIcon, Plus, Ruler, Scale } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { GrowthEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
-import { parseWeight, parseHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
+import { parseWeight, parseHeight, getWeightLabel, getHeightLabel, displayWeight, displayHeight } from '@/lib/unitConversions';
 import { toast } from 'sonner';
 
 interface EntryFormProps {
@@ -18,15 +18,20 @@ interface EntryFormProps {
   onCancel?: () => void;
   isEditing?: boolean;
   settings: AppSettings;
+  gender?: 'male' | 'female';
 }
 
-export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settings }: EntryFormProps) {
+export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settings, gender }: EntryFormProps) {
   const { t } = useTranslation(settings.language);
   const [date, setDate] = useState<Date | undefined>(
     initialValues ? new Date(initialValues.date) : new Date()
   );
-  const [weight, setWeight] = useState(initialValues?.weight.toString() || '');
-  const [height, setHeight] = useState(initialValues?.height.toString() || '');
+  const [weight, setWeight] = useState(() =>
+    initialValues?.weight ? displayWeight(initialValues.weight, settings.weightUnit) : ''
+  );
+  const [height, setHeight] = useState(() =>
+    initialValues?.height ? displayHeight(initialValues.height, settings.heightUnit) : ''
+  );
   const [calendarOpen, setCalendarOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -59,19 +64,29 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
 
   return (
     <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 space-y-5">
-      <h3 className="font-bold text-lg flex items-center gap-2">
-        {isEditing ? `✏️ ${t('editEntry')}` : `📝 ${t('addEntry')}`}
+      <h3 className="font-extrabold text-xl text-slate-800 flex items-center gap-3">
+        <div className={cn(
+          "w-10 h-10 rounded-2xl shadow-sm flex items-center justify-center transition-colors",
+          gender === 'male' ? "bg-baby-boy/10" : "bg-baby-girl/10"
+        )}>
+          {isEditing ? (
+            <Scale className={cn("h-5 w-5", gender === 'male' ? "text-baby-boy" : "text-baby-girl")} />
+          ) : (
+            <Ruler className={cn("h-5 w-5", gender === 'male' ? "text-baby-boy" : "text-baby-girl")} />
+          )}
+        </div>
+        {isEditing ? t('editEntry') : t('addEntry')}
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="space-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="date" className="text-sm font-medium">{t('date')}</Label>
           <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
                 className={cn(
-                  'w-full justify-start text-left font-normal',
+                  'h-12 w-full justify-start text-left font-bold rounded-2xl bg-slate-50/50 border-white/40 hover:bg-white transition-all',
                   !date && 'text-muted-foreground'
                 )}
               >
@@ -114,7 +129,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             placeholder={settings.weightUnit === 'lb' ? 'e.g., 12.1' : 'e.g., 5.5'}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
-            className="text-base"
+            className="h-12 text-base font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all"
           />
         </div>
 
@@ -129,14 +144,22 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             placeholder={settings.heightUnit === 'in' ? 'e.g., 23.6' : 'e.g., 60'}
             value={height}
             onChange={(e) => setHeight(e.target.value)}
-            className="text-base"
+            className="h-12 text-base font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all"
           />
         </div>
       </div>
 
       <div className="flex gap-3 pt-2">
-        <Button type="submit" className="gap-2">
-          {isEditing ? t('saveChanges') : <><Plus className="h-4 w-4" /> {t('addEntry')}</>}
+        <Button
+          type="submit"
+          className={cn(
+            "gap-2 h-14 px-8 rounded-2xl font-black text-lg shadow-lg transition-all active:scale-95 text-white border-none shrink-0",
+            gender === 'male'
+              ? "bg-baby-boy hover:bg-baby-boy/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-boy)/0.3)]"
+              : "bg-baby-girl hover:bg-baby-girl/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-girl)/0.3)]"
+          )}
+        >
+          {isEditing ? t('saveChanges') : <><Plus className="h-5 w-5 stroke-[3px]" /> {t('addEntry')}</>}
         </Button>
         {isEditing && onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>

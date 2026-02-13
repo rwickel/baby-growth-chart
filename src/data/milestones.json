@@ -1,309 +1,838 @@
 {
-    "age_range": "0-12 months",
-    "monthly_development": [
-        {
-            "month": 0,
-            "title": "Newborn",
-            "physical": [
-                "Moves arms and legs reflexively",
-                "Lifts head briefly during tummy time",
-                "Grasps finger when palm is touched"
-            ],
-            "cognitive": [
-                "Recognizes caregiver's voice",
-                "Focuses on objects 8-12 inches away",
-                "Startles at loud sounds"
-            ],
-            "social_emotional": [
-                "Makes eye contact",
-                "Calms when comforted",
-                "Cries to express needs"
-            ],
-            "language": [
-                "Cries differently for different needs",
-                "Makes small throat sounds"
-            ],
-            "milestones": [
-                "Begins tummy time",
-                "Responds to sound"
-            ]
-        },
-        {
-            "month": 1,
-            "title": "One Month",
-            "physical": [
-                "Holds head up briefly",
-                "Brings hands near face"
-            ],
-            "cognitive": [
-                "Follows moving object briefly",
-                "Recognizes familiar faces"
-            ],
-            "social_emotional": [
-                "Begins social smile",
-                "Looks at caregiver"
-            ],
-            "language": [
-                "Makes cooing sounds"
-            ],
-            "milestones": [
-                "Smiles at people"
-            ]
-        },
-        {
-            "month": 2,
-            "title": "Two Months",
-            "physical": [
-                "Holds head up steadily during tummy time",
-                "Begins smoother arm and leg movements"
-            ],
-            "cognitive": [
-                "Pays attention to faces",
-                "Begins tracking objects across midline"
-            ],
-            "social_emotional": [
-                "Smiles responsively",
-                "Tries to look at parent"
-            ],
-            "language": [
-                "Coos and gurgles",
-                "Turns head toward sounds"
-            ],
-            "milestones": [
-                "First social smile"
-            ]
-        },
-        {
-            "month": 3,
-            "title": "Three Months",
-            "physical": [
-                "Pushes up on elbows during tummy time",
-                "Opens and closes hands"
-            ],
-            "cognitive": [
-                "Recognizes familiar people at a distance",
-                "Shows interest in colorful toys"
-            ],
-            "social_emotional": [
-                "Enjoys playing with others",
-                "May cry when play stops"
-            ],
-            "language": [
-                "Begins babbling",
-                "Imitates some sounds"
-            ],
-            "milestones": [
-                "Supports upper body with arms"
-            ]
-        },
-        {
-            "month": 4,
-            "title": "Four Months",
-            "physical": [
-                "Rolls from tummy to back",
-                "Holds toy and shakes it"
-            ],
-            "cognitive": [
-                "Responds to affection",
-                "Reaches for toys with one hand"
-            ],
-            "social_emotional": [
-                "Smiles spontaneously",
-                "Copies some facial expressions"
-            ],
-            "language": [
-                "Babbles with expression",
-                "Copies sounds heard"
-            ],
-            "milestones": [
-                "Rolls over (tummy to back)"
-            ]
-        },
-        {
-            "month": 5,
-            "title": "Five Months",
-            "physical": [
-                "Rolls both directions",
-                "Begins sitting with support"
-            ],
-            "cognitive": [
-                "Explores objects by putting them in mouth",
-                "Shows curiosity about surroundings"
-            ],
-            "social_emotional": [
-                "Recognizes familiar faces",
-                "Likes to play with caregiver"
-            ],
-            "language": [
-                "Responds to own name",
-                "Makes consonant sounds"
-            ],
-            "milestones": [
-                "Rolls both ways"
-            ]
-        },
-        {
-            "month": 6,
-            "title": "Six Months",
-            "physical": [
-                "Sits briefly without support",
-                "Passes objects from one hand to another"
-            ],
-            "cognitive": [
-                "Looks around at nearby objects",
-                "Brings things to mouth"
-            ],
-            "social_emotional": [
-                "Recognizes familiar people",
-                "Likes looking at self in mirror"
-            ],
-            "language": [
-                "Responds to sounds by making sounds",
-                "Strings vowels together (e.g., 'ah', 'eh')"
-            ],
-            "milestones": [
-                "Sits without support"
-            ]
-        },
-        {
-            "month": 7,
-            "title": "Seven Months",
-            "physical": [
-                "Begins to bounce when held standing",
-                "May begin to crawl"
-            ],
-            "cognitive": [
-                "Finds partially hidden objects",
-                "Explores objects with hands and mouth"
-            ],
-            "social_emotional": [
-                "Enjoys social play",
-                "May show stranger anxiety"
-            ],
-            "language": [
-                "Responds to own name consistently",
-                "Babbles consonant sounds like 'ba', 'da'"
-            ],
-            "milestones": [
-                "Shows early crawling attempts"
-            ]
-        },
-        {
-            "month": 8,
-            "title": "Eight Months",
-            "physical": [
-                "Sits well without support",
-                "May pull to stand"
-            ],
-            "cognitive": [
-                "Understands object permanence",
-                "Looks for dropped objects"
-            ],
-            "social_emotional": [
-                "May show separation anxiety",
-                "Has favorite toys"
-            ],
-            "language": [
-                "Understands 'no'",
-                "Uses repetitive babbling"
-            ],
-            "milestones": [
-                "Pulls to stand"
-            ]
-        },
-        {
-            "month": 9,
-            "title": "Nine Months",
-            "physical": [
-                "Crawls or scoots",
-                "Stands holding on"
-            ],
-            "cognitive": [
-                "Watches path of falling objects",
-                "Looks for hidden objects"
-            ],
-            "social_emotional": [
-                "May be clingy with familiar adults",
-                "Has favorite objects"
-            ],
-            "language": [
-                "Understands simple words",
-                "Uses gestures like pointing"
-            ],
-            "milestones": [
-                "Crawls",
-                "Stands with support"
-            ]
-        },
-        {
-            "month": 10,
-            "title": "Ten Months",
-            "physical": [
-                "Cruises along furniture",
-                "Picks up small objects with thumb and forefinger"
-            ],
-            "cognitive": [
-                "Explores cause and effect",
-                "Imitates gestures"
-            ],
-            "social_emotional": [
-                "Shows preferences for certain people",
-                "Tests parental reactions"
-            ],
-            "language": [
-                "Says 'mama' or 'dada' (may not be specific)",
-                "Understands simple requests"
-            ],
-            "milestones": [
-                "Uses pincer grasp"
-            ]
-        },
-        {
-            "month": 11,
-            "title": "Eleven Months",
-            "physical": [
-                "Stands alone briefly",
-                "May take first steps"
-            ],
-            "cognitive": [
-                "Explores objects in different ways",
-                "Follows simple directions"
-            ],
-            "social_emotional": [
-                "Shows strong attachment to caregivers",
-                "Imitates others"
-            ],
-            "language": [
-                "Says one or two words",
-                "Uses gestures intentionally"
-            ],
-            "milestones": [
-                "First independent steps"
-            ]
-        },
-        {
-            "month": 12,
-            "title": "One Year",
-            "physical": [
-                "Walks independently or with support",
-                "Drinks from a cup"
-            ],
-            "cognitive": [
-                "Follows simple one-step commands",
-                "Explores objects by shaking, banging, throwing"
-            ],
-            "social_emotional": [
-                "Hands book to caregiver to read",
-                "Shows fear in some situations"
-            ],
-            "language": [
-                "Says 1-3 meaningful words",
-                "Understands simple instructions"
-            ],
-            "milestones": [
-                "First words",
-                "First independent steps"
-            ]
-        }
-    ]
+    "en": {
+        "monthly_development": [
+            {
+                "month": 0,
+                "title": "Newborn",
+                "physical": [
+                    "Moves arms and legs reflexively",
+                    "Lifts head briefly during tummy time",
+                    "Grasps finger when palm is touched"
+                ],
+                "cognitive": [
+                    "Recognizes caregiver's voice",
+                    "Focuses on objects 8-12 inches away",
+                    "Startles at loud sounds"
+                ],
+                "social_emotional": [
+                    "Makes eye contact",
+                    "Calms when comforted",
+                    "Cries to express needs"
+                ],
+                "language": [
+                    "Cries differently for different needs",
+                    "Makes small throat sounds"
+                ],
+                "milestones": [
+                    "Begins tummy time",
+                    "Responds to sound"
+                ],
+                "pro_tip": "Narrate your day to your baby; hearing your voice builds the foundation for language.",
+                "red_flags": "Does not respond to loud sounds or follow moving objects with eyes."
+            },
+            {
+                "month": 1,
+                "title": "One Month",
+                "physical": [
+                    "Holds head up briefly",
+                    "Brings hands near face"
+                ],
+                "cognitive": [
+                    "Follows moving object briefly",
+                    "Recognizes familiar faces"
+                ],
+                "social_emotional": [
+                    "Begins social smile",
+                    "Looks at caregiver"
+                ],
+                "language": [
+                    "Makes cooing sounds"
+                ],
+                "milestones": [
+                    "Smiles at people"
+                ],
+                "pro_tip": "Continue daily tummy time sessions, even if only for 1-2 minutes at a time.",
+                "red_flags": "Persistent feeding difficulties or very floppy/stiff limb movements."
+            },
+            {
+                "month": 2,
+                "title": "Two Months",
+                "physical": [
+                    "Holds head up steadily during tummy time",
+                    "Begins smoother arm and leg movements"
+                ],
+                "cognitive": [
+                    "Pays attention to faces",
+                    "Begins tracking objects across midline"
+                ],
+                "social_emotional": [
+                    "Smiles responsively",
+                    "Tries to look at parent"
+                ],
+                "language": [
+                    "Coos and gurgles",
+                    "Turns head toward sounds"
+                ],
+                "milestones": [
+                    "First social smile"
+                ],
+                "pro_tip": "Hold colorful toys in front of your baby to encourage visual tracking.",
+                "red_flags": "Does not smile at people or bring hands to mouth."
+            },
+            {
+                "month": 3,
+                "title": "Three Months",
+                "physical": [
+                    "Pushes up on elbows during tummy time",
+                    "Opens and closes hands"
+                ],
+                "cognitive": [
+                    "Recognizes familiar people at a distance",
+                    "Shows interest in colorful toys"
+                ],
+                "social_emotional": [
+                    "Enjoys playing with others",
+                    "May cry when play stops"
+                ],
+                "language": [
+                    "Begins babbling",
+                    "Imitates some sounds"
+                ],
+                "milestones": [
+                    "Supports upper body with arms"
+                ],
+                "pro_tip": "Play 'copycat' by mimicking your baby's babbles and facial expressions.",
+                "red_flags": "Cannot support head well or doesn't grasp toys."
+            },
+            {
+                "month": 4,
+                "title": "Four Months",
+                "physical": [
+                    "Rolls from tummy to back",
+                    "Holds toy and shakes it"
+                ],
+                "cognitive": [
+                    "Responds to affection",
+                    "Reaches for toys with one hand"
+                ],
+                "social_emotional": [
+                    "Smiles spontaneously",
+                    "Copies some facial expressions"
+                ],
+                "language": [
+                    "Babbles with expression",
+                    "Copies sounds heard"
+                ],
+                "milestones": [
+                    "Rolls over (tummy to back)"
+                ],
+                "pro_tip": "Place toys just out of reach to encourage rolling and reaching.",
+                "red_flags": "Doesn't coo or make sounds; doesn't bring objects to mouth."
+            },
+            {
+                "month": 6,
+                "title": "Six Months",
+                "physical": [
+                    "Sits briefly without support",
+                    "Passes objects from one hand to another"
+                ],
+                "cognitive": [
+                    "Looks around at nearby objects",
+                    "Brings things to mouth"
+                ],
+                "social_emotional": [
+                    "Recognizes familiar people",
+                    "Likes looking at self in mirror"
+                ],
+                "language": [
+                    "Responds to sounds by making sounds",
+                    "Strings vowels together"
+                ],
+                "milestones": [
+                    "Sits without support"
+                ],
+                "pro_tip": "Introduce a baby-safe mirror; babies are fascinated by their own reflections!",
+                "red_flags": "Does not roll in either direction or shows no affection for caregivers."
+            },
+            {
+                "month": 9,
+                "title": "Nine Months",
+                "physical": [
+                    "Crawls or scoots",
+                    "Stands holding on"
+                ],
+                "cognitive": [
+                    "Watches path of falling objects",
+                    "Looks for hidden objects"
+                ],
+                "social_emotional": [
+                    "May be clingy with familiar adults",
+                    "Has favorite objects"
+                ],
+                "language": [
+                    "Understands simple words",
+                    "Uses gestures like pointing"
+                ],
+                "milestones": [
+                    "Crawls",
+                    "Stands with support"
+                ],
+                "pro_tip": "Play 'Peek-a-boo' to help your baby understand object permanence.",
+                "red_flags": "Does not sit independently or respond to their own name."
+            },
+            {
+                "month": 12,
+                "title": "One Year",
+                "physical": [
+                    "Walks independently or with support",
+                    "Drinks from a cup"
+                ],
+                "cognitive": [
+                    "Follows simple one-step commands",
+                    "Explores objects by shaking, banging, throwing"
+                ],
+                "social_emotional": [
+                    "Hands book to caregiver to read",
+                    "Shows fear in some situations"
+                ],
+                "language": [
+                    "Says 1-3 meaningful words",
+                    "Understands simple instructions"
+                ],
+                "milestones": [
+                    "First words",
+                    "First independent steps"
+                ],
+                "pro_tip": "Encourage independence by offering a cup instead of a bottle.",
+                "red_flags": "Does not crawl, wave, or say simple words like 'mama' or 'dada'."
+            }
+        ]
+    },
+    "es": {
+        "monthly_development": [
+            {
+                "month": 0,
+                "title": "Recién Nacido",
+                "physical": [
+                    "Mueve brazos y piernas por reflejo",
+                    "Levanta la cabeza brevemente boca abajo",
+                    "Agarra el dedo al tocar la palma"
+                ],
+                "cognitive": [
+                    "Reconoce la voz de quien lo cuida",
+                    "Enfoca objetos a 20-30 cm",
+                    "Se sobresalta con sonidos fuertes"
+                ],
+                "social_emotional": [
+                    "Hace contacto visual",
+                    "Se calma cuando lo consuelan",
+                    "Llora para expresar necesidades"
+                ],
+                "language": [
+                    "Llora de distinta forma según la necesidad",
+                    "Hace sonidos de garganta"
+                ],
+                "milestones": [
+                    "Comienza el tiempo boca abajo",
+                    "Responde al sonido"
+                ],
+                "pro_tip": "Nárrale tu día a tu bebé; escuchar tu voz es la base del lenguaje.",
+                "red_flags": "No responde a sonidos fuertes ni sigue objetos con la mirada."
+            },
+            {
+                "month": 1,
+                "title": "Un Mes",
+                "physical": [
+                    "Mantiene la cabeza levantada brevemente",
+                    "Lleva las manos cerca de la cara"
+                ],
+                "cognitive": [
+                    "Sigue objetos brevemente",
+                    "Reconoce caras familiares"
+                ],
+                "social_emotional": [
+                    "Comienza sonrisa social",
+                    "Mira a quien lo cuida"
+                ],
+                "language": [
+                    "Hace sonidos de arrullo"
+                ],
+                "milestones": [
+                    "Sonríe a las personas"
+                ],
+                "pro_tip": "Continúa el tiempo boca abajo diariamente, aunque sea 1 o 2 minutos.",
+                "red_flags": "Dificultad persistente para alimentarse o cuerpo muy rígido/flácido."
+            },
+            {
+                "month": 2,
+                "title": "Dos Meses",
+                "physical": [
+                    "Mantiene la cabeza firme boca abajo",
+                    "Movimientos más fluidos"
+                ],
+                "cognitive": [
+                    "Presta atención a las caras",
+                    "Sigue objetos visualmente"
+                ],
+                "social_emotional": [
+                    "Sonríe en respuesta",
+                    "Intenta mirar a sus padres"
+                ],
+                "language": [
+                    "Gorjea y hace ruiditos",
+                    "Gira la cabeza hacia sonidos"
+                ],
+                "milestones": [
+                    "Primera sonrisa social"
+                ],
+                "pro_tip": "Usa juguetes coloridos para fomentar el seguimiento visual.",
+                "red_flags": "No sonríe a las personas ni se lleva las manos a la boca."
+            },
+            {
+                "month": 3,
+                "title": "Tres Meses",
+                "physical": [
+                    "Se apoya en los codos boca abajo",
+                    "Abre y cierra las manos"
+                ],
+                "cognitive": [
+                    "Reconoce personas a distancia",
+                    "Interés en juguetes coloridos"
+                ],
+                "social_emotional": [
+                    "Disfruta jugar con otros",
+                    "Llora si el juego para"
+                ],
+                "language": [
+                    "Empieza a balbucear",
+                    "Imita algunos sonidos"
+                ],
+                "milestones": [
+                    "Sostiene el torso con los brazos"
+                ],
+                "pro_tip": "Imita los balbuceos y expresiones faciales de tu bebé.",
+                "red_flags": "No sostiene bien la cabeza o no agarra juguetes."
+            },
+            {
+                "month": 4,
+                "title": "Cuatro Meses",
+                "physical": [
+                    "Se da la vuelta de boca abajo a arriba",
+                    "Sacude un juguete"
+                ],
+                "cognitive": [
+                    "Responde al afecto",
+                    "Alcanza juguetes con una mano"
+                ],
+                "social_emotional": [
+                    "Sonríe espontáneamente",
+                    "Imita expresiones"
+                ],
+                "language": [
+                    "Balbucea con expresión",
+                    "Copia sonidos"
+                ],
+                "milestones": [
+                    "Se da la vuelta"
+                ],
+                "pro_tip": "Pon juguetes fuera de su alcance para motivar el gateo o giros.",
+                "red_flags": "No hace ruidos ni se lleva objetos a la boca."
+            },
+            {
+                "month": 6,
+                "title": "Seis Meses",
+                "physical": [
+                    "Se sienta brevemente sin apoyo",
+                    "Pasa objetos de mano a mano"
+                ],
+                "cognitive": [
+                    "Mira objetos cercanos",
+                    "Se lleva cosas a la boca"
+                ],
+                "social_emotional": [
+                    "Reconoce personas familiares",
+                    "Le gusta el espejo"
+                ],
+                "language": [
+                    "Responde a sonidos con sonidos",
+                    "Une vocales"
+                ],
+                "milestones": [
+                    "Se sienta sin apoyo"
+                ],
+                "pro_tip": "¡A los bebés les fascina ver su propio reflejo en espejos seguros!",
+                "red_flags": "No se da la vuelta o no muestra afecto."
+            },
+            {
+                "month": 9,
+                "title": "Nueve Meses",
+                "physical": [
+                    "Gatea o se arrastra",
+                    "Se mantiene de pie agarrándose"
+                ],
+                "cognitive": [
+                    "Sigue objetos que caen",
+                    "Busca objetos escondidos"
+                ],
+                "social_emotional": [
+                    "Apegado a conocidos",
+                    "Tiene objetos favoritos"
+                ],
+                "language": [
+                    "Entiende palabras sencillas",
+                    "Usa gestos"
+                ],
+                "milestones": [
+                    "Gatea",
+                    "Se mantiene de pie con apoyo"
+                ],
+                "pro_tip": "Juega al '¿dónde está el bebé?' para enseñar permanencia de objeto.",
+                "red_flags": "No se sienta solo ni responde a su nombre."
+            },
+            {
+                "month": 12,
+                "title": "Un Año",
+                "physical": [
+                    "Camina solo o con apoyo",
+                    "Bebe de una taza"
+                ],
+                "cognitive": [
+                    "Sigue instrucciones simples",
+                    "Explora golpeando o lanzando"
+                ],
+                "social_emotional": [
+                    "Da un libro para que lean",
+                    "Muestra miedo"
+                ],
+                "language": [
+                    "Dice 1-3 palabras con significado",
+                    "Entiende instrucciones"
+                ],
+                "milestones": [
+                    "Primeras palabras",
+                    "Primeros pasos"
+                ],
+                "pro_tip": "Fomenta la independencia ofreciendo una taza en lugar de biberón.",
+                "red_flags": "No gatea, no señala ni dice palabras simples."
+            }
+        ]
+    },
+    "fr": {
+        "monthly_development": [
+            {
+                "month": 0,
+                "title": "Nouveau-né",
+                "physical": [
+                    "Bouge par réflexe",
+                    "Lève brièvement la tête",
+                    "Serre le doigt"
+                ],
+                "cognitive": [
+                    "Reconnaît la voix",
+                    "Fixe à 20-30 cm",
+                    "Sursaute aux bruits"
+                ],
+                "social_emotional": [
+                    "Contact visuel",
+                    "Se calme si réconforté",
+                    "Pleure pour ses besoins"
+                ],
+                "language": [
+                    "Cris variés",
+                    "Petits bruits de gorge"
+                ],
+                "milestones": [
+                    "Temps sur le ventre",
+                    "Réagit aux sons"
+                ],
+                "pro_tip": "Racontez votre journée à bébé ; votre voix est la base du langage.",
+                "red_flags": "Ne réagit pas aux sons forts."
+            },
+            {
+                "month": 1,
+                "title": "Un Mois",
+                "physical": [
+                    "Tient la tête brièvement",
+                    "Mains près du visage"
+                ],
+                "cognitive": [
+                    "Suit des yeux",
+                    "Reconnaît les visages"
+                ],
+                "social_emotional": [
+                    "Sourire social",
+                    "Regarde le parent"
+                ],
+                "language": [
+                    "Gazouille"
+                ],
+                "milestones": [
+                    "Sourire aux gens"
+                ],
+                "pro_tip": "Continuez le temps sur le ventre tous les jours.",
+                "red_flags": "Difficultés persistantes à téter."
+            },
+            {
+                "month": 2,
+                "title": "Deux Mois",
+                "physical": [
+                    "Tête droite sur le ventre",
+                    "Mouvements fluides"
+                ],
+                "cognitive": [
+                    "Attention aux visages",
+                    "Suit les objets"
+                ],
+                "social_emotional": [
+                    "Sourire social",
+                    "Cherche le regard"
+                ],
+                "language": [
+                    "Gazouille et bulles",
+                    "Se tourne vers les sons"
+                ],
+                "milestones": [
+                    "Premier sourire social"
+                ],
+                "pro_tip": "Utilisez des jouets colorés pour l'éveil visuel.",
+                "red_flags": "Ne sourit pas aux gens."
+            },
+            {
+                "month": 3,
+                "title": "Trois Mois",
+                "physical": [
+                    "Sur les coudes",
+                    "Ouvre les mains"
+                ],
+                "cognitive": [
+                    "Reconnaît de loin",
+                    "Intérêt pour les jouets"
+                ],
+                "social_emotional": [
+                    "Aime jouer",
+                    "Pleure si le jeu s'arrête"
+                ],
+                "language": [
+                    "Babille",
+                    "Imite les sons"
+                ],
+                "milestones": [
+                    "Tient son torse"
+                ],
+                "pro_tip": "Imitez les sons de votre bébé pour l'encourager.",
+                "red_flags": "Ne tient pas sa tête."
+            },
+            {
+                "month": 4,
+                "title": "Quatre Mois",
+                "physical": [
+                    "Se retourne ventre/dos",
+                    "Secoue un jouet"
+                ],
+                "cognitive": [
+                    "Réagit à l'affection",
+                    "Attrape d'une main"
+                ],
+                "social_emotional": [
+                    "Sourire spontané",
+                    "Imite les expressions"
+                ],
+                "language": [
+                    "Babille avec expression",
+                    "Copie les sons"
+                ],
+                "milestones": [
+                    "Se retourne"
+                ],
+                "pro_tip": "Placez des jouets un peu plus loin pour l'inciter à bouger.",
+                "red_flags": "Ne porte pas d'objets à la bouche."
+            },
+            {
+                "month": 6,
+                "title": "Six Mois",
+                "physical": [
+                    "Assis brièvement",
+                    "Passe un objet d'une main à l'autre"
+                ],
+                "cognitive": [
+                    "Observe",
+                    "Tout à la bouche"
+                ],
+                "social_emotional": [
+                    "Reconnaît les proches",
+                    "Aime le miroir"
+                ],
+                "language": [
+                    "Répond aux sons",
+                    "Enchaîne les voyelles"
+                ],
+                "milestones": [
+                    "Tient assis seul"
+                ],
+                "pro_tip": "Les bébés adorent regarder leur reflet !",
+                "red_flags": "Ne se retourne pas."
+            },
+            {
+                "month": 9,
+                "title": "Nuf Mois",
+                "physical": [
+                    "Rampe ou quatre pattes",
+                    "Debout avec appui"
+                ],
+                "cognitive": [
+                    "Suit la chute d'objets",
+                    "Cherche les objets cachés"
+                ],
+                "social_emotional": [
+                    "Pot de colle",
+                    "Objets favoris"
+                ],
+                "language": [
+                    "Comprend des mots simples",
+                    "Pointe du doigt"
+                ],
+                "milestones": [
+                    "Rampe",
+                    "Debout avec appui"
+                ],
+                "pro_tip": "Jouez à 'coucou-caché' pour la permanence de l'objet.",
+                "red_flags": "Ne répond pas à son prénom."
+            },
+            {
+                "month": 12,
+                "title": "Un An",
+                "physical": [
+                    "Marche seul ou avec aide",
+                    "Boit à la tasse"
+                ],
+                "cognitive": [
+                    "Suit des consignes",
+                    "Secoue et jette"
+                ],
+                "social_emotional": [
+                    "Tend un livre",
+                    "Peut avoir peur"
+                ],
+                "language": [
+                    "1 à 3 mots",
+                    "Comprend les ordres"
+                ],
+                "milestones": [
+                    "Premiers mots",
+                    "Premiers pas"
+                ],
+                "pro_tip": "Encouragez l'autonomie avec une tasse.",
+                "red_flags": "Ne pointe pas du doigt."
+            }
+        ]
+    },
+    "de": {
+        "monthly_development": [
+            {
+                "month": 0,
+                "title": "Neugeborenes",
+                "physical": [
+                    "Reflexartige Bewegungen",
+                    "Hebt Kopf kurz",
+                    "Greifreflex"
+                ],
+                "cognitive": [
+                    "Erkennt Stimmen",
+                    "Fixiert 20-30 cm",
+                    "Erschrickt bei Lärm"
+                ],
+                "social_emotional": [
+                    "Blickkontakt",
+                    "Beruhigt sich bei Zuwendung",
+                    "Weint bei Bedürfnissen"
+                ],
+                "language": [
+                    "Unterschiedliches Weinen",
+                    "Gurgellaute"
+                ],
+                "milestones": [
+                    "Bauchlage beginnt",
+                    "Reagiert auf Geräusche"
+                ],
+                "pro_tip": "Erzählen Sie Ihrem Baby von Ihrem Tag; Ihre Stimme fördert die Sprache.",
+                "red_flags": "Reagiert nicht auf laute Geräusche."
+            },
+            {
+                "month": 1,
+                "title": "Ein Monat",
+                "physical": [
+                    "Hebt Kopf kurz",
+                    "Hände zum Gesicht"
+                ],
+                "cognitive": [
+                    "Folgt Objekten",
+                    "Erkennt Gesichter"
+                ],
+                "social_emotional": [
+                    "Soziales Lächeln beginnt",
+                    "Blickt Eltern an"
+                ],
+                "language": [
+                    "Gurrlaute"
+                ],
+                "milestones": [
+                    "Lächelt Menschen an"
+                ],
+                "pro_tip": "Täglich kurz Bauchlage üben.",
+                "red_flags": "Anhaltende Trinkschwäche."
+            },
+            {
+                "month": 2,
+                "title": "Zwei Monate",
+                "physical": [
+                    "Kopf stabil in Bauchlage",
+                    "Flüssigere Bewegungen"
+                ],
+                "cognitive": [
+                    "Beachtet Gesichter",
+                    "Folgt Objekten"
+                ],
+                "social_emotional": [
+                    "Lächelt zurück",
+                    "Sucht Eltern"
+                ],
+                "language": [
+                    "Gurgeln",
+                    "Dreht Kopf zu Geräuschen"
+                ],
+                "milestones": [
+                    "Erstes Lächeln"
+                ],
+                "pro_tip": "Buntes Spielzeug zur visuellen Anregung nutzen.",
+                "red_flags": "Lächelt Menschen nicht an."
+            },
+            {
+                "month": 3,
+                "title": "Drei Monate",
+                "physical": [
+                    "Stützt auf Ellbogen",
+                    "Öffnet/Schließt Hände"
+                ],
+                "cognitive": [
+                    "Erkennt Personen",
+                    "Interesse an Farben"
+                ],
+                "social_emotional": [
+                    "Spielt gern",
+                    "Weint bei Spielstopp"
+                ],
+                "language": [
+                    "Brabbelt",
+                    "Imitiert Laute"
+                ],
+                "milestones": [
+                    "Stützt Oberkörper"
+                ],
+                "pro_tip": "Ahmen Sie die Laute Ihres Babys nach.",
+                "red_flags": "Kann den Kopf nicht halten."
+            },
+            {
+                "month": 4,
+                "title": "Vier Monate",
+                "physical": [
+                    "Rollt Bauch/Rücken",
+                    "Schüttelt Spielzeug"
+                ],
+                "cognitive": [
+                    "Reagiert auf Zuneigung",
+                    "Greift mit einer Hand"
+                ],
+                "social_emotional": [
+                    "Lächelt spontan",
+                    "Imitiert Mimik"
+                ],
+                "language": [
+                    "Ausdrucksvolles Brabbeln",
+                    "Kopiert Laute"
+                ],
+                "milestones": [
+                    "Rollt um"
+                ],
+                "pro_tip": "Spielzeug außer Reichweite legen, um Bewegung zu fördern.",
+                "red_flags": "Bringt keine Dinge zum Mund."
+            },
+            {
+                "month": 6,
+                "title": "Sechs Monate",
+                "physical": [
+                    "Sitzt kurz ohne Hilfe",
+                    "Wechselt Hände"
+                ],
+                "cognitive": [
+                    "Betrachtet Dinge",
+                    "Alles in den Mund"
+                ],
+                "social_emotional": [
+                    "Erkennt Vertraute",
+                    "Mag Spiegel"
+                ],
+                "language": [
+                    "Antwortet mit Lauten",
+                    "Reiht Vokale"
+                ],
+                "milestones": [
+                    "Sitzt frei"
+                ],
+                "pro_tip": "Ein babysicherer Spiegel sorgt für große Begeisterung!",
+                "red_flags": "Rollt sich in keine Richtung."
+            },
+            {
+                "month": 9,
+                "title": "Neun Monate",
+                "physical": [
+                    "Krabbelt oder robbt",
+                    "Steht mit Festhalten"
+                ],
+                "cognitive": [
+                    "Folgt Fallweg",
+                    "Sucht Verstecktes"
+                ],
+                "social_emotional": [
+                    "Anhänglich",
+                    "Lieblingsdinge"
+                ],
+                "language": [
+                    "Versteht Wörter",
+                    "Zeigt auf Dinge"
+                ],
+                "milestones": [
+                    "Krabbelt",
+                    "Steht mit Hilfe"
+                ],
+                "pro_tip": "Kuckuck-Spielen fördert das Verständnis von Beständigkeit.",
+                "red_flags": "Reagiert nicht auf den eigenen Namen."
+            },
+            {
+                "month": 12,
+                "title": "Ein Jahr",
+                "physical": [
+                    "Läuft (mit Hilfe)",
+                    "Trinkt aus Tasse"
+                ],
+                "cognitive": [
+                    "Folgt Anweisungen",
+                    "Untersucht durch Werfen"
+                ],
+                "social_emotional": [
+                    "Gibt Buch",
+                    "Zeigt Angst"
+                ],
+                "language": [
+                    "1-3 Wörter",
+                    "Versteht Sätze"
+                ],
+                "milestones": [
+                    "Erste Wörter",
+                    "Erste Schritte"
+                ],
+                "pro_tip": "Fördern Sie Selbstständigkeit durch eine Tasse statt Flasche.",
+                "red_flags": "Krabbelt nicht oder winkt nicht."
+            }
+        ]
+    }
 }

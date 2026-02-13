@@ -30,9 +30,11 @@ export function MilestoneList({ baby, settings }: MilestoneListProps) {
         setSelectedMonth(babyAgeInMonths);
     }, [babyAgeInMonths, baby.id]);
 
-    const monthlyData = useMemo(() =>
-        [...milestonesData.monthly_development].sort((a, b) => a.month - b.month)
-        , []);
+    const monthlyData = useMemo(() => {
+        const lang = settings.language as keyof typeof milestonesData;
+        const data = milestonesData[lang] || milestonesData.en;
+        return [...data.monthly_development].sort((a, b) => a.month - b.month);
+    }, [settings.language]);
 
     const currentMilestones = useMemo(() => {
         // Find the closest month that is <= selectedMonth

@@ -70,6 +70,7 @@ export function EntriesList({ entries, onUpdate, onDelete, settings, gender }: E
               initialValues={entry}
               isEditing
               settings={settings}
+              gender={gender}
               onSubmit={(updates) => {
                 onUpdate(entry.id, updates);
                 setEditingId(null);

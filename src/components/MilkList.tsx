@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { Edit2, Trash2, Droplets, Info } from 'lucide-react';
+import { Edit2, Trash2, Droplets, Info, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MilkEntry, AppSettings, Gender } from '@/types/baby';
 import { MilkEntryForm } from './MilkEntryForm';
@@ -39,7 +39,7 @@ export function MilkList({ entries, onUpdate, onDelete, settings, gender }: Milk
                 <div className="w-24 h-24 mb-6 animate-float rounded-full overflow-hidden bg-white border-4 border-white shadow-inner relative">
                     <img src={displayImg} alt="Baby" className="w-full h-full object-contain bg-white" />
                     <div className="absolute bottom-0 right-0 bg-white rounded-full p-1.5 shadow-sm relative z-10 border border-slate-100">
-                        <Droplets className="h-5 w-5 text-primary" />
+                        <Moon className="h-5 w-5 text-indigo-300" />
                     </div>
                 </div>
                 <h3 className="font-extrabold text-2xl mb-3 text-slate-800">{t('noMilkEntries')}</h3>
@@ -74,6 +74,7 @@ export function MilkList({ entries, onUpdate, onDelete, settings, gender }: Milk
                             initialValues={entry}
                             isEditing
                             settings={settings}
+                            gender={gender}
                             onSubmit={(updates) => {
                                 onUpdate(entry.id, updates);
                                 setEditingId(null);

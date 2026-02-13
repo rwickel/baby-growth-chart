@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { CalendarIcon, Plus, Clock } from 'lucide-react';
+import { CalendarIcon, Plus, Clock, Footprints } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,9 +26,10 @@ interface MilkEntryFormProps {
     settings: AppSettings;
     isOpen?: boolean;
     onOpenChange?: (open: boolean) => void;
+    gender?: 'male' | 'female';
 }
 
-export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, settings, isOpen, onOpenChange }: MilkEntryFormProps) {
+export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, settings, isOpen, onOpenChange, gender }: MilkEntryFormProps) {
     const { t } = useTranslation(settings.language);
 
     const initialDate = initialValues ? new Date(initialValues.date) : new Date();
@@ -63,6 +64,8 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
             if (onOpenChange) onOpenChange(false);
         }
     };
+
+    const isBoy = gender === 'male';
 
     const formContent = (
         <form onSubmit={handleSubmit} className={cn("space-y-8", isEditing ? "" : "p-2")}>
@@ -140,7 +143,15 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
             </div>
 
             <div className="flex gap-4 pt-4">
-                <Button type="submit" className="h-14 px-10 text-lg font-black rounded-2xl shadow-lg shadow-primary/10 flex-1">
+                <Button
+                    type="submit"
+                    className={cn(
+                        "h-14 px-10 text-lg font-black rounded-2xl shadow-lg flex-1 transition-all active:scale-95 text-white border-none",
+                        isBoy
+                            ? "bg-baby-boy hover:bg-baby-boy/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-boy)/0.3)]"
+                            : "bg-baby-girl hover:bg-baby-girl/90 shadow-[0_10px_20px_-5px_hsl(var(--baby-girl)/0.3)]"
+                    )}
+                >
                     {isEditing ? t('saveChanges') : t('addMilk')}
                 </Button>
                 {isEditing && onCancel && (
@@ -154,8 +165,16 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
 
     if (isEditing) {
         return (
-            <div className="kawaii-card p-8">
-                <h3 className="font-black text-xl text-slate-800 mb-8">{t('editMilk')}</h3>
+            <div className="kawaii-card p-8 bg-white/40">
+                <h3 className="font-black text-xl text-slate-800 mb-8 flex items-center gap-3">
+                    <div className={cn(
+                        "w-10 h-10 rounded-2xl shadow-sm flex items-center justify-center",
+                        gender === 'male' ? "bg-baby-boy/10" : "bg-baby-girl/10"
+                    )}>
+                        <Footprints className={cn("h-5 w-5", gender === 'male' ? "text-baby-boy" : "text-baby-girl")} />
+                    </div>
+                    {t('editMilk')}
+                </h3>
                 {formContent}
             </div>
         );
@@ -165,7 +184,13 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
         <Dialog open={isOpen} onOpenChange={onOpenChange}>
             <DialogContent className="rounded-[2.5rem] border-none shadow-2xl p-8 max-w-lg">
                 <DialogHeader className="mb-4">
-                    <DialogTitle className="text-2xl font-black text-slate-800 tracking-tight">
+                    <DialogTitle className="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-3">
+                        <div className={cn(
+                            "w-10 h-10 rounded-2xl shadow-sm flex items-center justify-center",
+                            gender === 'male' ? "bg-baby-boy/10" : "bg-baby-girl/10"
+                        )}>
+                            <Plus className={cn("h-5 w-5", gender === 'male' ? "text-baby-boy" : "text-baby-girl")} />
+                        </div>
                         {t('addMilk')}
                     </DialogTitle>
                 </DialogHeader>
