@@ -9,14 +9,14 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { differenceInMonths, parseISO } from 'date-fns';
+import { differenceInDays, parseISO } from 'date-fns';
 import { GrowthEntry, AppSettings } from '@/types/baby';
 import growthReferences from '@/data/growthReferences.json';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useTranslation } from '@/hooks/useTranslation';
 import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
 import { Button } from '@/components/ui/button';
-import { Share2, Download, FileSpreadsheet } from 'lucide-react';
+import { Share2, Download, FileSpreadsheet, LineChart as LineChartIcon } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { toast } from 'sonner';
 import { exportToCSV } from '@/lib/exportData';
@@ -46,57 +46,57 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
       gender,
       birthDate: birthDate || '',
       entries,
+      milkEntries: [],
     };
   }, [babyName, gender, birthDate, entries]);
 
   const getAgeInMonths = (date: string): number => {
-    if (birthDate) {
-      return differenceInMonths(parseISO(date), parseISO(birthDate));
-    }
-    if (entries.length > 0) {
-      const firstDate = parseISO(entries[0].date);
-      return differenceInMonths(parseISO(date), firstDate);
-    }
-    return 0;
+    const d1 = parseISO(date);
+    const d2 = birthDate ? parseISO(birthDate) : (entries.length > 0 ? parseISO(entries[0].date) : d1);
+    const days = differenceInDays(d1, d2);
+    // Use the standard average month length (365.25 / 12)
+    return Number((days / 30.4375).toFixed(2));
   };
 
   const chartData = useMemo(() => {
-    const data: Record<string, number | undefined>[] = [];
+    const dataMap = new Map<number, Record<string, number | undefined>>();
 
-    // Add reference data points (always in kg/cm)
+    const getOrInit = (month: number) => {
+      if (!dataMap.has(month)) {
+        dataMap.set(month, { month });
+      }
+      return dataMap.get(month)!;
+    };
+
+    // Add weight reference data
     references.weight.months.forEach((month, index) => {
-      data.push({
-        month,
-        weightP3: references.weight.p3[index],
-        weightP15: references.weight.p15[index],
-        weightP50: references.weight.p50[index],
-        weightP85: references.weight.p85[index],
-        weightP97: references.weight.p97[index],
-        heightP3: references.height.p3[index],
-        heightP15: references.height.p15[index],
-        heightP50: references.height.p50[index],
-        heightP85: references.height.p85[index],
-        heightP97: references.height.p97[index],
-      });
+      const point = getOrInit(month);
+      point.weightP3 = references.weight.p3[index];
+      point.weightP15 = references.weight.p15[index];
+      point.weightP50 = references.weight.p50[index];
+      point.weightP85 = references.weight.p85[index];
+      point.weightP97 = references.weight.p97[index];
+    });
+
+    // Add height reference data
+    references.height.months.forEach((month, index) => {
+      const point = getOrInit(month);
+      point.heightP3 = references.height.p3[index];
+      point.heightP15 = references.height.p15[index];
+      point.heightP50 = references.height.p50[index];
+      point.heightP85 = references.height.p85[index];
+      point.heightP97 = references.height.p97[index];
     });
 
     // Add baby's data points
     entries.forEach((entry) => {
       const month = getAgeInMonths(entry.date);
-      const existingPoint = data.find((d) => d.month === month);
-      if (existingPoint) {
-        existingPoint.babyWeight = entry.weight > 0 ? entry.weight : undefined;
-        existingPoint.babyHeight = entry.height > 0 ? entry.height : undefined;
-      } else {
-        data.push({
-          month,
-          babyWeight: entry.weight > 0 ? entry.weight : undefined,
-          babyHeight: entry.height > 0 ? entry.height : undefined,
-        });
-      }
+      const point = getOrInit(month);
+      point.babyWeight = entry.weight > 0 ? entry.weight : undefined;
+      point.babyHeight = entry.height > 0 ? entry.height : undefined;
     });
 
-    return data.sort((a, b) => (a.month || 0) - (b.month || 0));
+    return Array.from(dataMap.values()).sort((a, b) => (a.month || 0) - (b.month || 0));
   }, [entries, references, birthDate]);
 
   const handleDownload = async () => {
@@ -183,17 +183,44 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
       return displayHeight(value, settings.heightUnit);
     };
 
+    const maxAge = useMemo(() => {
+      if (entries.length === 0) return 60;
+      const latestEntryAge = getAgeInMonths(entries[entries.length - 1].date);
+      if (latestEntryAge <= 6) return 6;
+      if (latestEntryAge <= 12) return 12;
+      if (latestEntryAge <= 24) return 24;
+      if (latestEntryAge <= 36) return 36;
+      if (latestEntryAge <= 48) return 48;
+      return 60;
+    }, [entries]);
+
+    const xAxisTicks = useMemo(() => {
+      if (maxAge <= 6) return [0, 1, 2, 3, 4, 5, 6];
+      if (maxAge <= 12) return [0, 2, 4, 6, 8, 10, 12];
+      if (maxAge <= 24) return [0, 4, 8, 12, 16, 20, 24];
+      return [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60];
+    }, [maxAge]);
+
+    const filteredData = useMemo(() => {
+      return chartData.filter(d => (d.month || 0) <= maxAge);
+    }, [chartData, maxAge]);
+
     return (
       <ResponsiveContainer width="100%" height={400}>
-        <LineChart data={chartData} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
+        <LineChart data={filteredData} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
           <XAxis
             dataKey="month"
+            type="number"
+            domain={[0, maxAge]}
+            ticks={xAxisTicks}
             label={{ value: t('ageMonths'), position: 'bottom', offset: -5 }}
-            tick={{ fontSize: 12 }}
+            tick={{ fontSize: 10 }}
             stroke="hsl(var(--muted-foreground))"
           />
           <YAxis
+            domain={['auto', 'auto']}
+            padding={{ top: 20, bottom: 20 }}
             label={{ value: `${t(metric)} (${unit})`, angle: -90, position: 'insideLeft' }}
             tick={{ fontSize: 12 }}
             stroke="hsl(var(--muted-foreground))"
@@ -228,18 +255,18 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
                 [`${metric}P50`]: 'P50',
                 [`${metric}P85`]: 'P85',
                 [`${metric}P97`]: 'P97',
-                [dataKey]: `👶 ${babyName || t('yourBaby')}`,
+                [dataKey]: babyName || t('yourBaby'),
               };
               return labels[value] || value;
             }}
           />
 
           {/* Reference lines */}
-          <Line type="monotone" dataKey={`${metric}P3`} stroke="hsl(var(--chart-p3))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P3`} />
-          <Line type="monotone" dataKey={`${metric}P15`} stroke="hsl(var(--chart-p15))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P15`} />
-          <Line type="monotone" dataKey={`${metric}P50`} stroke="hsl(var(--chart-p50))" strokeWidth={2} dot={false} name={`${metric}P50`} />
-          <Line type="monotone" dataKey={`${metric}P85`} stroke="hsl(var(--chart-p85))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P85`} />
-          <Line type="monotone" dataKey={`${metric}P97`} stroke="hsl(var(--chart-p97))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P97`} />
+          <Line type="monotone" dataKey={`${metric}P3`} stroke="hsl(var(--chart-p3))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P3`} connectNulls />
+          <Line type="monotone" dataKey={`${metric}P15`} stroke="hsl(var(--chart-p15))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P15`} connectNulls />
+          <Line type="monotone" dataKey={`${metric}P50`} stroke="hsl(var(--chart-p50))" strokeWidth={2} dot={false} name={`${metric}P50`} connectNulls />
+          <Line type="monotone" dataKey={`${metric}P85`} stroke="hsl(var(--chart-p85))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P85`} connectNulls />
+          <Line type="monotone" dataKey={`${metric}P97`} stroke="hsl(var(--chart-p97))" strokeWidth={1.5} strokeDasharray="5 5" dot={false} name={`${metric}P97`} connectNulls />
 
           {/* Baby's data */}
           <Line
@@ -259,17 +286,19 @@ export function GrowthChart({ entries, gender, birthDate, settings, babyName }: 
 
   if (entries.length === 0) {
     return (
-      <div className="glass-card rounded-2xl p-8 text-center">
-        <div className="text-6xl mb-4">📊</div>
-        <h3 className="font-bold text-lg mb-2">{t('noChartData')}</h3>
-        <p className="text-muted-foreground">{t('noChartDataDesc')}</p>
+      <div className="glass-card rounded-[2.5rem] p-12 text-center flex flex-col items-center border-none shadow-xl">
+        <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+          <LineChartIcon className="h-10 w-10 text-primary" />
+        </div>
+        <h3 className="font-extrabold text-2xl mb-3 text-slate-800">{t('noChartData')}</h3>
+        <p className="text-slate-500 max-w-sm mx-auto">{t('noChartDataDesc')}</p>
       </div>
     );
   }
 
   return (
-    <div className="glass-card rounded-2xl p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="glass-card rounded-[2.5rem] p-8 space-y-8 border-none shadow-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
         {/* <h3 className="font-bold text-lg flex items-center gap-2">
            📈 {t('growthCharts')}
         </h3> */}

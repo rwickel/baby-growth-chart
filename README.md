@@ -4,17 +4,25 @@ A modern, responsive web and mobile application for tracking and visualizing bab
 <img width="803" height="962" alt="image" src="https://github.com/user-attachments/assets/93d57bf4-bd3f-4e10-a3e6-4df3fdaa77c6" />
 
 
+## Target Audience
+
+This application is designed for:
+- **Parents and Caregivers**: To monitor and track their baby's physical development and feeding patterns easily.
+- **Health-Conscious Families**: Who want to maintain a digital record of growth metrics to share with pediatricians.
+- **International Users**: Supporting multiple languages and both metric/imperial unit systems.
+
 ## Features
 
-- 👶 **Multi-Child Support**: Manage growth records for multiple babies.
-- 🎨 **Dynamic Themes**: Gender-based themes (Blue for boys, Pink for girls).
-- ⚙️ **Quick Setup**: Configure language and units directly from the start screen.
-- 📈 **Interactive Charts**: Visualize growth trends over time using Recharts.
-- 📝 **Detailed Entries**: Log weight, length/height, and head circumference with dates.
-- 🔄 **Unit Conversion**: Support for different unit systems (metric/imperial).
-- 📤 **Data Export**: Export records to CSV and PDF for sharing with healthcare providers.
-- 📱 **Mobile Ready**: Native Android support via Capacitor with immersive full-screen design.
-- 🌙 **Dark Mode**: Built-in support for light and dark themes.
+- 👶 **Multi-Child Support**: Manage growth records for multiple babies in one place.
+- 📈 **Interactive Charts**: Visualize weight, height, and head circumference trends with BMI and percentile curves (based on WHO standards).
+- 🍼 **Feeding Tracker**: Log milk feeding sessions (amount, time, and type).
+- 📝 **Growth History**: Detailed logs for all growth metrics with easy editing and deletion.
+- 🎨 **Dynamic Themes**: Personalized experience with gender-based themes (Blue/Pink) and full Dark Mode support.
+- 📤 **Data Export**: Export your data to CSV or PDF for backup or sharing with healthcare providers.
+- 🌍 **Internationalization**: Available in English, Spanish, French, and German.
+- 🔄 **Unit Flexibility**: Toggle between Metric (kg, cm, ml) and Imperial (lb, in, oz) units at any time.
+- 📱 **Cross-Platform**: Seamless experience on Web and Android with an offline-first, private approach (all data stays on your device).
+
 
 ## Tech Stack
 

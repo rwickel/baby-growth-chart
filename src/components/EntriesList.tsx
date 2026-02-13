@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { format, parseISO } from 'date-fns';
-import { Edit2, Trash2, Weight, Ruler } from 'lucide-react';
+import { Edit2, Trash2, Weight, Ruler, ClipboardList } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { GrowthEntry, AppSettings } from '@/types/baby';
+import { GrowthEntry, AppSettings, Gender } from '@/types/baby';
 import { EntryForm } from './EntryForm';
 import { useTranslation } from '@/hooks/useTranslation';
 import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
@@ -18,14 +18,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 
+import boyImg from '../img/boy.png';
+import girlImg from '../img/girl.png';
+
 interface EntriesListProps {
   entries: GrowthEntry[];
   onUpdate: (id: string, updates: Partial<Omit<GrowthEntry, 'id'>>) => void;
   onDelete: (id: string) => void;
   settings: AppSettings;
+  gender?: Gender;
 }
 
-export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesListProps) {
+export function EntriesList({ entries, onUpdate, onDelete, settings, gender }: EntriesListProps) {
   const { t } = useTranslation(settings.language);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -33,11 +37,14 @@ export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesLi
   const heightLabel = getHeightLabel(settings.heightUnit);
 
   if (entries.length === 0) {
+    const displayImg = gender === 'female' ? girlImg : boyImg;
     return (
-      <div className="glass-card rounded-2xl p-8 text-center">
-        <div className="text-6xl mb-4 animate-float">👶</div>
-        <h3 className="font-bold text-lg mb-2">{t('noEntries')}</h3>
-        <p className="text-muted-foreground">
+      <div className="glass-card rounded-[2.5rem] p-12 text-center flex flex-col items-center border-none shadow-xl">
+        <div className="w-24 h-24 mb-6 animate-float rounded-full overflow-hidden bg-white border-4 border-white shadow-inner">
+          <img src={displayImg} alt="Baby" className="w-full h-full object-contain bg-white" />
+        </div>
+        <h3 className="font-extrabold text-2xl mb-3 text-slate-800">{t('noEntries')}</h3>
+        <p className="text-slate-500 max-w-sm mx-auto">
           {t('noEntriesDesc')}
         </p>
       </div>
@@ -45,15 +52,17 @@ export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesLi
   }
 
   return (
-    <div className="glass-card rounded-2xl p-6 space-y-4">
-      <h3 className="font-bold text-lg flex items-center gap-2">
-        📋 {t('growthHistory')}
-        <span className="text-sm font-normal text-muted-foreground">
-          ({entries.length} {entries.length === 1 ? t('entry') : t('entries')})
+    <div className="glass-card rounded-[2.5rem] p-8 space-y-8 border-none shadow-lg">
+      <div className="flex items-center justify-between">
+        <h3 className="font-extrabold text-xl text-slate-800 flex items-center gap-3">
+          {t('growthHistory')}
+        </h3>
+        <span className="text-xs font-bold text-slate-400 bg-slate-100 px-3 py-1 rounded-full uppercase tracking-widest">
+          {entries.length} {entries.length === 1 ? t('entry') : t('entries')}
         </span>
-      </h3>
+      </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {entries.map((entry) =>
           editingId === entry.id ? (
             <EntryForm
@@ -70,63 +79,68 @@ export function EntriesList({ entries, onUpdate, onDelete, settings }: EntriesLi
           ) : (
             <div
               key={entry.id}
-              className="group flex items-center justify-between p-3 bg-secondary/40 rounded-xl hover:bg-secondary/60 transition-colors gap-2"
+              className="group flex items-center justify-between p-5 bg-white/40 border border-white/60 rounded-[1.5rem] hover:bg-white hover:shadow-md transition-all gap-4"
             >
-              <div className="grid grid-cols-[100px_1fr_1fr] items-center gap-2 flex-1 min-w-0">
-                <div className="text-[11px] font-bold text-muted-foreground whitespace-nowrap overflow-hidden text-ellipsis">
-                  {format(parseISO(entry.date), 'MMM d, yy')}
+              <div className="flex flex-wrap items-center gap-6 flex-1 min-w-0">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
+                    {format(parseISO(entry.date), 'yyyy')}
+                  </span>
+                  <span className="text-sm font-black text-slate-700 whitespace-nowrap">
+                    {format(parseISO(entry.date), 'MMM d')}
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-foreground min-w-0">
-                  <Weight className="h-3 w-3 text-primary/70 shrink-0" />
-                  <div className="flex items-baseline gap-0.5 overflow-hidden">
-                    <span className="text-sm font-bold tabular-nums">
+                <div className="flex items-center gap-3 text-slate-700 bg-white/50 px-4 py-2 rounded-2xl border border-white/40">
+                  <Weight className="h-4 w-4 text-primary shrink-0" />
+                  <div className="flex items-baseline gap-1 overflow-hidden">
+                    <span className="text-base font-black tabular-nums">
                       {entry.weight > 0 ? displayWeight(entry.weight, settings.weightUnit) : "—"}
                     </span>
-                    <span className="text-[9px] text-muted-foreground font-medium lowercase">{weightLabel}</span>
+                    <span className="text-[10px] text-slate-400 font-bold lowercase tracking-wider">{weightLabel}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 text-foreground min-w-0">
-                  <Ruler className="h-3 w-3 text-accent/70 shrink-0" />
-                  <div className="flex items-baseline gap-0.5 overflow-hidden">
-                    <span className="text-sm font-bold tabular-nums">
+                <div className="flex items-center gap-3 text-slate-700 bg-white/50 px-4 py-2 rounded-2xl border border-white/40">
+                  <Ruler className="h-4 w-4 text-accent shrink-0" />
+                  <div className="flex items-baseline gap-1 overflow-hidden">
+                    <span className="text-base font-black tabular-nums">
                       {entry.height > 0 ? displayHeight(entry.height, settings.heightUnit) : "—"}
                     </span>
-                    <span className="text-[9px] text-muted-foreground font-medium lowercase">{heightLabel}</span>
+                    <span className="text-[10px] text-slate-400 font-bold lowercase tracking-wider">{heightLabel}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-0.5 shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setEditingId(entry.id)}
-                  className="h-9 w-9 text-muted-foreground hover:text-foreground"
+                  className="h-10 w-10 rounded-xl hover:bg-white hover:shadow-sm text-slate-400 hover:text-primary transition-all"
                 >
                   <Edit2 className="h-4 w-4" />
                 </Button>
 
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-9 w-9 text-destructive/60 hover:text-destructive">
+                    <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl hover:bg-rose-50 text-slate-300 hover:text-destructive transition-all">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="rounded-[2.5rem] p-8 border-none shadow-2xl">
                     <AlertDialogHeader>
-                      <AlertDialogTitle>{t('deleteEntry')}</AlertDialogTitle>
-                      <AlertDialogDescription>
+                      <AlertDialogTitle className="text-xl font-black">{t('deleteEntry')}</AlertDialogTitle>
+                      <AlertDialogDescription className="font-medium text-slate-500">
                         {t('deleteEntryDesc')} {format(parseISO(entry.date), 'MMM d, yyyy')}.
                         {' '}{t('cannotUndo')}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                    <AlertDialogFooter className="mt-6">
+                      <AlertDialogCancel className="rounded-2xl font-bold h-12 px-6">{t('cancel')}</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={() => onDelete(entry.id)}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-2xl font-bold h-12 px-6"
                       >
                         {t('delete')}
                       </AlertDialogAction>

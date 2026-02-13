@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { AppData, Baby, GrowthEntry, AppSettings, Gender, Language, WeightUnit, HeightUnit } from '@/types/baby';
+import { AppData, Baby, GrowthEntry, MilkEntry, AppSettings, Gender, Language, WeightUnit, HeightUnit } from '@/types/baby';
 import { generateUUID } from '@/lib/utils';
 
 const STORAGE_KEY = 'baby-growth-tracker-v2';
@@ -30,6 +30,7 @@ function migrateFromV1(): AppData | null {
           gender: parsed.gender,
           birthDate: '',
           entries: parsed.entries,
+          milkEntries: [],
         };
         return {
           babies: [newBaby],
@@ -50,7 +51,17 @@ export function useBabyData() {
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
-        return { ...defaultData, ...parsed, settings: { ...defaultSettings, ...parsed.settings } };
+        // Ensure all babies have milkEntries
+        const babiesWithMilk = (parsed.babies || []).map((b: any) => ({
+          ...b,
+          milkEntries: b.milkEntries || []
+        }));
+        return {
+          ...defaultData,
+          ...parsed,
+          babies: babiesWithMilk,
+          settings: { ...defaultSettings, ...parsed.settings }
+        };
       } catch {
         return defaultData;
       }
@@ -97,6 +108,7 @@ export function useBabyData() {
       gender,
       birthDate,
       entries: [],
+      milkEntries: [],
     };
     setData(prev => ({
       ...prev,
@@ -106,7 +118,7 @@ export function useBabyData() {
     return newBaby.id;
   }, []);
 
-  const updateBaby = useCallback((id: string, updates: Partial<Omit<Baby, 'id' | 'entries'>>) => {
+  const updateBaby = useCallback((id: string, updates: Partial<Omit<Baby, 'id' | 'entries' | 'milkEntries'>>) => {
     setData(prev => ({
       ...prev,
       babies: prev.babies.map(baby =>
@@ -190,6 +202,64 @@ export function useBabyData() {
     }));
   }, [data.activeBabyId]);
 
+  // Milk Entry management
+  const addMilkEntry = useCallback((entry: Omit<MilkEntry, 'id'>) => {
+    if (!data.activeBabyId) return;
+
+    const newEntry: MilkEntry = {
+      ...entry,
+      id: generateUUID(),
+    };
+
+    setData(prev => ({
+      ...prev,
+      babies: prev.babies.map(baby =>
+        baby.id === prev.activeBabyId
+          ? {
+            ...baby,
+            milkEntries: [...(baby.milkEntries || []), newEntry].sort(
+              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+            ),
+          }
+          : baby
+      ),
+    }));
+  }, [data.activeBabyId]);
+
+  const updateMilkEntry = useCallback((id: string, updates: Partial<Omit<MilkEntry, 'id'>>) => {
+    if (!data.activeBabyId) return;
+
+    setData(prev => ({
+      ...prev,
+      babies: prev.babies.map(baby =>
+        baby.id === prev.activeBabyId
+          ? {
+            ...baby,
+            milkEntries: (baby.milkEntries || [])
+              .map(entry => (entry.id === id ? { ...entry, ...updates } : entry))
+              .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()),
+          }
+          : baby
+      ),
+    }));
+  }, [data.activeBabyId]);
+
+  const deleteMilkEntry = useCallback((id: string) => {
+    if (!data.activeBabyId) return;
+
+    setData(prev => ({
+      ...prev,
+      babies: prev.babies.map(baby =>
+        baby.id === prev.activeBabyId
+          ? {
+            ...baby,
+            milkEntries: (baby.milkEntries || []).filter(entry => entry.id !== id),
+          }
+          : baby
+      ),
+    }));
+  }, [data.activeBabyId]);
+
   return {
     // Data
     babies: data.babies,
@@ -211,6 +281,11 @@ export function useBabyData() {
     addEntry,
     updateEntry,
     deleteEntry,
+
+    // Milk Entry actions
+    addMilkEntry,
+    updateMilkEntry,
+    deleteMilkEntry,
 
     // Utilities (exposed for testing)
     generateUUID,

@@ -11,12 +11,20 @@ export interface GrowthEntry {
   height: number; // stored in cm
 }
 
+export interface MilkEntry {
+  id: string;
+  date: string; // ISO date string including time
+  amount: number; // measured in ml
+  note?: string;
+}
+
 export interface Baby {
   id: string;
   name: string;
   gender: Gender;
   birthDate: string;
   entries: GrowthEntry[];
+  milkEntries: MilkEntry[];
 }
 
 export interface AppSettings {
