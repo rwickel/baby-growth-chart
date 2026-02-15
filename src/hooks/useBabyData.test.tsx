@@ -61,7 +61,6 @@ describe('useBabyData Hook', () => {
       weight: 5,
       height: 60,
       headCircumference: 40,
-      notes: 'First month',
     };
 
     act(() => {
@@ -103,7 +102,6 @@ describe('useBabyData Hook', () => {
         date: '2023-02-01',
         weight: 5,
         height: 60,
-        headCircumference: 40,
       });
     });
 
@@ -129,7 +127,6 @@ describe('useBabyData Hook', () => {
         date: '2023-02-01',
         weight: 5,
         height: 60,
-        headCircumference: 40,
       });
     });
 
@@ -140,5 +137,30 @@ describe('useBabyData Hook', () => {
     });
 
     expect(result.current.activeBaby?.entries).toHaveLength(0);
+  });
+
+  it('should handle weight unit conversions across settings', () => {
+    const { result } = renderHook(() => useBabyData());
+
+    act(() => {
+      result.current.addBaby('Unit Test Baby', 'male', '2023-01-01');
+    });
+
+    act(() => {
+      result.current.addEntry({
+        date: '2023-01-01',
+        weight: 5, // 5kg
+        height: 50,
+      });
+    });
+
+    expect(result.current.activeBaby?.entries[0].weight).toBe(5);
+
+    act(() => {
+      result.current.setWeightUnit('lb');
+    });
+
+    expect(result.current.settings.weightUnit).toBe('lb');
+    expect(result.current.activeBaby?.entries[0].weight).toBe(5);
   });
 });

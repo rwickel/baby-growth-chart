@@ -88,6 +88,7 @@ npx capacitor-assets generate --android
 ## Available Scripts
 
 - `npm run dev`: Starts the development server.
+- `npm run assets:generate`: Generates app icons and splash screens.
 - `npm run build`: Builds the application for production.
 - `npm run preview`: Previews the production build locally.
 - `npm run lint`: Runs ESLint to check for code quality issues.

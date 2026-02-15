@@ -67,34 +67,46 @@ export function MilestoneList({ baby, settings }: MilestoneListProps) {
                         onClick={handlePrev}
                         disabled={currentIndex === 0}
                         className={cn(
-                            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 active:scale-90",
-                            currentIndex === 0 ? "opacity-30" : "hover:border-slate-300 hover:shadow-md"
+                            "w-14 h-14 rounded-[1.5rem] flex items-center justify-center transition-all bg-white/60 backdrop-blur-sm shadow-sm border border-white/40 active:scale-95",
+                            currentIndex === 0 ? "opacity-20 cursor-not-allowed" : "hover:bg-white hover:shadow-md hover:border-slate-200"
                         )}
                     >
-                        <ChevronLeft className="w-6 h-6 text-slate-600" />
+                        <ChevronLeft className={cn("w-7 h-7", isBoy ? "text-baby-boy" : "text-baby-girl")} />
                     </button>
 
-                    <div className="flex flex-col items-center min-w-[140px]">
+                    <div className="flex flex-col items-center min-w-[160px]">
                         <div className={cn(
-                            "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm border mb-2",
-                            isBoy ? "bg-blue-50/50 text-baby-boy border-blue-100" : "bg-pink-50/50 text-baby-girl border-pink-100"
+                            "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-[0.2em] shadow-sm border -mb-3 z-10 bg-white",
+                            isBoy ? "text-baby-boy border-blue-100" : "text-baby-girl border-pink-100"
                         )}>
-                            {t('expectedAt')} {currentMilestones.month} {t('monthsOld')}
+                            {t('expectedAt')}
                         </div>
-                        <h2 className="text-3xl font-black text-slate-800 tracking-tight">
-                            {currentMilestones.title}
-                        </h2>
+                        <div className={cn(
+                            "flex flex-col items-center px-10 py-5 rounded-[2.5rem] border-2 transition-all duration-500 bg-white/40 backdrop-blur-sm",
+                            isBoy
+                                ? "border-blue-50 shadow-[0_10px_25px_-5px_rgba(59,130,246,0.08)]"
+                                : "border-pink-50 shadow-[0_10px_25px_-5px_rgba(236,72,153,0.08)]"
+                        )}>
+                            <div className="flex items-baseline gap-1.5 mt-1">
+                                <h2 className={cn(
+                                    "text-sm font-black tracking-tighter tabular-nums uppercase",
+                                    isBoy ? "text-baby-boy" : "text-baby-girl"
+                                )}>
+                                    {currentMilestones.month} {t('monthsOld')}
+                                </h2>
+                            </div>
+                        </div>
                     </div>
 
                     <button
                         onClick={handleNext}
                         disabled={currentIndex === monthlyData.length - 1}
                         className={cn(
-                            "w-12 h-12 rounded-2xl flex items-center justify-center transition-all bg-white shadow-sm border border-slate-100 active:scale-90",
-                            currentIndex === monthlyData.length - 1 ? "opacity-30" : "hover:border-slate-300 hover:shadow-md"
+                            "w-14 h-14 rounded-[1.5rem] flex items-center justify-center transition-all bg-white/60 backdrop-blur-sm shadow-sm border border-white/40 active:scale-95",
+                            currentIndex === monthlyData.length - 1 ? "opacity-20 cursor-not-allowed" : "hover:bg-white hover:shadow-md hover:border-slate-200"
                         )}
                     >
-                        <ChevronRight className="w-6 h-6 text-slate-600" />
+                        <ChevronRight className={cn("w-7 h-7", isBoy ? "text-baby-boy" : "text-baby-girl")} />
                     </button>
                 </div>
 
@@ -110,35 +122,13 @@ export function MilestoneList({ baby, settings }: MilestoneListProps) {
                 )}
             </div>
 
-            {/* Hero Milestones */}
-            <div className="grid grid-cols-1 gap-4">
-                {currentMilestones.milestones.map((milestone, index) => (
-                    <div
-                        key={index}
-                        className="group relative overflow-hidden"
-                    >
-                        <div className={cn(
-                            "absolute inset-0 opacity-10 group-hover:opacity-20 transition-opacity duration-500",
-                            isBoy ? "bg-baby-boy" : "bg-baby-girl"
-                        )} />
-                        <div className="relative p-6 kawaii-card bg-white/80 backdrop-blur-sm border-none shadow-sm flex items-center gap-6 group-hover:translate-x-1 transition-transform duration-300">
-                            <div className={cn(
-                                "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0",
-                                isBoy ? "bg-blue-50 text-baby-boy" : "bg-pink-50 text-baby-girl"
-                            )}>
-                                <Trophy className="w-7 h-7" />
-                            </div>
-                            <p className="font-bold text-slate-700 text-lg leading-tight">
-                                {milestone}
-                            </p>
-                            <Star className={cn(
-                                "w-5 h-5 ml-auto opacity-20 group-hover:opacity-100 transition-opacity",
-                                isBoy ? "text-baby-boy fill-baby-boy" : "text-baby-girl fill-baby-girl"
-                            )} />
-                        </div>
-                    </div>
-                ))}
-            </div>
+            {/* Top Achievements / Highlights */}
+            <CategoryCard
+                title={t('milestones')}
+                items={currentMilestones.milestones}
+                icon={<Trophy className="w-5 h-5" />}
+                color={isBoy ? "baby-boy" : "baby-girl"}
+            />
 
             {/* Categories Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -178,7 +168,7 @@ export function MilestoneList({ baby, settings }: MilestoneListProps) {
             <div className="pt-8 flex justify-center">
                 <div className="text-center max-w-xs">
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-loose">
-                        Note: Every baby develops at their own pace. These are general guidelines.
+                        {t('milestoneNote')}
                     </p>
                 </div>
             </div>

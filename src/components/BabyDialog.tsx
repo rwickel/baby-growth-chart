@@ -15,9 +15,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
-import { Gender, Language, Baby } from '@/types/baby';
+import { Language, Baby, Gender } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
 import { parseWeight, parseHeight } from '@/lib/unitConversions';
+import { formatDate, getDateLocale } from '@/lib/dateUtils';
 
 interface BabyDialogProps {
   onSubmit: (name: string, gender: Gender, birthDate: string, weight?: number, height?: number) => void;
@@ -67,7 +68,7 @@ export function BabyDialog({ onSubmit, language, trigger, initialData, title, we
     const w = weight ? parseWeight(parseFloat(weight), weightUnit) : undefined;
     const h = height ? parseHeight(parseFloat(height), heightUnit) : undefined;
 
-    onSubmit(name.trim(), gender, format(birthDate, 'yyyy-MM-dd'), w, h);
+    onSubmit(name.trim(), gender, formatDate(birthDate, 'yyyy-MM-dd', language), w, h);
     if (!initialData) {
       setName('');
       setGender('male');
@@ -112,7 +113,7 @@ export function BabyDialog({ onSubmit, language, trigger, initialData, title, we
               id="baby-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Emma"
+              placeholder={t('babyNamePlaceholder')}
               className="h-14 text-lg font-bold rounded-2xl bg-slate-50 border-slate-100 focus:bg-white transition-all px-6"
               required
             />
@@ -171,12 +172,13 @@ export function BabyDialog({ onSubmit, language, trigger, initialData, title, we
                   )}
                 >
                   <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
-                  {birthDate ? format(birthDate, 'PPP') : <span>{t('pickDate')}</span>}
+                  {birthDate ? formatDate(birthDate, 'PPP', language) : <span>{t('pickDate')}</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0 rounded-3xl overflow-hidden border-none shadow-2xl" align="start">
                 <Calendar
                   mode="single"
+                  locale={getDateLocale(language)}
                   selected={birthDate}
                   onSelect={(d) => {
                     setBirthDate(d);

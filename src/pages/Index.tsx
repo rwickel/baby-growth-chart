@@ -146,11 +146,11 @@ const Index = () => {
                       "w-24 h-24 rounded-[2rem] flex items-center justify-center transition-transform duration-700 group-hover:scale-110 group-hover:rotate-6",
                       isBoy ? "bg-blue-50" : "bg-pink-50"
                     )}>
-                      <Droplets className={cn("w-12 h-12", isBoy ? "text-baby-boy" : "text-baby-girl")} />
+                      <Droplets className={cn("w-6 h-6", isBoy ? "text-baby-boy" : "text-baby-girl")} />
                     </div>
                     <div className="space-y-2">
                       <h2 className="text-3xl font-black text-slate-800 tracking-tight">{t('feeding')}</h2>
-                      <p className="text-slate-500 font-medium">Capture your baby's nutrition journey</p>
+                      <p className="text-slate-500 font-medium">{t('nutritionJourneyDesc')}</p>
                     </div>
                     <button
                       onClick={() => setFeedingDialogOpen(true)}
@@ -176,7 +176,7 @@ const Index = () => {
                     <div className="flex items-center gap-3">
                       <div className={cn("w-1.5 h-6 rounded-full", isBoy ? "bg-baby-boy" : "bg-baby-girl")} />
                       <h2 className="text-xl font-black text-slate-800 tracking-tight">
-                        Recent Feedings
+                        {t('recentFeedings')}
                       </h2>
                     </div>
                   </div>
@@ -219,7 +219,7 @@ const Index = () => {
         <footer className="pt-20 pb-8 text-center">
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-white/40 backdrop-blur-sm rounded-full border border-white/20 shadow-sm">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
-              Made with <Heart className="h-2.5 w-2.5 text-rose-300 fill-rose-300 animate-pulse" /> for parents
+              {t('madeWith')} <Heart className="h-2.5 w-2.5 text-rose-300 fill-rose-300 animate-pulse" /> {t('forParents')}
             </p>
           </div>
         </footer>

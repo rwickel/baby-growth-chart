@@ -154,9 +154,9 @@ export function BabySelector({ babies, activeBabyId, onSelect, onDelete, onAdd, 
             <span className="text-sm font-black text-slate-400">
               {t('addBaby')}
             </span>
-            <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">
+            {/* <span className="text-[10px] font-bold text-slate-300 uppercase tracking-tighter">
               New
-            </span>
+            </span> */}
           </div>
         </div>
 

@@ -1,7 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#f0f9ff"/>
-  <path d="M112 400V112M112 400h288M112 400l80-128l64 64l128-192" stroke="#0ea5e9" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <circle cx="192" cy="272" r="24" fill="#0ea5e9"/>
-  <circle cx="256" cy="336" r="24" fill="#0ea5e9"/>
-  <circle cx="384" cy="144" r="24" fill="#0ea5e9"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background Circle with soft shadow feel -->
+  <circle cx="50" cy="50" r="48" fill="#f8fafc" />
+  
+  <!-- Baby Bottle Body -->
+  <rect x="35" y="40" width="30" height="40" rx="8" fill="#e0f2fe" stroke="#38bdf8" stroke-width="4" />
+  
+  <!-- Bottle Top -->
+  <path d="M40 40 L40 32 C40 28 44 25 50 25 C56 25 60 28 60 32 L60 40 Z" fill="#fbdbe4" stroke="#f472b6" stroke-width="3" />
+  
+  <!-- Nipple -->
+  <path d="M46 25 Q50 15 54 25" stroke="#f472b6" stroke-width="4" fill="none" stroke-linecap="round" />
+  
+  <!-- Decorative Heart in the center -->
+  <path d="M50 65 C48 63 44 63 44 60 C44 58 46 56 48 56 C49 56 50 57 50 58 C50 57 51 56 52 56 C54 56 56 58 56 60 C56 63 52 63 50 65 Z" fill="#f472b6" />
+  
+  <!-- Reflection detail -->
+  <rect x="39" y="45" width="4" height="20" rx="2" fill="white" fill-opacity="0.6" />
 </svg>

@@ -9,9 +9,10 @@ import {
     ResponsiveContainer,
     Cell,
 } from 'recharts';
-import { format, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { MilkEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
+import { formatDate } from '@/lib/dateUtils';
 
 interface FeedingChartProps {
     entries: MilkEntry[];
@@ -30,7 +31,7 @@ export function FeedingChart({ entries, settings, gender }: FeedingChartProps) {
 
         // Group entries by day and sum amount
         entries.forEach((entry) => {
-            const day = format(parseISO(entry.date), 'yyyy-MM-dd');
+            const day = formatDate(parseISO(entry.date), 'yyyy-MM-dd', settings.language);
             dailyTotals.set(day, (dailyTotals.get(day) || 0) + entry.amount);
         });
 
@@ -38,7 +39,7 @@ export function FeedingChart({ entries, settings, gender }: FeedingChartProps) {
         return Array.from(dailyTotals.entries())
             .map(([date, amount]) => ({
                 date,
-                formattedDate: format(parseISO(date), 'MMM dd'),
+                formattedDate: formatDate(parseISO(date), 'MMM dd', settings.language),
                 amount,
             }))
             .sort((a, b) => a.date.localeCompare(b.date))
@@ -64,12 +65,12 @@ export function FeedingChart({ entries, settings, gender }: FeedingChartProps) {
                 <div className="flex items-center gap-3">
                     <div className={isBoy ? "w-1.5 h-6 rounded-full bg-baby-boy shadow-[0_0_10px_rgba(var(--baby-boy)/0.3)]" : "w-1.5 h-6 rounded-full bg-baby-girl shadow-[0_0_10px_rgba(var(--baby-girl)/0.3)]"} />
                     <h3 className="font-black text-xl text-slate-800 tracking-tight">
-                        Daily Volume
+                        {t('dailyVolume')}
                     </h3>
                 </div>
                 <div className="px-3 py-1 bg-white/60 backdrop-blur-md rounded-full border border-white/40 shadow-sm">
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                        Last 7 Days
+                        {t('last7Days')}
                     </span>
                 </div>
             </div>
@@ -93,7 +94,7 @@ export function FeedingChart({ entries, settings, gender }: FeedingChartProps) {
                                 tickFormatter={(val) => `${val}`}
                             />
                             <Tooltip
-                                cursor={{ fill: 'rgba(0,0,0,0.03)', radius: [12, 12, 12, 12] }}
+                                cursor={{ fill: 'rgba(0,0,0,0.03)', radius: 12 }}
                                 contentStyle={{
                                     backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                     backdropFilter: 'blur(8px)',
@@ -104,7 +105,7 @@ export function FeedingChart({ entries, settings, gender }: FeedingChartProps) {
                                 }}
                                 itemStyle={{ color: 'hsl(var(--slate-800))', fontWeight: 900, fontSize: '14px' }}
                                 labelStyle={{ color: 'hsl(var(--slate-400))', fontWeight: 800, marginBottom: '8px', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.05em' }}
-                                formatter={(val: number) => [`${val} ml`, 'Total']}
+                                formatter={(val: number) => [val, t('amount')]}
                                 labelFormatter={(label) => label}
                             />
                             <Bar

@@ -6,6 +6,7 @@ import { GrowthEntry, AppSettings, Gender } from '@/types/baby';
 import { EntryForm } from './EntryForm';
 import { useTranslation } from '@/hooks/useTranslation';
 import { displayWeight, displayHeight, getWeightLabel, getHeightLabel } from '@/lib/unitConversions';
+import { formatDate } from '@/lib/dateUtils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -85,10 +86,10 @@ export function EntriesList({ entries, onUpdate, onDelete, settings, gender }: E
               <div className="flex items-center gap-3 md:gap-8 flex-1 min-w-0 overflow-hidden">
                 <div className="flex flex-col flex-shrink-0 min-w-[50px]">
                   <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter leading-none mb-0.5">
-                    {format(parseISO(entry.date), 'yyyy')}
+                    {formatDate(parseISO(entry.date), 'yyyy', settings.language)}
                   </span>
                   <span className="text-xs font-black text-slate-700 whitespace-nowrap">
-                    {format(parseISO(entry.date), 'MMM d')}
+                    {formatDate(parseISO(entry.date), 'MMM d', settings.language)}
                   </span>
                 </div>
 
@@ -131,7 +132,7 @@ export function EntriesList({ entries, onUpdate, onDelete, settings, gender }: E
                     <AlertDialogHeader>
                       <AlertDialogTitle className="text-lg font-black">{t('deleteEntry')}</AlertDialogTitle>
                       <AlertDialogDescription className="text-sm font-medium text-slate-500">
-                        {t('deleteEntryDesc')} {format(parseISO(entry.date), 'MMM d, yyyy')}.
+                        {t('deleteEntryDesc')} {formatDate(parseISO(entry.date), 'MMM d, yyyy', settings.language)}.
                         <br />{t('cannotUndo')}
                       </AlertDialogDescription>
                     </AlertDialogHeader>

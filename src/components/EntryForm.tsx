@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { GrowthEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
 import { parseWeight, parseHeight, getWeightLabel, getHeightLabel, displayWeight, displayHeight } from '@/lib/unitConversions';
+import { formatDate, getDateLocale } from '@/lib/dateUtils';
 import { toast } from 'sonner';
 
 interface EntryFormProps {
@@ -47,7 +48,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
     const heightInCm = height ? parseHeight(parseFloat(height), settings.heightUnit) : 0;
 
     onSubmit({
-      date: format(date, 'yyyy-MM-dd'),
+      date: formatDate(date, 'yyyy-MM-dd', settings.language),
       weight: weightInKg,
       height: heightInCm,
     });
@@ -63,7 +64,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
   const heightLabel = getHeightLabel(settings.heightUnit);
 
   return (
-    <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 space-y-5">
+    <form onSubmit={handleSubmit} aria-label="Growth Entry Form" className="glass-card rounded-2xl p-6 space-y-5">
       <h3 className="font-extrabold text-xl text-slate-800 flex items-center gap-3">
         <div className={cn(
           "w-10 h-10 rounded-2xl shadow-sm flex items-center justify-center transition-colors",
@@ -91,12 +92,13 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, 'PPP') : <span>{t('pickDate')}</span>}
+                {date ? formatDate(date, 'PPP', settings.language) : <span>{t('pickDate')}</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="single"
+                locale={getDateLocale(settings.language)}
                 selected={date}
                 onSelect={(d) => {
                   setDate(d);
@@ -126,7 +128,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             step="0.01"
             min="0"
             max={settings.weightUnit === 'lb' ? '66' : '30'}
-            placeholder={settings.weightUnit === 'lb' ? 'e.g., 12.1' : 'e.g., 5.5'}
+            placeholder={settings.weightUnit === 'lb' ? `${t('eg')} 12.1` : `${t('eg')} 5.5`}
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
             className="h-12 text-base font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all"
@@ -141,7 +143,7 @@ export function EntryForm({ onSubmit, initialValues, onCancel, isEditing, settin
             step="0.1"
             min="0"
             max={settings.heightUnit === 'in' ? '48' : '120'}
-            placeholder={settings.heightUnit === 'in' ? 'e.g., 23.6' : 'e.g., 60'}
+            placeholder={settings.heightUnit === 'in' ? `${t('eg')} 24.5` : `${t('eg')} 65.0`}
             value={height}
             onChange={(e) => setHeight(e.target.value)}
             className="h-12 text-base font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all"

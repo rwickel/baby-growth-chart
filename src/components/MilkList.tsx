@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { MilkEntry, AppSettings, Gender } from '@/types/baby';
 import { MilkEntryForm } from './MilkEntryForm';
 import { useTranslation } from '@/hooks/useTranslation';
+import { formatDate } from '@/lib/dateUtils';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -89,10 +90,10 @@ export function MilkList({ entries, onUpdate, onDelete, settings, gender }: Milk
                             <div className="flex items-center gap-3 md:gap-8 flex-1 min-w-0 overflow-hidden">
                                 <div className="flex flex-col flex-shrink-0 min-w-[50px]">
                                     <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter leading-none mb-0.5">
-                                        {format(parseISO(entry.date), 'yyyy')}
+                                        {formatDate(parseISO(entry.date), 'yyyy', settings.language)}
                                     </span>
                                     <span className="text-xs font-black text-slate-700 whitespace-nowrap">
-                                        {format(parseISO(entry.date), 'MMM d, HH:mm')}
+                                        {formatDate(parseISO(entry.date), 'MMM d, HH:mm', settings.language)}
                                     </span>
                                 </div>
 
@@ -133,7 +134,7 @@ export function MilkList({ entries, onUpdate, onDelete, settings, gender }: Milk
                                         <AlertDialogHeader>
                                             <AlertDialogTitle className="text-lg font-black">{t('deleteEntry')}</AlertDialogTitle>
                                             <AlertDialogDescription className="text-sm font-medium text-slate-500">
-                                                {t('deleteMilkEntryDesc')} {format(parseISO(entry.date), 'MMM d, HH:mm')}.
+                                                {t('deleteMilkEntryDesc')} {formatDate(parseISO(entry.date), 'MMM d, HH:mm', settings.language)}.
                                                 <br />{t('cannotUndo')}
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>

@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { MilkEntry, AppSettings } from '@/types/baby';
 import { useTranslation } from '@/hooks/useTranslation';
+import { formatDate, getDateLocale } from '@/lib/dateUtils';
 import { toast } from 'sonner';
 
 import {
@@ -82,12 +83,13 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                                 )}
                             >
                                 <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
-                                {date ? format(date, 'PPP') : <span>{t('pickDate')}</span>}
+                                {date ? formatDate(date, 'PPP', settings.language) : <span>{t('pickDate')}</span>}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0 rounded-3xl overflow-hidden border-none shadow-2xl" align="start">
                             <Calendar
                                 mode="single"
+                                locale={getDateLocale(settings.language)}
                                 selected={date}
                                 onSelect={(d) => {
                                     setDate(d);
@@ -122,7 +124,7 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                         step="1"
                         min="0"
                         max="1000"
-                        placeholder="120"
+                        placeholder={`${t('eg')} 120`}
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
                         className="h-14 text-lg font-black rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all px-6"
@@ -134,7 +136,7 @@ export function MilkEntryForm({ onSubmit, initialValues, onCancel, isEditing, se
                     <Input
                         id="note"
                         type="text"
-                        placeholder="e.g., Breast milk"
+                        placeholder={t('milkNotePlaceholder')}
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         className="h-14 text-lg font-bold rounded-2xl bg-slate-50/50 border-white/40 focus:bg-white transition-all px-6"

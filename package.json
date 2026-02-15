@@ -1,7 +1,7 @@
 {
   "name": "vite_react_shadcn_ts",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,6 +9,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "assets:generate": "capacitor-assets generate --android",
+    "android:build:release": "cd android && .\\gradlew.bat assembleRelease && cd ..",
     "test": "vitest run",
     "test:watch": "vitest"
   },
