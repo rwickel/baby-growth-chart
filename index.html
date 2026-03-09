@@ -1,25 +1,51 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Baby Growth Chart</title>
-    <meta name="description" content="Track your baby's growth and feeding with ease." />
-    <meta name="author" content="Baby Growth Chart" />
 
-    <meta property="og:title" content="Baby Growth Tracker" />
-    <meta property="og:description" content="A modern, responsive web application designed to track and visualize baby growth data." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/logo.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>My Growing Days</title>
+  <meta name="description"
+    content="Track your baby's growth and feeding with ease. Interactive WHO growth charts, feeding logs, and developmental milestones." />
+  <meta name="keywords"
+    content="baby growth tracker, infant growth chart, WHO growth standards, baby feeding log, developmental milestones, tracking baby weight, tracking baby height" />
+  <meta name="author" content="My Growing Days" />
+  <link rel="canonical" href="https://mygrowingdays.app/" />
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Baby Growth Tracker" />
-    <meta name="twitter:image" content="/logo.png" />
-  </head>
+  <meta property="og:title" content="My Growing Days" />
+  <meta property="og:description"
+    content="A modern, responsive web application designed to track and visualize baby growth data using WHO standards." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mygrowingdays.app/" />
+  <meta property="og:image" content="/logo.png" />
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="My Growing Days" />
+  <meta name="twitter:description" content="Track your baby's growth and feeding with ease using WHO standards." />
+  <meta name="twitter:image" content="/logo.png" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "My Growing Days",
+      "url": "https://mygrowingdays.app/",
+      "description": "Track your baby's growth and feeding with ease. Interactive WHO growth charts, feeding logs, and developmental milestones.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web, Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

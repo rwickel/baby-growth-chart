@@ -1,7 +1,68 @@
-# Baby Growth Chart (Android / Web App)
+# My Growing Days (Android / Web App)
 
 A modern, responsive web and mobile application for tracking and visualizing baby growth data (weight, height, head circumference). Built with React, TypeScript, and shadcn/ui, and powered by Capacitor for mobile.
 <img width="803" height="962" alt="image" src="https://github.com/user-attachments/assets/93d57bf4-bd3f-4e10-a3e6-4df3fdaa77c6" />
+
+
+The website/app has a soft, modern, pastel-themed mobile UI style with a focus on warmth and simplicity. Here’s a breakdown of its visual design:
+
+🎨 Color Palette
+
+Soft pastel tones dominate (light grays, blush pinks, muted blues).
+
+Pink is used as an accent color, especially to highlight the selected child and section headers.
+
+The background uses a very light gray-blue, giving a calm, nurturing feel.
+
+🧸 Overall Mood
+
+Friendly, gentle, and family-oriented.
+
+Clearly designed for parents tracking baby growth.
+
+The rounded elements and soft shadows create a comforting, approachable atmosphere.
+
+🔵 Shapes & Layout
+
+Rounded corners everywhere (cards, buttons, tabs, profile icons).
+
+Uses card-based design with elevated panels and subtle shadows.
+
+Spacious layout with generous padding, making it feel uncluttered and breathable.
+
+Circular profile avatars with soft highlights and selection rings.
+
+✏️ Typography
+
+Clean, sans-serif font.
+
+Friendly lowercase styling (e.g., “emma”).
+
+Clear hierarchy:
+
+Section titles are bold and darker.
+
+Sub-labels are lighter and smaller.
+
+📊 UI Elements
+
+Toggle switch between “Weight” and “Height” styled as pill tabs.
+
+Simple icon buttons (share, download, data view).
+
+Minimalistic line graph with soft, muted line colors.
+
+Bottom navigation uses rounded icon buttons with subtle shading.
+
+✨ Design Style Category
+
+This style fits into:
+
+Soft UI / Neumorphism-inspired design
+
+Modern mobile health tracking app aesthetic
+
+Pastel, child-friendly dashboard design
 
 
 ## Target Audience
@@ -68,6 +129,7 @@ This application is designed for:
    ```bash
       npm install
       npm install @capacitor/android
+      npx capacitor-assets generate --android
       npm run build
       npx cap add android
       npx cap sync android

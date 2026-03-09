@@ -203,10 +203,10 @@ const Index = () => {
           <div className="kawaii-card p-12 text-center space-y-10 flex flex-col items-center bg-white/60 backdrop-blur-md border border-white/40">
             <div className="relative w-40 h-36 animate-float">
               <div className="absolute top-0 left-0 w-24 h-24 bg-baby-boy/10 rounded-3xl rotate-[-10deg] flex items-center justify-center overflow-hidden border-4 border-white shadow-xl">
-                <img src={boyImg} alt="" className="w-20 h-20 object-contain" />
+                <img src={boyImg} alt="Cute cartoon baby boy illustration" className="w-20 h-20 object-contain" />
               </div>
               <div className="absolute bottom-0 right-0 w-24 h-24 bg-baby-girl/10 rounded-3xl rotate-[10deg] flex items-center justify-center overflow-hidden border-4 border-white shadow-xl">
-                <img src={girlImg} alt="" className="w-20 h-20 object-contain" />
+                <img src={girlImg} alt="Cute cartoon baby girl illustration" className="w-20 h-20 object-contain" />
               </div>
             </div>
             <div className="space-y-3 pt-4">
@@ -225,13 +225,16 @@ const Index = () => {
         </footer>
       </div>
 
-      {activeBaby && (
-        <BottomNav
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          language={settings.language}
-        />
-      )}
+      {
+        activeBaby && (
+          <BottomNav
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            language={settings.language}
+            gender={activeBaby.gender}
+          />
+        )
+      }
 
       <MilkEntryForm
         isOpen={feedingDialogOpen}
@@ -240,7 +243,7 @@ const Index = () => {
         settings={settings}
         gender={activeBaby?.gender}
       />
-    </main>
+    </main >
   );
 };
 

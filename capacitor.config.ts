@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.babygrowthchart.app',
-  appName: 'Baby Growth Chart',
+  appName: 'My Growing Days',
   webDir: 'dist',
   plugins: {
     StatusBar: {

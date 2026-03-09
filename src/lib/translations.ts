@@ -2,7 +2,7 @@ import { Language } from '@/types/baby';
 
 export const translations: Record<Language, Record<string, string>> = {
   en: {
-    appTitle: 'Watch Me Grow',
+    appTitle: 'My Growing Days',
     appSubtitle: 'Track height & weight',
     addEntry: 'Add Entry',
     editEntry: 'Edit Entry',
@@ -114,7 +114,7 @@ export const translations: Record<Language, Record<string, string>> = {
     customizeAppExperience: 'Customize your app experience',
   },
   es: {
-    appTitle: 'Watch Me Grow',
+    appTitle: 'My Growing Days',
     appSubtitle: 'Controla altura y peso',
     addEntry: 'Agregar Entrada',
     editEntry: 'Editar Entrada',
@@ -223,7 +223,7 @@ export const translations: Record<Language, Record<string, string>> = {
     customizeAppExperience: 'Personaliza tu experiencia',
   },
   fr: {
-    appTitle: 'Watch Me Grow',
+    appTitle: 'My Growing Days',
     appSubtitle: 'Suivre taille et poids',
     addEntry: 'Ajouter Entrée',
     editEntry: 'Modifier Entrée',
@@ -332,7 +332,7 @@ export const translations: Record<Language, Record<string, string>> = {
     customizeAppExperience: 'Personnalisez votre expérience',
   },
   de: {
-    appTitle: 'Watch Me Grow',
+    appTitle: 'My Growing Days',
     appSubtitle: 'Größe & Gewicht verfolgen',
     addEntry: 'Eintrag Hinzufügen',
     editEntry: 'Eintrag Bearbeiten',

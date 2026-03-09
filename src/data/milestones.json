@@ -446,7 +446,7 @@
                     "Réagit aux sons"
                 ],
                 "pro_tip": "Racontez votre journée à bébé ; votre voix est la base du langage.",
-                "red_flags": "Ne réagit pas aux sons forts."
+                "red_flags": "Ne réagit pas aux sons forts ou ne suit pas les objets en mouvement des yeux."
             },
             {
                 "month": 1,
@@ -574,29 +574,29 @@
             },
             {
                 "month": 9,
-                "title": "Nuf Mois",
+                "title": "Neuf Mois",
                 "physical": [
-                    "Rampe ou quatre pattes",
-                    "Debout avec appui"
+                    "Rampe ou se déplace en s'asseyant",
+                    "Se tient debout en s'appuyant"
                 ],
                 "cognitive": [
-                    "Suit la chute d'objets",
+                    "Suit la chute d'objets des yeux",
                     "Cherche les objets cachés"
                 ],
                 "social_emotional": [
-                    "Pot de colle",
-                    "Objets favoris"
+                    "Peut être collant avec les adultes familiers",
+                    "A des objets favoris"
                 ],
                 "language": [
                     "Comprend des mots simples",
-                    "Pointe du doigt"
+                    "Utilise des gestes comme pointer du doigt"
                 ],
                 "milestones": [
                     "Rampe",
                     "Debout avec appui"
                 ],
-                "pro_tip": "Jouez à 'coucou-caché' pour la permanence de l'objet.",
-                "red_flags": "Ne répond pas à son prénom."
+                "pro_tip": "Jouez à 'coucou-caché' pour aider votre bébé à comprendre la permanence de l'objet.",
+                "red_flags": "Ne s'assoit pas de manière indépendante ou ne répond pas à son propre nom."
             },
             {
                 "month": 12,
@@ -621,8 +621,8 @@
                     "Premiers mots",
                     "Premiers pas"
                 ],
-                "pro_tip": "Encouragez l'autonomie avec une tasse.",
-                "red_flags": "Ne pointe pas du doigt."
+                "pro_tip": "Encouragez l'autonomie en proposant une tasse plutôt qu'un biberon.",
+                "red_flags": "Ne rampe pas, ne fait pas au revoir ou ne dit pas de mots simples comme 'maman' ou 'papa'."
             }
         ]
     },
@@ -797,15 +797,15 @@
                     "Lieblingsdinge"
                 ],
                 "language": [
-                    "Versteht Wörter",
-                    "Zeigt auf Dinge"
+                    "Versteht einfache Wörter",
+                    "Nutzt Gesten wie Zeigen"
                 ],
                 "milestones": [
                     "Krabbelt",
                     "Steht mit Hilfe"
                 ],
                 "pro_tip": "Kuckuck-Spielen fördert das Verständnis von Beständigkeit.",
-                "red_flags": "Reagiert nicht auf den eigenen Namen."
+                "red_flags": "Sitzt nicht selbstständig oder reagiert nicht auf den eigenen Namen."
             },
             {
                 "month": 12,

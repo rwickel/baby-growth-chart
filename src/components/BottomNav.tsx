@@ -1,7 +1,7 @@
 import { Scale, Droplets, Footprints } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/hooks/useTranslation';
-import { Language } from '@/types/baby';
+import { Language, Gender } from '@/types/baby';
 
 export type TabType = 'growth' | 'feeding' | 'milestones';
 
@@ -9,15 +9,18 @@ interface BottomNavProps {
     activeTab: TabType;
     onTabChange: (tab: TabType) => void;
     language: Language;
+    gender: Gender;
 }
 
-export function BottomNav({ activeTab, onTabChange, language }: BottomNavProps) {
+export function BottomNav({ activeTab, onTabChange, language, gender }: BottomNavProps) {
     const { t } = useTranslation(language);
 
-    const tabs: { id: TabType; icon: any; label: string; color: string }[] = [
-        { id: 'growth', icon: Scale, label: t('growth'), color: 'text-indigo-400' },
-        { id: 'feeding', icon: Droplets, label: t('feeding'), color: 'text-blue-400' },
-        { id: 'milestones', icon: Footprints, label: t('milestones'), color: 'text-rose-400' },
+    const genderColor = gender === 'male' ? 'text-baby-boy' : 'text-baby-girl';
+
+    const tabs: { id: TabType; icon: any; label: string }[] = [
+        { id: 'growth', icon: Scale, label: t('growth') },
+        { id: 'feeding', icon: Droplets, label: t('feeding') },
+        { id: 'milestones', icon: Footprints, label: t('milestones') },
     ];
 
     return (
@@ -44,7 +47,7 @@ export function BottomNav({ activeTab, onTabChange, language }: BottomNavProps) 
                             )}>
                                 <tab.icon className={cn(
                                     "w-6 h-6 transition-all duration-500 stroke-[2.5px]",
-                                    isActive ? tab.color : "text-slate-300"
+                                    isActive ? genderColor : "text-slate-300"
                                 )} />
                             </div>
                             <span className={cn(
