@@ -147,7 +147,14 @@ src/
 └── test/           # Unit tests
 android/            # Native Android project files
 assets/             # Source assets for icons/splash
+screenshots/        # App screenshots and marketing assets
 ```
+
+## Privacy Policy
+
+Your privacy is important to us. All data is stored locally on your device. For more details, see our full privacy policies:
+- [English Privacy Policy](PRIVACY_POLICY_EN.md)
+- [German Privacy Policy (Datenschutzerklärung)](PRIVACY_POLICY.md)
 
 ## License
 
