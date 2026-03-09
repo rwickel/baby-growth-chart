@@ -1,68 +1,44 @@
 # My Growing Days (Android / Web App)
 
 A modern, responsive web and mobile application for tracking and visualizing baby growth data (weight, height, head circumference). Built with React, TypeScript, and shadcn/ui, and powered by Capacitor for mobile.
-<img width="803" height="962" alt="image" src="https://github.com/user-attachments/assets/93d57bf4-bd3f-4e10-a3e6-4df3fdaa77c6" />
 
+![App Overview](screenshots/overview_en.png)
 
-The website/app has a soft, modern, pastel-themed mobile UI style with a focus on warmth and simplicity. Here’s a breakdown of its visual design:
+## Screenshots
 
-🎨 Color Palette
+<div align="center">
+  <table style="width: 100%;">
+    <tr>
+      <td align="center"><b>Dashboard</b></td>
+      <td align="center"><b>Feeding</b></td>
+      <td align="center"><b>Add Entry</b></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/Screenshot_20260309_130507.png" width="250" /></td>
+      <td><img src="screenshots/Screenshot_20260309_130515.png" width="250" /></td>
+      <td><img src="screenshots/Screenshot_20260309_130533.png" width="250" /></td>
+    </tr>
+    <tr>
+      <td align="center"><b>Settings</b></td>
+      <td align="center"><b>Onboarding</b></td>
+      <td align="center"><b>Growth Curves</b></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/Screenshot_20260309_130449.png" width="250" /></td>
+      <td><img src="screenshots/Screenshot_20260309_130600.png" width="250" /></td>
+      <td><img src="screenshots/Screenshot_20260309_130829.png" width="250" /></td>
+    </tr>
+  </table>
+</div>
 
-Soft pastel tones dominate (light grays, blush pinks, muted blues).
+## Visual Design
 
-Pink is used as an accent color, especially to highlight the selected child and section headers.
+The app features a soft, modern, pastel-themed mobile UI designed for warmth and simplicity:
 
-The background uses a very light gray-blue, giving a calm, nurturing feel.
-
-🧸 Overall Mood
-
-Friendly, gentle, and family-oriented.
-
-Clearly designed for parents tracking baby growth.
-
-The rounded elements and soft shadows create a comforting, approachable atmosphere.
-
-🔵 Shapes & Layout
-
-Rounded corners everywhere (cards, buttons, tabs, profile icons).
-
-Uses card-based design with elevated panels and subtle shadows.
-
-Spacious layout with generous padding, making it feel uncluttered and breathable.
-
-Circular profile avatars with soft highlights and selection rings.
-
-✏️ Typography
-
-Clean, sans-serif font.
-
-Friendly lowercase styling (e.g., “emma”).
-
-Clear hierarchy:
-
-Section titles are bold and darker.
-
-Sub-labels are lighter and smaller.
-
-📊 UI Elements
-
-Toggle switch between “Weight” and “Height” styled as pill tabs.
-
-Simple icon buttons (share, download, data view).
-
-Minimalistic line graph with soft, muted line colors.
-
-Bottom navigation uses rounded icon buttons with subtle shading.
-
-✨ Design Style Category
-
-This style fits into:
-
-Soft UI / Neumorphism-inspired design
-
-Modern mobile health tracking app aesthetic
-
-Pastel, child-friendly dashboard design
+- **Color Palette**: Gentle pastel tones (blush pinks, muted blues) that dynamically adapt based on the child's gender.
+- **Shapes & Layout**: Rounded elements, card-based design with subtle shadows, and a spacious layout for clarity.
+- **Typography**: Friendly, clean sans-serif typography with a clear hierarchy for ease of use.
+- **UI Elements**: Interactive Recharts graphs with WHO percentile curves and intuitive navigation.
 
 
 ## Target Audience
@@ -74,15 +50,15 @@ This application is designed for:
 
 ## Features
 
-- 👶 **Multi-Child Support**: Manage growth records for multiple babies in one place.
-- 📈 **Interactive Charts**: Visualize weight, height, and head circumference trends with BMI and percentile curves (based on WHO standards).
-- 🍼 **Feeding Tracker**: Log milk feeding sessions (amount, time, and type).
-- 📝 **Growth History**: Detailed logs for all growth metrics with easy editing and deletion.
-- 🎨 **Dynamic Themes**: Personalized experience with gender-based themes (Blue/Pink) and full Dark Mode support.
-- 📤 **Data Export**: Export your data to CSV or PDF for backup or sharing with healthcare providers.
-- 🌍 **Internationalization**: Available in English, Spanish, French, and German.
-- 🔄 **Unit Flexibility**: Toggle between Metric (kg, cm, ml) and Imperial (lb, in, oz) units at any time.
-- 📱 **Cross-Platform**: Seamless experience on Web and Android with an offline-first, private approach (all data stays on your device).
+- **Multi-Child Support**: Manage growth records for multiple babies in one place.
+- **Interactive Charts**: Visualize weight, height, and head circumference trends with BMI and percentile curves (based on WHO standards).
+- **Feeding Tracker**: Log milk feeding sessions (amount, time, and type).
+- **Growth History**: Detailed logs for all growth metrics with easy editing and deletion.
+- **Dynamic Themes**: Personalized experience with gender-based themes (Blue/Pink) and full Dark Mode support.
+- **Data Export**: Export your data to CSV or PDF for backup or sharing with healthcare providers.
+- **Internationalization**: Available in English, Spanish, French, and German.
+- **Unit Flexibility**: Toggle between Metric (kg, cm, ml) and Imperial (lb, in, oz) units at any time.
+- **Cross-Platform**: Seamless experience on Web and Android with an offline-first, private approach (all data stays on your device).
 
 
 ## Tech Stack
